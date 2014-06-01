@@ -1,0 +1,16 @@
+{
+  "slug": "broken",
+  "language": "Broken",
+  "repository": "https://github.com/exercism/xbroken",
+  "active": true,
+  "problems": [
+    "alpaca"
+    "badger",
+  ],
+  "deprecated": [
+
+  ],
+  "ignore": [
+
+  ]
+}

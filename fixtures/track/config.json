@@ -1,0 +1,18 @@
+{
+  "slug": "gemstones",
+  "language": "Gemstones",
+  "repository": "https://github.com/exercism/xgemstones",
+  "active": true,
+  "problems": [
+    "amethyst",
+    "beryl",
+    "crystal"
+  ],
+  "deprecated": [
+    "opal"
+  ],
+  "ignore": [
+    "ignored",
+    "no-such-dir"
+  ]
+}
