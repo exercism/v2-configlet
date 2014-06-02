@@ -32,5 +32,5 @@ func Load(file string) (Config, error) {
 }
 
 func (c Config) IgnoredDirs() []string {
-	return append(c.Ignore, ".git")
+	return append(c.Ignore, ".git", "bin")
 }

@@ -56,7 +56,7 @@ func TestSlugs(t *testing.T) {
 		t.Errorf("Borked. Don't understand.")
 	}
 
-	expected := []string{"amethyst", "beryl", "crystal", "ignored", "no-such-dir", ".git", "opal"}
+	expected := []string{"amethyst", "bin", "beryl", "crystal", "ignored", "no-such-dir", ".git", "opal"}
 
 	if len(slugs) != len(expected) {
 		t.Errorf("Expected len(slugs)==%v to equal len(expected)==%v", slugs, expected)
