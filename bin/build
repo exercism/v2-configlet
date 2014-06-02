@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e -x
+
+EXECUTABLE_NAME="configlet"
+
+PLATFORMS="darwin/386 darwin/amd64 linux/386 linux/amd64 windows/386 windows/amd64"
+
+function build-architecture {
+GOOS=${1%/*}
+GOARCH=${1#*/}
+echo "Creating $GOOS $GOARCH binary..."
+
+GOOS=$GOOS GOARCH=$GOARCH go build -o out/$EXECUTABLE_NAME
+cd out
+ls
+
+if [ $GOOS == windows ]; then
+    mv $EXECUTABLE_NAME $EXECUTABLE_NAME-$GOOS-$GOARCH.exe
+  else
+    mv $EXECUTABLE_NAME $EXECUTABLE_NAME-$GOOS-$GOARCH
+  fi
+
+  cd ..
+}
+
+for PLATFORM in $PLATFORMS; do
+  build-architecture $PLATFORM
+done
