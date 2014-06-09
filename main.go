@@ -42,7 +42,18 @@ func main() {
 
 	if len(problems) > 0 {
 		hasErrors = true
-		fmt.Printf("-> config.json does not include %v\n", problems)
+		fmt.Printf("-> config.json does not include %v.\n", problems)
+	}
+
+	problems, err = track.ProblemsLackingExample()
+	if err != nil {
+		hasErrors = true
+		fmt.Errorf("-> %v", err)
+	}
+
+	if len(problems) > 0 {
+		hasErrors = true
+		fmt.Printf("-> missing example solution in %v.\n", problems)
 	}
 
 	if hasErrors {

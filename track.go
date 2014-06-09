@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"regexp"
 )
 
 type Track struct {
@@ -125,4 +126,63 @@ func (t Track) UnconfiguredProblems() ([]string, error) {
 func (t Track) hasValidConfig() bool {
 	_, err := t.Config()
 	return err == nil
+}
+
+func (t Track) ProblemsLackingExample() ([]string, error) {
+	problems := []string{}
+
+	dirs, err := t.Dirs()
+	if err != nil {
+		return problems, err
+	}
+
+	for dir, _ := range dirs {
+		files, err := findAllFiles(fmt.Sprintf("%s/%s", t.path, dir))
+		if err != nil {
+			return problems, err
+		}
+		found, err := hasExampleFile(files)
+		if !found {
+			problems = append(problems, dir)
+		}
+	}
+
+	return problems, nil
+}
+
+func hasExampleFile(files []string) (bool, error) {
+	r, err := regexp.Compile(`[Ee]xample`)
+	if err != nil {
+		return false, err
+	}
+	for _, file := range files {
+		matches := r.Find([]byte(file))
+		if len(matches) > 0 {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func findAllFiles(path string) ([]string, error) {
+	files := []string{}
+
+	infos, err := ioutil.ReadDir(path)
+	if err != nil {
+		return files, err
+	}
+
+	for _, info := range infos {
+		if info.IsDir() {
+			subPath := fmt.Sprintf("%s/%s", path, info.Name())
+			subFiles, err := findAllFiles(subPath)
+			if err != nil {
+				return files, err
+			}
+			files = append(files, subFiles...)
+		} else {
+			files = append(files, info.Name())
+		}
+	}
+	return files, nil
 }

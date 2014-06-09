@@ -103,3 +103,20 @@ func TestProblemIsUnconfigured(t *testing.T) {
 		t.Errorf("Expected unconfigured problem to be 'garnet', but was %s", problems[0])
 	}
 }
+
+func TestProblemLacksExample(t *testing.T) {
+	track := NewTrack(fakeTrackPath)
+
+	problems, err := track.ProblemsLackingExample()
+	if err != nil {
+		t.Errorf("Blew up: %v", err)
+	}
+
+	if len(problems) != 1 {
+		t.Fatalf("Expected len(%v)==1", problems)
+	}
+
+	if problems[0] != "beryl" {
+		t.Errorf("Expected missing example to be on 'beryl' problem, but was %s", problems[0])
+	}
+}
