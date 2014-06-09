@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"regexp"
 )
 
@@ -131,19 +132,22 @@ func (t Track) hasValidConfig() bool {
 func (t Track) ProblemsLackingExample() ([]string, error) {
 	problems := []string{}
 
-	dirs, err := t.Dirs()
+	c, err := t.Config()
 	if err != nil {
 		return problems, err
 	}
 
-	for dir, _ := range dirs {
-		files, err := findAllFiles(fmt.Sprintf("%s/%s", t.path, dir))
-		if err != nil {
-			return problems, err
-		}
-		found, err := hasExampleFile(files)
-		if !found {
-			problems = append(problems, dir)
+	for _, problem := range c.Problems {
+		filename := fmt.Sprintf("%s/%s", t.path, problem)
+		if _, err := os.Stat(filename); err == nil {
+			files, err := findAllFiles(fmt.Sprintf("%s/%s", t.path, problem))
+			if err != nil {
+				return problems, err
+			}
+			found, err := hasExampleFile(files)
+			if !found {
+				problems = append(problems, problem)
+			}
 		}
 	}
 

@@ -12,7 +12,7 @@ func TestTrackDirs(t *testing.T) {
 		t.Errorf("Borked. Don't understand.")
 	}
 
-	expected := []string{"amethyst", "beryl", "garnet", "ignored"}
+	expected := []string{".git", "bin", "amethyst", "beryl", "garnet", "ignored"}
 
 	if len(dirs) != len(expected) {
 		t.Errorf("Expected len(dirs)==%v to equal len(expected)==%v", dirs, expected)
