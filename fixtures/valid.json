@@ -11,7 +11,7 @@
   "deprecated": [
     "durian"
   ],
-  "ignore": [
+  "ignored": [
     "ignored"
   ]
 }

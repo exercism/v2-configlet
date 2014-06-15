@@ -13,7 +13,7 @@ type Config struct {
 	Active     bool
 	Repository string
 	Problems   []string
-	Ignore     []string
+	Ignored    []string
 	Deprecated []string
 }
 
@@ -32,5 +32,5 @@ func Load(file string) (Config, error) {
 }
 
 func (c Config) IgnoredDirs() []string {
-	return append(c.Ignore, ".git", "bin")
+	return append(c.Ignored, ".git", "bin")
 }
