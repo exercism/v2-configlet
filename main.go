@@ -5,6 +5,13 @@ import (
 	"os"
 )
 
+type Check func() ([]string, error)
+
+type ConfigError struct {
+	check Check
+	msg   string
+}
+
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: configlet path/to/problems/repository")
@@ -12,7 +19,6 @@ func main() {
 	}
 
 	path := os.Args[1]
-
 	fmt.Printf("Evaluating %s\n", path)
 
 	track := NewTrack(path)
@@ -23,47 +29,37 @@ func main() {
 		fmt.Println("-> config.json is invalid")
 	}
 
-	problems, err := track.MissingProblems()
-	if err != nil {
-		hasErrors = true
-		fmt.Errorf("-> %v", err)
+	configErrors := []ConfigError{
+		ConfigError{
+			check: track.MissingProblems,
+			msg:   "-> No directory found for %v.\n",
+		},
+		ConfigError{
+			check: track.UnconfiguredProblems,
+			msg:   "-> config.json does not include %v.\n",
+		},
+		ConfigError{
+			check: track.ProblemsLackingExample,
+			msg:   "-> missing example solution in %v.\n",
+		},
+		ConfigError{
+			check: track.ForegoneViolations,
+			msg:   "-> %v should not be implemented.\n",
+		},
 	}
 
-	if len(problems) > 0 {
-		hasErrors = true
-		fmt.Printf("-> No directory found for %v.\n", problems)
-	}
+	for _, configError := range configErrors {
+		result, err := configError.check()
 
-	problems, err = track.UnconfiguredProblems()
-	if err != nil {
-		hasErrors = true
-		fmt.Errorf("-> %v", err)
-	}
+		if err != nil {
+			hasErrors = true
+			fmt.Errorf("-> %v", err)
+		}
 
-	if len(problems) > 0 {
-		hasErrors = true
-		fmt.Printf("-> config.json does not include %v.\n", problems)
-	}
-
-	problems, err = track.ProblemsLackingExample()
-	if err != nil {
-		hasErrors = true
-		fmt.Errorf("-> %v", err)
-	}
-
-	if len(problems) > 0 {
-		hasErrors = true
-		fmt.Printf("-> missing example solution in %v.\n", problems)
-	}
-
-	problems, err = track.ForegoneViolations()
-	if err != nil {
-		hasErrors = true
-		fmt.Print("-> %v", err)
-	}
-
-	if len(problems) > 0 {
-		fmt.Printf("-> %v should not be implemented.\n", problems)
+		if len(result) > 0 {
+			hasErrors = true
+			fmt.Printf(configError.msg, result)
+		}
 	}
 
 	if hasErrors {
