@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/exercism/configlet/configlet"
 )
 
 // Check identifies configuration problems.
@@ -23,10 +25,10 @@ func main() {
 	path := os.Args[1]
 	fmt.Printf("Evaluating %s\n", path)
 
-	track := NewTrack(path)
+	track := configlet.NewTrack(path)
 
 	hasErrors := false
-	if !track.hasValidConfig() {
+	if !track.HasValidConfig() {
 		hasErrors = true
 		fmt.Println("-> config.json is invalid")
 	}

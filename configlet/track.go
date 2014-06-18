@@ -1,4 +1,4 @@
-package main
+package configlet
 
 import (
 	"fmt"
@@ -30,6 +30,12 @@ func (t Track) Config() (Config, error) {
 		return c, err
 	}
 	return c, nil
+}
+
+// HasValidConfig lints the JSON file.
+func (t Track) HasValidConfig() bool {
+	_, err := t.Config()
+	return err == nil
 }
 
 // Problems lists all the configured problems.
@@ -201,11 +207,6 @@ func (t Track) ForegoneViolations() ([]string, error) {
 
 func (t Track) configFile() string {
 	return fmt.Sprintf("%s/config.json", t.path)
-}
-
-func (t Track) hasValidConfig() bool {
-	_, err := t.Config()
-	return err == nil
 }
 
 func hasExampleFile(files []string) (bool, error) {
