@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 )
 
+// Config is an Exercism track configuration.
 type Config struct {
 	path       string
 	Slug       string
@@ -18,6 +19,7 @@ type Config struct {
 	Foregone   []string
 }
 
+// Load loads an Exercism track configuration.
 func Load(file string) (Config, error) {
 	c := Config{}
 
@@ -32,6 +34,9 @@ func Load(file string) (Config, error) {
 	return c, nil
 }
 
+// IgnoredDirs merges configured and default dirs.
+// Some directories will never, ever represent an
+// Exercism problem.
 func (c Config) IgnoredDirs() []string {
 	return append(c.Ignored, ".git", "bin")
 }

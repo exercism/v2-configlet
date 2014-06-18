@@ -5,8 +5,10 @@ import (
 	"os"
 )
 
+// Check identifies configuration problems.
 type Check func() ([]string, error)
 
+// ConfigError defines the error message for a Check.
 type ConfigError struct {
 	check Check
 	msg   string

@@ -7,14 +7,23 @@ import (
 	"regexp"
 )
 
+// Track represents a set of Exercism problems.
+// Typically these will all be in the same language, defined
+// in github.com/exercism/x<LANGUAGE>.
 type Track struct {
 	path string
 }
 
+// NewTrack finds a Track at path.
+// It will look for a config.json in the root of that path.
+// This file will list problems that correspond to
+// directories which contain a test suite and supporting
+// files, along with an example solution.
 func NewTrack(path string) Track {
 	return Track{path: path}
 }
 
+// Config loads a track's configuration.
 func (t Track) Config() (Config, error) {
 	c, err := Load(t.configFile())
 	if err != nil {
@@ -23,6 +32,7 @@ func (t Track) Config() (Config, error) {
 	return c, nil
 }
 
+// Problems lists all the configured problems.
 func (t Track) Problems() (map[string]struct{}, error) {
 	problems := make(map[string]struct{})
 
@@ -38,6 +48,7 @@ func (t Track) Problems() (map[string]struct{}, error) {
 	return problems, nil
 }
 
+// Slugs is a list of all problems mentioned in the config.
 func (t Track) Slugs() (map[string]struct{}, error) {
 	slugs := make(map[string]struct{})
 
@@ -64,6 +75,7 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 	return slugs, nil
 }
 
+// Dirs is a list of all the directories in the root of a track.
 func (t Track) Dirs() (map[string]struct{}, error) {
 	dirs := make(map[string]struct{})
 
@@ -80,6 +92,9 @@ func (t Track) Dirs() (map[string]struct{}, error) {
 	return dirs, nil
 }
 
+// MissingProblems identify problems lacking an implementation.
+// This will complain if the problem slug is listed in the configuration,
+// but there is no corresponding directory for it.
 func (t Track) MissingProblems() ([]string, error) {
 	dirs, err := t.Dirs()
 	if err != nil {
@@ -102,6 +117,9 @@ func (t Track) MissingProblems() ([]string, error) {
 	return omissions, nil
 }
 
+// UnconfiguredProblems identifies unlisted implementations.
+// This will complain if a directory exists, but is not mentioned
+// anywhere in the config file.
 func (t Track) UnconfiguredProblems() ([]string, error) {
 	dirs, err := t.Dirs()
 	if err != nil {
@@ -124,6 +142,11 @@ func (t Track) UnconfiguredProblems() ([]string, error) {
 	return omissions, nil
 }
 
+// ProblemsLackingExample identifies implementations without a solution.
+// This will often be triggered because the implementation's sample solution
+// is not named something with example. This is particularly critical since
+// any file that is not named /[Ee]xample/ will be served by the API, showing
+// the user a possible solution before they have solved the problem themselves.
 func (t Track) ProblemsLackingExample() ([]string, error) {
 	problems := []string{}
 
@@ -149,6 +172,9 @@ func (t Track) ProblemsLackingExample() ([]string, error) {
 	return problems, nil
 }
 
+// ForegoneViolations indentifies implementations that should not be included.
+// This could be because the problem is too trivial, ridiculously non-trivial,
+// or simply uninteresting.
 func (t Track) ForegoneViolations() ([]string, error) {
 	problems := []string{}
 
