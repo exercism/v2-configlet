@@ -8,14 +8,20 @@ func TestTrackDirs(t *testing.T) {
 	track := NewTrack(fakeTrackPath)
 
 	dirs, err := track.Dirs()
-	if err != nil {
-		t.Errorf("Borked. Don't understand.")
+	assertNoError(t, err)
+
+	expected := []string{
+		".git",
+		"amethyst",
+		"beryl",
+		"bin",
+		"garnet",
+		"ignored",
 	}
 
-	expected := []string{".git", "bin", "amethyst", "beryl", "garnet", "ignored"}
-
 	if len(dirs) != len(expected) {
-		t.Errorf("Expected len(dirs)==%v to equal len(expected)==%v", dirs, expected)
+		msg := "Expected len(dirs:%d)==%v to equal len(expected:%d)==%v"
+		t.Errorf(msg, len(dirs), dirs, len(expected), expected)
 	}
 
 	for _, gemstone := range expected {
@@ -30,14 +36,17 @@ func TestTrackProblems(t *testing.T) {
 	track := NewTrack(fakeTrackPath)
 
 	problems, err := track.Problems()
-	if err != nil {
-		t.Errorf("Borked. Don't understand.")
+	assertNoError(t, err)
+
+	expected := []string{
+		"amethyst",
+		"beryl",
+		"crystal",
 	}
 
-	expected := []string{"amethyst", "beryl", "crystal"}
-
 	if len(problems) != len(expected) {
-		t.Errorf("Expected len(problems)==%v to equal len(expected)==%v", problems, expected)
+		msg := "Expected len(problems:%d)==%v to equal len(expected:%d)==%v"
+		t.Errorf(msg, len(problems), problems, len(expected), expected)
 	}
 
 	for _, gemstone := range expected {
@@ -52,14 +61,22 @@ func TestSlugs(t *testing.T) {
 	track := NewTrack(fakeTrackPath)
 
 	slugs, err := track.Slugs()
-	if err != nil {
-		t.Errorf("Borked. Don't understand.")
+	assertNoError(t, err)
+
+	expected := []string{
+		".git",
+		"amethyst",
+		"beryl",
+		"bin",
+		"crystal",
+		"ignored",
+		"no-such-dir",
+		"opal",
 	}
 
-	expected := []string{"amethyst", "bin", "beryl", "crystal", "ignored", "no-such-dir", ".git", "opal"}
-
 	if len(slugs) != len(expected) {
-		t.Errorf("Expected len(slugs)==%v to equal len(expected)==%v", slugs, expected)
+		msg := "Expected len(slugs:%d)==%v to equal len(expected:%d)==%v"
+		t.Errorf(msg, len(slugs), slugs, len(expected), expected)
 	}
 
 	for _, slug := range expected {
@@ -74,12 +91,11 @@ func TestProblemIsMissing(t *testing.T) {
 	track := NewTrack(fakeTrackPath)
 
 	problems, err := track.MissingProblems()
-	if err != nil {
-		t.Errorf("Blew up: %v", err)
-	}
+	assertNoError(t, err)
 
 	if len(problems) != 1 {
-		t.Errorf("Expected len(%v)==1", problems)
+		msg := "Expected len(problems)==1, but len(%v)==%d"
+		t.Errorf(msg, len(problems), problems)
 	}
 
 	if problems[0] != "crystal" {
@@ -91,12 +107,11 @@ func TestProblemIsUnconfigured(t *testing.T) {
 	track := NewTrack(fakeTrackPath)
 
 	problems, err := track.UnconfiguredProblems()
-	if err != nil {
-		t.Errorf("Blew up: %v", err)
-	}
+	assertNoError(t, err)
 
 	if len(problems) != 1 {
-		t.Errorf("Expected len(%v)==1", problems)
+		msg := "Expected len(problems)==1, but len(%v)==%d"
+		t.Errorf(msg, len(problems), problems)
 	}
 
 	if problems[0] != "garnet" {
@@ -108,15 +123,20 @@ func TestProblemLacksExample(t *testing.T) {
 	track := NewTrack(fakeTrackPath)
 
 	problems, err := track.ProblemsLackingExample()
-	if err != nil {
-		t.Errorf("Blew up: %v", err)
-	}
+	assertNoError(t, err)
 
 	if len(problems) != 1 {
-		t.Fatalf("Expected len(%v)==1", problems)
+		msg := "Expected len(problems)==1, but len(%v)==%d"
+		t.Errorf(msg, len(problems), problems)
 	}
 
 	if problems[0] != "beryl" {
 		t.Errorf("Expected missing example to be on 'beryl' problem, but was %s", problems[0])
+	}
+}
+
+func assertNoError(t *testing.T, err error) {
+	if err != nil {
+		t.Errorf("FAIL: %v", err)
 	}
 }
