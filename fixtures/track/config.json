@@ -14,5 +14,9 @@
   "ignored": [
     "ignored",
     "no-such-dir"
+    ],
+  "foregone": [
+    "diamond",
+    "pearl"
   ]
 }

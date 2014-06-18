@@ -15,6 +15,7 @@ type Config struct {
 	Problems   []string
 	Ignored    []string
 	Deprecated []string
+	Foregone   []string
 }
 
 func Load(file string) (Config, error) {

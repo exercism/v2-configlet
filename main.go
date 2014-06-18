@@ -56,6 +56,16 @@ func main() {
 		fmt.Printf("-> missing example solution in %v.\n", problems)
 	}
 
+	problems, err = track.ForegoneViolations()
+	if err != nil {
+		hasErrors = true
+		fmt.Print("-> %v", err)
+	}
+
+	if len(problems) > 0 {
+		fmt.Printf("-> %v should not be implemented.\n", problems)
+	}
+
 	if hasErrors {
 		os.Exit(1)
 	}

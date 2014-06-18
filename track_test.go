@@ -17,6 +17,7 @@ func TestTrackDirs(t *testing.T) {
 		"bin",
 		"garnet",
 		"ignored",
+		"diamond",
 	}
 
 	if len(dirs) != len(expected) {
@@ -69,9 +70,11 @@ func TestSlugs(t *testing.T) {
 		"beryl",
 		"bin",
 		"crystal",
+		"diamond",
 		"ignored",
 		"no-such-dir",
 		"opal",
+		"pearl",
 	}
 
 	if len(slugs) != len(expected) {
@@ -132,6 +135,22 @@ func TestProblemLacksExample(t *testing.T) {
 
 	if problems[0] != "beryl" {
 		t.Errorf("Expected missing example to be on 'beryl' problem, but was %s", problems[0])
+	}
+}
+
+func TestForegoneViolations(t *testing.T) {
+	track := NewTrack(fakeTrackPath)
+
+	problems, err := track.ForegoneViolations()
+	assertNoError(t, err)
+
+	if len(problems) != 1 {
+		msg := "Expected len(problems)==1, but len(%v)==%d"
+		t.Errorf(msg, len(problems), problems)
+	}
+
+	if problems[0] != "diamond" {
+		t.Errorf("Expected violation to be 'diamond', but was %s", problems[0])
 	}
 }
 

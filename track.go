@@ -57,6 +57,10 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 	for _, slug := range c.Deprecated {
 		slugs[slug] = struct{}{}
 	}
+
+	for _, slug := range c.Foregone {
+		slugs[slug] = struct{}{}
+	}
 	return slugs, nil
 }
 
@@ -143,6 +147,30 @@ func (t Track) ProblemsLackingExample() ([]string, error) {
 	}
 
 	return problems, nil
+}
+
+func (t Track) ForegoneViolations() ([]string, error) {
+	problems := []string{}
+
+	c, err := t.Config()
+	if err != nil {
+		return problems, err
+	}
+
+	dirs, err := t.Dirs()
+	if err != nil {
+		return problems, err
+	}
+
+	violations := make([]string, 0, len(dirs))
+
+	for _, problem := range c.Foregone {
+		_, present := dirs[problem]
+		if present {
+			violations = append(violations, problem)
+		}
+	}
+	return violations, nil
 }
 
 func (t Track) configFile() string {
