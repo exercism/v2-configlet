@@ -15,10 +15,6 @@ func NewTrack(path string) Track {
 	return Track{path: path}
 }
 
-func (t Track) configFile() string {
-	return fmt.Sprintf("%s/config.json", t.path)
-}
-
 func (t Track) Config() (Config, error) {
 	c, err := Load(t.configFile())
 	if err != nil {
@@ -124,11 +120,6 @@ func (t Track) UnconfiguredProblems() ([]string, error) {
 	return omissions, nil
 }
 
-func (t Track) hasValidConfig() bool {
-	_, err := t.Config()
-	return err == nil
-}
-
 func (t Track) ProblemsLackingExample() ([]string, error) {
 	problems := []string{}
 
@@ -152,6 +143,15 @@ func (t Track) ProblemsLackingExample() ([]string, error) {
 	}
 
 	return problems, nil
+}
+
+func (t Track) configFile() string {
+	return fmt.Sprintf("%s/config.json", t.path)
+}
+
+func (t Track) hasValidConfig() bool {
+	_, err := t.Config()
+	return err == nil
 }
 
 func hasExampleFile(files []string) (bool, error) {
