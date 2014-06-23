@@ -21,8 +21,8 @@ func TestTrackDirs(t *testing.T) {
 	}
 
 	if len(dirs) != len(expected) {
-		msg := "Expected len(dirs:%d)==%v to equal len(expected:%d)==%v"
-		t.Errorf(msg, len(dirs), dirs, len(expected), expected)
+		msg := "Expected len(dirs:%d)==%v to equal len(expected:%v)==%d"
+		t.Errorf(msg, len(dirs), dirs, expected, len(expected))
 	}
 
 	for _, gemstone := range expected {
@@ -46,8 +46,8 @@ func TestTrackProblems(t *testing.T) {
 	}
 
 	if len(problems) != len(expected) {
-		msg := "Expected len(problems:%d)==%v to equal len(expected:%d)==%v"
-		t.Errorf(msg, len(problems), problems, len(expected), expected)
+		msg := "Expected len(problems:%v)==%d to equal len(expected:%v)==%d"
+		t.Errorf(msg, problems, len(problems), expected, len(expected))
 	}
 
 	for _, gemstone := range expected {
@@ -78,8 +78,8 @@ func TestSlugs(t *testing.T) {
 	}
 
 	if len(slugs) != len(expected) {
-		msg := "Expected len(slugs:%d)==%v to equal len(expected:%d)==%v"
-		t.Errorf(msg, len(slugs), slugs, len(expected), expected)
+		msg := "Expected len(slugs:%v)==%d to equal len(expected:%v)==%d"
+		t.Errorf(msg, slugs, len(slugs), expected, len(expected))
 	}
 
 	for _, slug := range expected {
@@ -98,7 +98,7 @@ func TestProblemIsMissing(t *testing.T) {
 
 	if len(problems) != 1 {
 		msg := "Expected len(problems)==1, but len(%v)==%d"
-		t.Errorf(msg, len(problems), problems)
+		t.Errorf(msg, problems, len(problems))
 	}
 
 	if problems[0] != "crystal" {
@@ -114,7 +114,7 @@ func TestProblemIsUnconfigured(t *testing.T) {
 
 	if len(problems) != 1 {
 		msg := "Expected len(problems)==1, but len(%v)==%d"
-		t.Errorf(msg, len(problems), problems)
+		t.Errorf(msg, problems, len(problems))
 	}
 
 	if problems[0] != "garnet" {
@@ -130,7 +130,7 @@ func TestProblemLacksExample(t *testing.T) {
 
 	if len(problems) != 1 {
 		msg := "Expected len(problems)==1, but len(%v)==%d"
-		t.Errorf(msg, len(problems), problems)
+		t.Errorf(msg, problems, len(problems))
 	}
 
 	if problems[0] != "beryl" {
@@ -146,7 +146,7 @@ func TestForegoneViolations(t *testing.T) {
 
 	if len(problems) != 1 {
 		msg := "Expected len(problems)==1, but len(%v)==%d"
-		t.Errorf(msg, len(problems), problems)
+		t.Errorf(msg, problems, len(problems))
 	}
 
 	if problems[0] != "diamond" {
