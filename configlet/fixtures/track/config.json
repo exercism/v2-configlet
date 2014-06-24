@@ -9,14 +9,17 @@
     "crystal"
   ],
   "deprecated": [
-    "opal"
+    "opal",
+    "amethyst"
   ],
   "ignored": [
     "ignored",
-    "no-such-dir"
+    "no-such-dir",
+    "beryl"
     ],
   "foregone": [
     "diamond",
-    "pearl"
+    "pearl",
+    "crystal"
   ]
 }

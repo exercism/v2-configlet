@@ -205,6 +205,46 @@ func (t Track) ForegoneViolations() ([]string, error) {
 	return violations, nil
 }
 
+// DuplicateSlugs detects slugs in multiple config categories.
+// If a problem is deprecated, it means that we have the files for it,
+// we're just not serving it in the default response.
+// If a directory is ignored, it means that it's not a problem.
+// If a slug is foregone, it means that we've chosen not to implement it,
+// and it should not have a directory.
+func (t Track) DuplicateSlugs() ([]string, error) {
+	counts := make(map[string]int)
+
+	c, err := t.Config()
+	if err != nil {
+		return []string{}, err
+	}
+
+	for _, slug := range c.Problems {
+		counts[slug] = counts[slug] + 1
+	}
+
+	for _, slug := range c.IgnoredDirs() {
+		counts[slug] = counts[slug] + 1
+	}
+
+	for _, slug := range c.Deprecated {
+		counts[slug] = counts[slug] + 1
+	}
+
+	for _, slug := range c.Foregone {
+		counts[slug] = counts[slug] + 1
+	}
+
+	dupes := make([]string, 0, len(counts))
+	for slug, count := range counts {
+		if count > 1 {
+			dupes = append(dupes, slug)
+		}
+	}
+
+	return dupes, nil
+}
+
 func (t Track) configFile() string {
 	return fmt.Sprintf("%s/config.json", t.path)
 }

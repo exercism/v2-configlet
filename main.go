@@ -50,6 +50,10 @@ func main() {
 			check: track.ForegoneViolations,
 			msg:   "-> %v should not be implemented.\n",
 		},
+		ConfigError{
+			check: track.DuplicateSlugs,
+			msg:   "-> %v found in multiple categories.\n",
+		},
 	}
 
 	for _, configError := range configErrors {

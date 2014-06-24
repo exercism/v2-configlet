@@ -1,6 +1,10 @@
 package configlet
 
-import "testing"
+import (
+	"sort"
+	"strings"
+	"testing"
+)
 
 const fakeTrackPath = "./fixtures/track"
 
@@ -151,6 +155,25 @@ func TestForegoneViolations(t *testing.T) {
 
 	if problems[0] != "diamond" {
 		t.Errorf("Expected violation to be 'diamond', but was %s", problems[0])
+	}
+}
+
+func TestDuplicateSlugs(t *testing.T) {
+	track := NewTrack(fakeTrackPath)
+
+	problems, err := track.DuplicateSlugs()
+	assertNoError(t, err)
+
+	if len(problems) != 3 {
+		msg := "Expected len(problems)==3, but len(%v)==%d"
+		t.Errorf(msg, len(problems), problems)
+	}
+
+	expected := []string{"amethyst", "beryl", "crystal"}
+	sort.Strings(problems)
+
+	if strings.Join(problems, " ") != strings.Join(expected, " ") {
+		t.Errorf("Expected duplicates to be '[amethyst beryl crystal]', but was %v", problems)
 	}
 }
 
