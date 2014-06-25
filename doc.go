@@ -25,13 +25,7 @@ To verify the command, use the fixture files:
     $ go build -o out/configlet
     $ out/configlet configlet/fixtures/track
 
-The command should exit with status 1, and output:
-
-    Evaluating configlet/fixtures/track
-    -> No directory found for [crystal].
-    -> config.json does not include [garnet].
-    -> missing example solution in [beryl].
-    -> [diamond] should not be implemented.
+The command should exit with status 1, and output a list of issues.
 
 */
 package main
