@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-
-	"github.com/exercism/configlet/configlet"
 )
 
 // Check identifies configuration problems.
@@ -25,50 +23,7 @@ func main() {
 	path := os.Args[1]
 	fmt.Printf("Evaluating %s\n", path)
 
-	track := configlet.NewTrack(path)
-
-	hasErrors := false
-	if !track.HasValidConfig() {
-		hasErrors = true
-		fmt.Println("-> config.json is invalid")
-	}
-
-	configErrors := []ConfigError{
-		ConfigError{
-			check: track.MissingProblems,
-			msg:   "-> No directory found for %v.\n",
-		},
-		ConfigError{
-			check: track.UnconfiguredProblems,
-			msg:   "-> config.json does not include %v.\n",
-		},
-		ConfigError{
-			check: track.ProblemsLackingExample,
-			msg:   "-> missing example solution in %v.\n",
-		},
-		ConfigError{
-			check: track.ForegoneViolations,
-			msg:   "-> %v should not be implemented.\n",
-		},
-		ConfigError{
-			check: track.DuplicateSlugs,
-			msg:   "-> %v found in multiple categories.\n",
-		},
-	}
-
-	for _, configError := range configErrors {
-		result, err := configError.check()
-
-		if err != nil {
-			hasErrors = true
-			fmt.Errorf("-> %v", err)
-		}
-
-		if len(result) > 0 {
-			hasErrors = true
-			fmt.Printf(configError.msg, result)
-		}
-	}
+	hasErrors := Evaluate(path)
 
 	if hasErrors {
 		os.Exit(1)
