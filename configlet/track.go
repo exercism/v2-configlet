@@ -114,7 +114,7 @@ func (t Track) MissingProblems() ([]string, error) {
 
 	omissions := make([]string, 0, len(problems))
 
-	for problem, _ := range problems {
+	for problem := range problems {
 		_, present := dirs[problem]
 		if !present {
 			omissions = append(omissions, problem)
@@ -139,7 +139,7 @@ func (t Track) UnconfiguredProblems() ([]string, error) {
 
 	omissions := make([]string, 0, len(slugs))
 
-	for dir, _ := range dirs {
+	for dir := range dirs {
 		_, present := slugs[dir]
 		if !present {
 			omissions = append(omissions, dir)
