@@ -1,6 +1,10 @@
 package configlet
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestBrokenConfig(t *testing.T) {
 	_, err := Load("./fixtures/broken.json")
@@ -15,4 +19,14 @@ func TestValidConfig(t *testing.T) {
 	if err != nil {
 		t.Errorf("Config at %s should be valid, but barfed: %s", path, err)
 	}
+}
+
+func TestIgnoredDirsIsUnique(t *testing.T) {
+	path := "./fixtures/valid.json"
+	c, err := Load(path)
+	assert.Nil(t, err)
+
+	expected := []string{".git", "bin", "fig", "ignored"}
+	actual := c.IgnoredDirs()
+	assert.Equal(t, expected, actual)
 }

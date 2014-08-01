@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"sort"
 )
 
 // Config is an Exercism track configuration.
@@ -38,5 +39,21 @@ func Load(file string) (Config, error) {
 // Some directories will never, ever represent an
 // Exercism problem.
 func (c Config) IgnoredDirs() []string {
-	return append(c.Ignored, ".git", "bin")
+	dirs := append(c.Ignored, ".git", "bin")
+	dirs = uniq(dirs)
+	sort.Strings(dirs)
+	return dirs
+}
+
+func uniq(items []string) []string {
+	uniques := map[string]bool{}
+	for _, item := range items {
+		uniques[item] = true
+	}
+
+	items = []string{}
+	for unique, _ := range uniques {
+		items = append(items, unique)
+	}
+	return items
 }
