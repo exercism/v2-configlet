@@ -16,11 +16,14 @@ function build-architecture {
 		EXT=".exe"
 	fi
 
-	SRC=out/$EXECUTABLE_NAME$EXT
-	DST=build/$EXECUTABLE_NAME-$GOOS-$GOARCH.tgz
+	FILE=$EXECUTABLE_NAME$EXT
 
-	GOOS=$GOOS GOARCH=$GOARCH go build -o $SRC
-	tar cvzf $DST $SRC
+	GOOS=$GOOS GOARCH=$GOARCH go build -o out/$FILE
+
+	cd out
+	ZIP=../build/$EXECUTABLE_NAME-$GOOS-$GOARCH.tgz
+	tar cvzf $ZIP $FILE
+	cd ..
 }
 
 for PLATFORM in $PLATFORMS; do
