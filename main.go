@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 )
@@ -14,7 +15,19 @@ type ConfigError struct {
 	msg   string
 }
 
+const (
+	Version = "1.0.0"
+)
+
+var showVersion = flag.Bool("version", false, "output the version of the tool")
+
 func main() {
+	flag.Parse()
+	if *showVersion {
+		fmt.Printf("configlet v%s\n", Version)
+		os.Exit(0)
+	}
+
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: configlet path/to/problems/repository")
 		os.Exit(1)
