@@ -7,21 +7,20 @@ EXECUTABLE_NAME="configlet"
 PLATFORMS="darwin/386 darwin/amd64 linux/386 linux/amd64 windows/386 windows/amd64"
 
 function build-architecture {
-GOOS=${1%/*}
-GOARCH=${1#*/}
-echo "Creating $GOOS $GOARCH binary..."
+	GOOS=${1%/*}
+	GOARCH=${1#*/}
+	echo "Creating $GOOS $GOARCH binary..."
 
-GOOS=$GOOS GOARCH=$GOARCH go build -o out/$EXECUTABLE_NAME
-cd out
-ls
+	EXT=""
+	if [ $GOOS == windows ]; then
+		EXT=".exe"
+	fi
 
-if [ $GOOS == windows ]; then
-    mv $EXECUTABLE_NAME $EXECUTABLE_NAME-$GOOS-$GOARCH.exe
-  else
-    mv $EXECUTABLE_NAME $EXECUTABLE_NAME-$GOOS-$GOARCH
-  fi
+	SRC=out/$EXECUTABLE_NAME$EXT
+	DST=build/$EXECUTABLE_NAME-$GOOS-$GOARCH.tgz
 
-  cd ..
+	GOOS=$GOOS GOARCH=$GOARCH go build -o $SRC
+	tar cvzf $DST $SRC
 }
 
 for PLATFORM in $PLATFORMS; do
