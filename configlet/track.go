@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"sort"
 )
 
 // Track represents a set of Exercism problems.
@@ -241,6 +242,7 @@ func (t Track) DuplicateSlugs() ([]string, error) {
 			dupes = append(dupes, slug)
 		}
 	}
+	sort.Strings(dupes)
 
 	return dupes, nil
 }
