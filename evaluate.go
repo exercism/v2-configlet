@@ -18,7 +18,7 @@ func Evaluate(path string) bool {
 	hasErrors := false
 	if !track.HasValidConfig() {
 		hasErrors = true
-		fmt.Println("-> config.json is invalid")
+		fmt.Println("-> config.json is invalid. Try jsonlint.com")
 	}
 
 	configErrors := []ConfigError{
