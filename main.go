@@ -16,7 +16,7 @@ type ConfigError struct {
 }
 
 const (
-	Version = "1.0.1"
+	Version = "1.0.2"
 )
 
 var showVersion = flag.Bool("version", false, "output the version of the tool")
