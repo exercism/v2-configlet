@@ -152,8 +152,9 @@ func (t Track) UnconfiguredProblems() ([]string, error) {
 // ProblemsLackingExample identifies implementations without a solution.
 // This will often be triggered because the implementation's sample solution
 // is not named something with example. This is particularly critical since
-// any file that is not named /[Ee]xample/ will be served by the API, showing
-// the user a possible solution before they have solved the problem themselves.
+// any file that is in a path not named /[Ee]xample/ will be served by the API,
+// showing the user a possible solution before they have solved the problem
+// themselves.
 func (t Track) ProblemsLackingExample() ([]string, error) {
 	problems := []string{}
 
@@ -274,15 +275,15 @@ func findAllFiles(path string) ([]string, error) {
 	}
 
 	for _, info := range infos {
+		subPath := fmt.Sprintf("%s/%s", path, info.Name())
 		if info.IsDir() {
-			subPath := fmt.Sprintf("%s/%s", path, info.Name())
 			subFiles, err := findAllFiles(subPath)
 			if err != nil {
 				return files, err
 			}
 			files = append(files, subFiles...)
 		} else {
-			files = append(files, info.Name())
+			files = append(files, subPath)
 		}
 	}
 	return files, nil

@@ -6,7 +6,8 @@
   "problems": [
     "amethyst",
     "beryl",
-    "crystal"
+    "crystal",
+    "sapphire"
   ],
   "deprecated": [
     "opal",

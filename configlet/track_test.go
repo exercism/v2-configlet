@@ -22,6 +22,7 @@ func TestTrackDirs(t *testing.T) {
 		"garnet",
 		"ignored",
 		"diamond",
+		"sapphire",
 	}
 
 	if len(dirs) != len(expected) {
@@ -47,6 +48,7 @@ func TestTrackProblems(t *testing.T) {
 		"amethyst",
 		"beryl",
 		"crystal",
+		"sapphire",
 	}
 
 	if len(problems) != len(expected) {
@@ -79,6 +81,7 @@ func TestSlugs(t *testing.T) {
 		"no-such-dir",
 		"opal",
 		"pearl",
+		"sapphire",
 	}
 
 	if len(slugs) != len(expected) {
