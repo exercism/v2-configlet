@@ -16,6 +16,8 @@ type ConfigError struct {
 }
 
 const (
+	// Version represents the latest released version of the project.
+	// Configlet follows semantic versioning.
 	Version = "1.0.2"
 )
 

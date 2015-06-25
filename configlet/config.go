@@ -52,7 +52,7 @@ func uniq(items []string) []string {
 	}
 
 	items = []string{}
-	for unique, _ := range uniques {
+	for unique := range uniques {
 		items = append(items, unique)
 	}
 	return items
