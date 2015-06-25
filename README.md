@@ -1,6 +1,11 @@
 # Configlet
 
-This is a tool to help verify that an exercism problem repository is valid and up to date.
+A linter for exercism language track repositories.
+
+The API that delivers language-specific exercism problems makes
+certain assumptions. Configlet makes it simple to verify up-front
+that the changes to existing problems or the addition of new problems
+will play nicely with the API.
 
 There are three common problems that occur:
 
@@ -14,8 +19,15 @@ There are three common problems that occur:
 $ configlet path/to/problem/repository
 ```
 
+If you have [installed the configlet binary](https://github.com/exercism/configlet/releases/latest)
+and are at the root of an exercism language track, then you can run the following:
+
+```bash
+$ configlet .
+```
+
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Katrina Owen, _@kytrinyx.com
+Copyright (c) 2015 Katrina Owen, _@kytrinyx.com
