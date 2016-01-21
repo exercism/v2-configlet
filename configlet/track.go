@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"regexp"
 	"sort"
 )
@@ -82,12 +83,32 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 	return slugs, nil
 }
 
-// Dirs is a list of all the directories in the root of a track.
+// Dirs is a list of all the relevant directories.
 func (t Track) Dirs() (map[string]struct{}, error) {
 	dirs := make(map[string]struct{})
 
 	infos, err := ioutil.ReadDir(t.path)
 	if err != nil {
+		return dirs, err
+	}
+
+	for _, info := range infos {
+		if info.IsDir() {
+			dirs[info.Name()] = struct{}{}
+		}
+	}
+	return dirs, nil
+}
+
+// ExerciseDirs lists all directories within the "exercises" directory.
+// An implemented problem must be either in the root (legacy) or in the
+// exercises dir.
+func (t Track) ExerciseDirs() (map[string]struct{}, error) {
+	dirs := make(map[string]struct{})
+
+	infos, err := ioutil.ReadDir(filepath.Join(t.path, "exercises"))
+	if err != nil {
+		fmt.Println(err)
 		return dirs, err
 	}
 
