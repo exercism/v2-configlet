@@ -13,7 +13,8 @@ import (
 // are not present. It also checks that a problem
 // isn't mentioned in multiple categories.
 func Evaluate(path string) bool {
-	track := configlet.NewTrack(path)
+	// TODO: handle this error
+	track, _ := configlet.NewTrack(path)
 
 	hasErrors := false
 	if !track.HasValidConfig() {

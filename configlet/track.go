@@ -14,6 +14,7 @@ import (
 // in github.com/exercism/x<LANGUAGE>.
 type Track struct {
 	path string
+	dirs map[string]string
 }
 
 // NewTrack finds a Track at path.
@@ -21,8 +22,33 @@ type Track struct {
 // This file will list problems that correspond to
 // directories which contain a test suite and supporting
 // files, along with an example solution.
-func NewTrack(path string) Track {
-	return Track{path: path}
+func NewTrack(path string) (Track, error) {
+	t := Track{path: path, dirs: map[string]string{}}
+
+	slugs, err := t.Slugs()
+	if err != nil {
+		return t, err
+	}
+
+	for slug := range slugs {
+		path := filepath.Join(t.path, "exercises", slug)
+
+		fi, err := os.Stat(path)
+		if err != nil && os.IsNotExist(err) {
+			path = filepath.Join(t.path, slug)
+		}
+
+		fi, err = os.Stat(path)
+		if err == nil && fi.IsDir() {
+			t.dirs[slug] = path
+			continue
+		}
+		if err != nil && !os.IsNotExist(err) {
+			return t, err
+		}
+	}
+
+	return t, nil
 }
 
 // Config loads a track's configuration.
@@ -177,28 +203,30 @@ func (t Track) UnconfiguredProblems() ([]string, error) {
 // showing the user a possible solution before they have solved the problem
 // themselves.
 func (t Track) ProblemsLackingExample() ([]string, error) {
-	problems := []string{}
-
 	c, err := t.Config()
 	if err != nil {
-		return problems, err
+		return nil, err
 	}
 
+	var issues []string
+
 	for _, problem := range c.Problems {
-		filename := fmt.Sprintf("%s/%s", t.path, problem)
-		if _, err := os.Stat(filename); err == nil {
-			files, err := findAllFiles(fmt.Sprintf("%s/%s", t.path, problem))
-			if err != nil {
-				return problems, err
-			}
-			found, err := hasExampleFile(files)
-			if !found {
-				problems = append(problems, problem)
-			}
+		path := t.dirs[problem]
+		if path == "" {
+			continue
+		}
+
+		files, err := findAllFiles(path)
+		if err != nil {
+			return issues, err
+		}
+		found, err := hasExampleFile(files)
+		if !found {
+			issues = append(issues, problem)
 		}
 	}
 
-	return problems, nil
+	return issues, nil
 }
 
 // ForegoneViolations indentifies implementations that should not be included.

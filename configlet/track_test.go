@@ -8,8 +8,42 @@ import (
 
 const fakeTrackPath = "./fixtures/track"
 
+func TestNewTrack(t *testing.T) {
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
+
+	expected := []string{
+		"fixtures/track/.git",
+		"fixtures/track/beryl",
+		"fixtures/track/bin",
+		"fixtures/track/diamond",
+		"fixtures/track/exercises/amethyst",
+		"fixtures/track/exercises/melanite",
+		"fixtures/track/ignored",
+		"fixtures/track/sapphire",
+	}
+
+	var paths []string
+	for _, path := range track.dirs {
+		paths = append(paths, path)
+	}
+	if len(paths) != len(expected) {
+		t.Errorf("len(paths)=%d - expected %d", len(paths), len(expected))
+	}
+
+	sort.Strings(paths)
+	sort.Strings(expected)
+
+	for i := 0; i < len(paths); i++ {
+		if paths[i] != expected[i] {
+			t.Errorf("got: %s, want: %s", paths[i], expected[i])
+		}
+	}
+}
+
 func TestTrackDirs(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	dirs, err := track.Dirs()
 	assertNoError(t, err)
@@ -22,6 +56,7 @@ func TestTrackDirs(t *testing.T) {
 		"garnet",
 		"ignored",
 		"diamond",
+		"melanite",
 		"sapphire",
 	}
 
@@ -39,7 +74,8 @@ func TestTrackDirs(t *testing.T) {
 }
 
 func TestTrackProblems(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	problems, err := track.Problems()
 	assertNoError(t, err)
@@ -48,6 +84,7 @@ func TestTrackProblems(t *testing.T) {
 		"amethyst",
 		"beryl",
 		"crystal",
+		"melanite",
 		"sapphire",
 	}
 
@@ -65,7 +102,8 @@ func TestTrackProblems(t *testing.T) {
 }
 
 func TestSlugs(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	slugs, err := track.Slugs()
 	assertNoError(t, err)
@@ -78,6 +116,7 @@ func TestSlugs(t *testing.T) {
 		"crystal",
 		"diamond",
 		"ignored",
+		"melanite",
 		"no-such-dir",
 		"opal",
 		"pearl",
@@ -98,7 +137,8 @@ func TestSlugs(t *testing.T) {
 }
 
 func TestProblemIsMissing(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	problems, err := track.MissingProblems()
 	assertNoError(t, err)
@@ -114,7 +154,8 @@ func TestProblemIsMissing(t *testing.T) {
 }
 
 func TestProblemIsUnconfigured(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	problems, err := track.UnconfiguredProblems()
 	assertNoError(t, err)
@@ -130,23 +171,30 @@ func TestProblemIsUnconfigured(t *testing.T) {
 }
 
 func TestProblemLacksExample(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	problems, err := track.ProblemsLackingExample()
 	assertNoError(t, err)
 
-	if len(problems) != 1 {
-		msg := "Expected len(problems)==1, but len(%v)==%d"
-		t.Errorf(msg, problems, len(problems))
+	if len(problems) != 2 {
+		msg := "Expected len(problems)==2, but len(%v)==%d"
+		t.Fatalf(msg, problems, len(problems))
 	}
+
+	sort.Strings(problems)
 
 	if problems[0] != "beryl" {
 		t.Errorf("Expected missing example to be on 'beryl' problem, but was %s", problems[0])
 	}
+	if problems[1] != "melanite" {
+		t.Errorf("Expected missing example to be on 'melanite' problem, but was %s", problems[1])
+	}
 }
 
 func TestForegoneViolations(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	problems, err := track.ForegoneViolations()
 	assertNoError(t, err)
@@ -162,7 +210,8 @@ func TestForegoneViolations(t *testing.T) {
 }
 
 func TestDuplicateSlugs(t *testing.T) {
-	track := NewTrack(fakeTrackPath)
+	track, err := NewTrack(fakeTrackPath)
+	assertNoError(t, err)
 
 	problems, err := track.DuplicateSlugs()
 	assertNoError(t, err)
