@@ -1,6 +1,7 @@
 package configlet
 
 import (
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -28,5 +29,9 @@ func TestIgnoredDirsIsUnique(t *testing.T) {
 
 	expected := []string{".git", "bin", "fig", "ignored"}
 	actual := c.IgnoredDirs()
+
+	sort.Strings(expected)
+	sort.Strings(actual)
+
 	assert.Equal(t, expected, actual)
 }
