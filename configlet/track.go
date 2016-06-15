@@ -39,7 +39,7 @@ func NewTrack(path string) (Track, error) {
 		}
 
 		fi, err = os.Stat(path)
-		if err == nil && fi.IsDir() {
+		if err == nil && fi.IsDir() && isHiddenDir(fi.Name()) {
 			t.dirs[slug] = path
 			continue
 		}
@@ -119,7 +119,7 @@ func (t Track) Dirs() (map[string]struct{}, error) {
 	}
 
 	for _, info := range infos {
-		if info.IsDir() && info.Name() != "exercises" {
+		if info.IsDir() && info.Name() != "exercises" && isHiddenDir(info.Name()) {
 			dirs[info.Name()] = struct{}{}
 		}
 	}
@@ -138,7 +138,7 @@ func (t Track) Dirs() (map[string]struct{}, error) {
 	}
 
 	for _, info := range infos {
-		if info.IsDir() && info.Name() != "exercises" {
+		if info.IsDir() && info.Name() != "exercises" && isHiddenDir(info.Name()) {
 			dirs[info.Name()] = struct{}{}
 		}
 	}
@@ -336,4 +336,8 @@ func findAllFiles(path string) ([]string, error) {
 		}
 	}
 	return files, nil
+}
+
+func isHiddenDir(name string) bool {
+	return name[0] != 46
 }

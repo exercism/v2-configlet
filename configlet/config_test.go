@@ -27,7 +27,7 @@ func TestIgnoredDirsIsUnique(t *testing.T) {
 	c, err := Load(path)
 	assert.Nil(t, err)
 
-	expected := []string{".git", "bin", "fig", "ignored"}
+	expected := []string{"bin", "fig", "ignored"}
 	actual := c.IgnoredDirs()
 
 	sort.Strings(expected)

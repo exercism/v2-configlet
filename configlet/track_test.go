@@ -13,7 +13,6 @@ func TestNewTrack(t *testing.T) {
 	assertNoError(t, err)
 
 	expected := []string{
-		"fixtures/track/.git",
 		"fixtures/track/beryl",
 		"fixtures/track/bin",
 		"fixtures/track/diamond",
@@ -49,7 +48,6 @@ func TestTrackDirs(t *testing.T) {
 	assertNoError(t, err)
 
 	expected := []string{
-		".git",
 		"amethyst",
 		"beryl",
 		"bin",
@@ -109,7 +107,6 @@ func TestSlugs(t *testing.T) {
 	assertNoError(t, err)
 
 	expected := []string{
-		".git",
 		"amethyst",
 		"beryl",
 		"bin",
