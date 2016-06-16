@@ -113,6 +113,7 @@ func TestSlugs(t *testing.T) {
 		"crystal",
 		"diamond",
 		"ignored",
+		"img",
 		"melanite",
 		"no-such-dir",
 		"opal",

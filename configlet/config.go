@@ -39,7 +39,7 @@ func Load(file string) (Config, error) {
 // Some directories will never, ever represent an
 // Exercism problem.
 func (c Config) IgnoredDirs() []string {
-	dirs := append(c.Ignored, "bin")
+	dirs := append(c.Ignored, "bin", "img")
 	dirs = uniq(dirs)
 	sort.Strings(dirs)
 	return dirs
