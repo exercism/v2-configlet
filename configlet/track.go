@@ -339,5 +339,5 @@ func findAllFiles(path string) ([]string, error) {
 }
 
 func isHiddenDir(name string) bool {
-	return name[0] != 46
+	return []rune(name)[0] != []rune(".")[0]
 }
