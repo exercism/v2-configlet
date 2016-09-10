@@ -8,17 +8,46 @@ import (
 )
 
 func TestBrokenConfig(t *testing.T) {
-	_, err := Load("./fixtures/broken.json")
-	if err == nil {
+	if _, err := Load("./fixtures/broken.json"); err == nil {
 		t.Errorf("Expected Load() to complain that it couldn't parse the JSON")
 	}
 }
 
 func TestValidConfig(t *testing.T) {
-	path := "./fixtures/valid.json"
-	_, err := Load(path)
-	if err != nil {
-		t.Errorf("Config at %s should be valid, but barfed: %s", path, err)
+	if _, err := Load("./fixtures/valid.json"); err != nil {
+		t.Errorf("Expected valid.json to contain valid JSON: %s", err)
+	}
+}
+
+func TestConfigSlugs(t *testing.T) {
+	paths := []string{
+		"./fixtures/use-problems.json",
+		"./fixtures/use-exercises.json",
+	}
+	expectedSlugs := []string{
+		"apple",
+		"banana",
+		"cherimoya",
+	}
+
+	for _, path := range paths {
+		c, err := Load(path)
+		if err != nil {
+			t.Errorf("failed to load config at %s.", path)
+			continue
+		}
+
+		actualSlugs := c.Slugs()
+		if len(actualSlugs) != len(expectedSlugs) {
+			t.Errorf("%s: got %d slugs, want %d", path, len(actualSlugs), len(expectedSlugs))
+			continue
+		}
+
+		for i, slug := range c.Slugs() {
+			if expectedSlugs[i] != slug {
+				t.Errorf("%s - slugs[%d]: expected '%s', got '%s'", path, i, expectedSlugs[i], slug)
+			}
+		}
 	}
 }
 

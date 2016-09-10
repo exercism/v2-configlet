@@ -15,9 +15,16 @@ type Config struct {
 	Active     bool
 	Repository string
 	Problems   []string
+	Exercises  []Exercise
 	Ignored    []string
 	Deprecated []string
 	Foregone   []string
+}
+
+type Exercise struct {
+	Slug       string
+	Difficulty int
+	Topics     []string
 }
 
 // Load loads an Exercism track configuration.
@@ -33,6 +40,20 @@ func Load(file string) (Config, error) {
 		return c, fmt.Errorf("Unable to parse config: %s -- %s", file, err.Error())
 	}
 	return c, nil
+}
+
+func (c Config) Slugs() []string {
+	var slugs []string
+	if len(c.Exercises) > 0 {
+		for _, ex := range c.Exercises {
+			slugs = append(slugs, ex.Slug)
+		}
+		return slugs
+	}
+	for _, p := range c.Problems {
+		slugs = append(slugs, p)
+	}
+	return slugs
 }
 
 // IgnoredDirs merges configured and default dirs.

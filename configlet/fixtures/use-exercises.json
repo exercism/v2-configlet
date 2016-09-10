@@ -1,12 +1,12 @@
 {
-  "slug": "valid",
-  "language": "Valid",
-  "repository": "https://github.com/exercism/xvalid",
+  "slug": "use-exercises",
+  "language": "Use Exercises",
+  "repository": "https://github.com/exercism/xuse-exercises",
   "active": true,
   "problems": [
-    "apple",
-    "banana",
-    "cherimoya"
+    "nope-a",
+    "nope-b",
+    "nope-c"
   ],
   "exercises": [
   {
@@ -26,11 +26,7 @@
   }
   ],
   "deprecated": [
-    "durian"
   ],
   "ignored": [
-    "ignored",
-    "fig",
-    "fig"
   ]
 }

@@ -75,7 +75,7 @@ func (t Track) Problems() (map[string]struct{}, error) {
 		return problems, err
 	}
 
-	for _, problem := range c.Problems {
+	for _, problem := range c.Slugs() {
 		problems[problem] = struct{}{}
 	}
 
@@ -91,7 +91,7 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 		return slugs, err
 	}
 
-	for _, slug := range c.Problems {
+	for _, slug := range c.Slugs() {
 		slugs[slug] = struct{}{}
 	}
 
@@ -210,7 +210,7 @@ func (t Track) ProblemsLackingExample() ([]string, error) {
 
 	var issues []string
 
-	for _, problem := range c.Problems {
+	for _, problem := range c.Slugs() {
 		path := t.dirs[problem]
 		if path == "" {
 			continue
@@ -270,7 +270,7 @@ func (t Track) DuplicateSlugs() ([]string, error) {
 		return []string{}, err
 	}
 
-	for _, slug := range c.Problems {
+	for _, slug := range c.Slugs() {
 		counts[slug] = counts[slug] + 1
 	}
 
