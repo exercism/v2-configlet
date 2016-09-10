@@ -31,7 +31,7 @@ func main() {
 	}
 
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: configlet path/to/problems/repository")
+		fmt.Println("Usage: configlet path/to/track/repository")
 		os.Exit(1)
 	}
 
