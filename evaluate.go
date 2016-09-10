@@ -7,11 +7,13 @@ import (
 )
 
 // Evaluate sanity-checks a track.
-// It verifies that the config is valid JSON, that
-// there are no missing problems, that each problem
-// has an example file, and that foregone problems
-// are not present. It also checks that a problem
-// isn't mentioned in multiple categories.
+//
+// It verifies that:
+// - the config is valid JSON.
+// - there are no missing problems.
+// - each problem has an example file.
+// - foregone problems are not implemented.
+// - a problem isn't mentioned in multiple config categories.
 func Evaluate(path string) bool {
 	// TODO: handle this error
 	track, _ := configlet.NewTrack(path)
