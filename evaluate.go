@@ -25,23 +25,23 @@ func Evaluate(path string) bool {
 	}
 
 	configErrors := []ConfigError{
-		ConfigError{
+		{
 			check: track.MissingProblems,
 			msg:   "-> No directory found for %v.\n",
 		},
-		ConfigError{
+		{
 			check: track.UnconfiguredProblems,
 			msg:   "-> config.json does not include %v.\n",
 		},
-		ConfigError{
+		{
 			check: track.ProblemsLackingExample,
 			msg:   "-> missing example solution in %v.\n",
 		},
-		ConfigError{
+		{
 			check: track.ForegoneViolations,
 			msg:   "-> %v should not be implemented.\n",
 		},
-		ConfigError{
+		{
 			check: track.DuplicateSlugs,
 			msg:   "-> %v found in multiple categories.\n",
 		},
