@@ -3,6 +3,7 @@
   "language": "Gemstones",
   "repository": "https://github.com/exercism/xgemstones",
   "active": true,
+  "solution_pattern": "[Ee]xample|\\.meta/solutions/[^/]*\\.rb",
   "problems": [
     "amethyst",
     "beryl",
