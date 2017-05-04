@@ -7,6 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNewConfigHasDefaultSolutionPattern(t *testing.T) {
+	c := NewConfig()
+	expected := "[Ee]xample"
+	assert.Equal(t, expected, c.SolutionPattern)
+}
+
 func TestBrokenConfig(t *testing.T) {
 	if _, err := Load("./fixtures/broken.json"); err == nil {
 		t.Errorf("Expected Load() to complain that it couldn't parse the JSON")

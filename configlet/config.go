@@ -9,16 +9,17 @@ import (
 
 // Config is an Exercism track configuration.
 type Config struct {
-	path       string
-	Slug       string
-	Language   string
-	Active     bool
-	Repository string
-	Problems   []string
-	Exercises  []Exercise
-	Ignored    []string
-	Deprecated []string
-	Foregone   []string
+	path            string
+	Slug            string
+	Language        string
+	Active          bool
+	Repository      string
+	Problems        []string
+	Exercises       []Exercise
+	Ignored         []string
+	Deprecated      []string
+	Foregone        []string
+	SolutionPattern string `json:"solution_pattern"`
 }
 
 type Exercise struct {
@@ -29,7 +30,7 @@ type Exercise struct {
 
 // Load loads an Exercism track configuration.
 func Load(file string) (Config, error) {
-	c := Config{}
+	c := NewConfig()
 
 	bytes, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -39,7 +40,15 @@ func Load(file string) (Config, error) {
 	if err != nil {
 		return c, fmt.Errorf("Unable to parse config: %s -- %s", file, err.Error())
 	}
+
 	return c, nil
+}
+
+// Create new Config with optional defaults set.
+// Currently the only optional value is SolutionPattern which is used by Track
+// to work out if a problem has a provided solution file.
+func NewConfig() Config {
+	return Config{SolutionPattern: "[Ee]xample"}
 }
 
 func (c Config) Slugs() []string {
