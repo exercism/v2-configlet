@@ -20,6 +20,7 @@ func TestNewTrack(t *testing.T) {
 		"fixtures/track/exercises/melanite",
 		"fixtures/track/ignored",
 		"fixtures/track/sapphire",
+		"fixtures/track/rhodolite",
 	}
 
 	var paths []string
@@ -55,6 +56,7 @@ func TestTrackDirs(t *testing.T) {
 		"ignored",
 		"diamond",
 		"melanite",
+		"rhodolite",
 		"sapphire",
 	}
 
@@ -84,6 +86,7 @@ func TestTrackProblems(t *testing.T) {
 		"crystal",
 		"melanite",
 		"sapphire",
+		"rhodolite",
 	}
 
 	if len(problems) != len(expected) {
@@ -119,6 +122,7 @@ func TestSlugs(t *testing.T) {
 		"opal",
 		"pearl",
 		"sapphire",
+		"rhodolite",
 	}
 
 	if len(slugs) != len(expected) {

@@ -220,7 +220,7 @@ func (t Track) ProblemsLackingExample() ([]string, error) {
 		if err != nil {
 			return issues, err
 		}
-		found, err := hasExampleFile(files)
+		found, err := t.hasExampleFile(files)
 		if !found {
 			issues = append(issues, problem)
 		}
@@ -301,11 +301,17 @@ func (t Track) configFile() string {
 	return fmt.Sprintf("%s/config.json", t.path)
 }
 
-func hasExampleFile(files []string) (bool, error) {
-	r, err := regexp.Compile(`[Ee]xample`)
+func (t Track) hasExampleFile(files []string) (bool, error) {
+	c, err := t.Config()
 	if err != nil {
 		return false, err
 	}
+
+	r, err := regexp.Compile(c.SolutionPattern)
+	if err != nil {
+		return false, err
+	}
+
 	for _, file := range files {
 		matches := r.Find([]byte(file))
 		if len(matches) > 0 {
