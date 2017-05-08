@@ -9,7 +9,7 @@ will play nicely with the API.
 
 There are three common problems that occur:
 
-1. The `config.json` might be invalid.
+1. The `config.json` [(documented here)](https://github.com/exercism/x-common/blob/master/CONTRIBUTING.md#track-configuration-file) might be invalid.
 1. Problems might be missing a reference solution.
 1. Problems might be implemented (test suite + reference solution), but not configured.
 1. Slugs in the configuration might not have a corresponding problem.
