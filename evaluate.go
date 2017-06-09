@@ -11,9 +11,9 @@ import (
 // It verifies that:
 // - the config is valid JSON.
 // - there are no missing problems.
-// - each problem has an example file.
-// - foregone problems are not implemented.
-// - a problem isn't mentioned in multiple config categories.
+// - each exercise has an example file.
+// - foregone problem specifications are not implemented.
+// - an exercise isn't mentioned in multiple config categories.
 func Evaluate(path string) bool {
 	// TODO: handle this error
 	track, _ := configlet.NewTrack(path)

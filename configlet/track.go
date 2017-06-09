@@ -9,19 +9,15 @@ import (
 	"sort"
 )
 
-// Track represents a set of Exercism problems.
-// Typically these will all be in the same language, defined
-// in github.com/exercism/x<LANGUAGE>.
+// Track is a collection of Exercism exercises in a given programming language.
 type Track struct {
 	path string
 	dirs map[string]string
 }
 
-// NewTrack finds a Track at path.
-// It will look for a config.json in the root of that path.
-// This file will list problems that correspond to
-// directories which contain a test suite and supporting
-// files, along with an example solution.
+// NewTrack is an exercism language track that lives at path.
+// It uses the config.json in the root of the track to figure
+// out which exercises a track contains.
 func NewTrack(path string) (Track, error) {
 	t := Track{path: path, dirs: map[string]string{}}
 
@@ -66,7 +62,7 @@ func (t Track) HasValidConfig() bool {
 	return err == nil
 }
 
-// Problems lists all the configured problems.
+// Problems lists all the problem specifications that a track has implemented exercises for.
 func (t Track) Problems() (map[string]struct{}, error) {
 	problems := make(map[string]struct{})
 

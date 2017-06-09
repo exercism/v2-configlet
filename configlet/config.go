@@ -22,6 +22,9 @@ type Config struct {
 	SolutionPattern string `json:"solution_pattern"`
 }
 
+// Exercise configures metadata about an implemented exercise.
+// It's listed in the config in the order that the exercise will be
+// delivered by the API.
 type Exercise struct {
 	Slug       string
 	Difficulty int
@@ -44,13 +47,14 @@ func Load(file string) (Config, error) {
 	return c, nil
 }
 
-// Create new Config with optional defaults set.
-// Currently the only optional value is SolutionPattern which is used by Track
-// to work out if a problem has a provided solution file.
+// NewConfig creates a new Config with optional defaults set.
+// Currently the only optional value is SolutionPattern which is used
+// to work out if an exercise has a sample solution.
 func NewConfig() Config {
 	return Config{SolutionPattern: "[Ee]xample"}
 }
 
+// Slugs is the list of exercise identifiers for the track.
 func (c Config) Slugs() []string {
 	var slugs []string
 	if len(c.Exercises) > 0 {

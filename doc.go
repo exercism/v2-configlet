@@ -1,10 +1,7 @@
 /*
 Command configlet sanity-checks Exercism track configuration.
 
-The binary is distributed with each track repository. The repositories are located at
-github.com/exercism/x<TRACK>.
-
-The command also runs on Travis-CI.
+Each track has a script that downloads the binary to run on Travis CI.
 
 See http://exercism.io for more information about the project.
 
