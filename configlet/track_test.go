@@ -108,13 +108,9 @@ func TestSlugs(t *testing.T) {
 	expected := []string{
 		"amethyst",
 		"beryl",
-		"bin",
 		"crystal",
 		"diamond",
-		"ignored",
-		"img",
 		"melanite",
-		"no-such-dir",
 		"opal",
 		"pearl",
 		"sapphire",
@@ -214,16 +210,16 @@ func TestDuplicateSlugs(t *testing.T) {
 	problems, err := track.DuplicateSlugs()
 	assertNoError(t, err)
 
-	if len(problems) != 3 {
+	if len(problems) != 2 {
 		msg := "Expected len(problems)==3, but len(%v)==%d"
 		t.Errorf(msg, len(problems), problems)
 	}
 
-	expected := []string{"amethyst", "beryl", "crystal"}
+	expected := []string{"amethyst", "crystal"}
 	sort.Strings(problems)
 
 	if strings.Join(problems, " ") != strings.Join(expected, " ") {
-		t.Errorf("Expected duplicates to be '[amethyst beryl crystal]', but was %v", problems)
+		t.Errorf("Expected duplicates to be '[amethyst crystal]', but was %v", problems)
 	}
 }
 

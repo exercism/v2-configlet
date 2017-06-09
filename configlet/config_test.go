@@ -1,7 +1,6 @@
 package configlet
 
 import (
-	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -48,18 +47,4 @@ func TestConfigSlugs(t *testing.T) {
 			t.Errorf("%s - slugs[%d]: expected '%s', got '%s'", path, i, expectedSlugs[i], slug)
 		}
 	}
-}
-
-func TestIgnoredDirsIsUnique(t *testing.T) {
-	path := "./fixtures/valid.json"
-	c, err := Load(path)
-	assert.Nil(t, err)
-
-	expected := []string{"bin", "fig", "ignored", "img"}
-	actual := c.IgnoredDirs()
-
-	sort.Strings(expected)
-	sort.Strings(actual)
-
-	assert.Equal(t, expected, actual)
 }

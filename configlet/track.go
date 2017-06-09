@@ -86,10 +86,6 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 		slugs[slug] = struct{}{}
 	}
 
-	for _, slug := range c.IgnoredDirs() {
-		slugs[slug] = struct{}{}
-	}
-
 	for _, slug := range c.Deprecated {
 		slugs[slug] = struct{}{}
 	}
@@ -239,7 +235,6 @@ func (t Track) ForegoneViolations() ([]string, error) {
 // DuplicateSlugs detects slugs in multiple config categories.
 // If a problem is deprecated, it means that we have the files for it,
 // we're just not serving it in the default response.
-// If a directory is ignored, it means that it's not a problem.
 // If a slug is foregone, it means that we've chosen not to implement it,
 // and it should not have a directory.
 func (t Track) DuplicateSlugs() ([]string, error) {
@@ -251,10 +246,6 @@ func (t Track) DuplicateSlugs() ([]string, error) {
 	}
 
 	for _, slug := range c.Slugs() {
-		counts[slug] = counts[slug] + 1
-	}
-
-	for _, slug := range c.IgnoredDirs() {
 		counts[slug] = counts[slug] + 1
 	}
 
