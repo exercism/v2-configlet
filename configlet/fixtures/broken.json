@@ -3,9 +3,17 @@
   "language": "Broken",
   "repository": "https://github.com/exercism/xbroken",
   "active": true,
-  "problems": [
-    "alpaca"
-    "badger",
+  "exercises": [
+    {
+      "slug": "alpaca"
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "badger",
+      "topics": [],
+      "difficulty": 1
+    }
   ],
   "deprecated": [
 

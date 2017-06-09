@@ -4,13 +4,37 @@
   "repository": "https://github.com/exercism/xgemstones",
   "active": true,
   "solution_pattern": "[Ee]xample|\\.meta/solutions/[^/]*\\.rb",
-  "problems": [
-    "amethyst",
-    "beryl",
-    "crystal",
-    "melanite",
-    "sapphire",
-    "rhodolite"
+  "exercises": [
+    {
+      "slug": "amethyst",
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "beryl",
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "crystal",
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "melanite",
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "sapphire",
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "rhodolite",
+      "topics": [],
+      "difficulty": 1
+    }
   ],
   "deprecated": [
     "opal",

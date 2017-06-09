@@ -3,11 +3,6 @@
   "language": "Use Exercises",
   "repository": "https://github.com/exercism/xuse-exercises",
   "active": true,
-  "problems": [
-    "nope-a",
-    "nope-b",
-    "nope-c"
-  ],
   "exercises": [
   {
     "slug": "apple",

@@ -14,7 +14,6 @@ type Config struct {
 	Language        string
 	Active          bool
 	Repository      string
-	Problems        []string
 	Exercises       []Exercise
 	Ignored         []string
 	Deprecated      []string
@@ -62,9 +61,6 @@ func (c Config) Slugs() []string {
 			slugs = append(slugs, ex.Slug)
 		}
 		return slugs
-	}
-	for _, p := range c.Problems {
-		slugs = append(slugs, p)
 	}
 	return slugs
 }
