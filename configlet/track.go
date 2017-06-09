@@ -30,11 +30,6 @@ func NewTrack(path string) (Track, error) {
 		path := filepath.Join(t.path, "exercises", slug)
 
 		fi, err := os.Stat(path)
-		if err != nil && os.IsNotExist(err) {
-			path = filepath.Join(t.path, slug)
-		}
-
-		fi, err = os.Stat(path)
 		if err == nil && fi.IsDir() && isHiddenDir(fi.Name()) {
 			t.dirs[slug] = path
 			continue
@@ -109,17 +104,6 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 func (t Track) Dirs() (map[string]struct{}, error) {
 	dirs := make(map[string]struct{})
 
-	infos, err := ioutil.ReadDir(t.path)
-	if err != nil {
-		return dirs, err
-	}
-
-	for _, info := range infos {
-		if info.IsDir() && info.Name() != "exercises" && isHiddenDir(info.Name()) {
-			dirs[info.Name()] = struct{}{}
-		}
-	}
-
 	path := filepath.Join(t.path, "exercises")
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
@@ -128,7 +112,7 @@ func (t Track) Dirs() (map[string]struct{}, error) {
 		return dirs, err
 	}
 
-	infos, err = ioutil.ReadDir(filepath.Join(t.path, "exercises"))
+	infos, err := ioutil.ReadDir(filepath.Join(t.path, "exercises"))
 	if err != nil {
 		return dirs, err
 	}

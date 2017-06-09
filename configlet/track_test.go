@@ -13,14 +13,12 @@ func TestNewTrack(t *testing.T) {
 	assertNoError(t, err)
 
 	expected := []string{
-		"fixtures/track/beryl",
-		"fixtures/track/bin",
-		"fixtures/track/diamond",
+		"fixtures/track/exercises/beryl",
+		"fixtures/track/exercises/diamond",
 		"fixtures/track/exercises/amethyst",
 		"fixtures/track/exercises/melanite",
-		"fixtures/track/ignored",
-		"fixtures/track/sapphire",
-		"fixtures/track/rhodolite",
+		"fixtures/track/exercises/sapphire",
+		"fixtures/track/exercises/rhodolite",
 	}
 
 	var paths []string
@@ -51,9 +49,7 @@ func TestTrackDirs(t *testing.T) {
 	expected := []string{
 		"amethyst",
 		"beryl",
-		"bin",
 		"garnet",
-		"ignored",
 		"diamond",
 		"melanite",
 		"rhodolite",
