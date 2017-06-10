@@ -26,33 +26,26 @@ func TestValidConfig(t *testing.T) {
 }
 
 func TestConfigSlugs(t *testing.T) {
-	paths := []string{
-		"./fixtures/use-problems.json",
-		"./fixtures/use-exercises.json",
-	}
 	expectedSlugs := []string{
 		"apple",
 		"banana",
 		"cherimoya",
 	}
 
-	for _, path := range paths {
-		c, err := Load(path)
-		if err != nil {
-			t.Errorf("failed to load config at %s.", path)
-			continue
-		}
+	path := "./fixtures/exercises.json"
+	c, err := Load(path)
+	if err != nil {
+		t.Errorf("failed to load config at %s.", path)
+	}
 
-		actualSlugs := c.Slugs()
-		if len(actualSlugs) != len(expectedSlugs) {
-			t.Errorf("%s: got %d slugs, want %d", path, len(actualSlugs), len(expectedSlugs))
-			continue
-		}
+	actualSlugs := c.Slugs()
+	if len(actualSlugs) != len(expectedSlugs) {
+		t.Errorf("%s: got %d slugs, want %d", path, len(actualSlugs), len(expectedSlugs))
+	}
 
-		for i, slug := range c.Slugs() {
-			if expectedSlugs[i] != slug {
-				t.Errorf("%s - slugs[%d]: expected '%s', got '%s'", path, i, expectedSlugs[i], slug)
-			}
+	for i, slug := range c.Slugs() {
+		if expectedSlugs[i] != slug {
+			t.Errorf("%s - slugs[%d]: expected '%s', got '%s'", path, i, expectedSlugs[i], slug)
 		}
 	}
 }
