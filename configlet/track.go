@@ -30,11 +30,6 @@ func NewTrack(path string) (Track, error) {
 		path := filepath.Join(t.path, "exercises", slug)
 
 		fi, err := os.Stat(path)
-		if err != nil && os.IsNotExist(err) {
-			path = filepath.Join(t.path, slug)
-		}
-
-		fi, err = os.Stat(path)
 		if err == nil && fi.IsDir() && isHiddenDir(fi.Name()) {
 			t.dirs[slug] = path
 			continue
@@ -91,10 +86,6 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 		slugs[slug] = struct{}{}
 	}
 
-	for _, slug := range c.IgnoredDirs() {
-		slugs[slug] = struct{}{}
-	}
-
 	for _, slug := range c.Deprecated {
 		slugs[slug] = struct{}{}
 	}
@@ -109,17 +100,6 @@ func (t Track) Slugs() (map[string]struct{}, error) {
 func (t Track) Dirs() (map[string]struct{}, error) {
 	dirs := make(map[string]struct{})
 
-	infos, err := ioutil.ReadDir(t.path)
-	if err != nil {
-		return dirs, err
-	}
-
-	for _, info := range infos {
-		if info.IsDir() && info.Name() != "exercises" && isHiddenDir(info.Name()) {
-			dirs[info.Name()] = struct{}{}
-		}
-	}
-
 	path := filepath.Join(t.path, "exercises")
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
@@ -128,7 +108,7 @@ func (t Track) Dirs() (map[string]struct{}, error) {
 		return dirs, err
 	}
 
-	infos, err = ioutil.ReadDir(filepath.Join(t.path, "exercises"))
+	infos, err := ioutil.ReadDir(filepath.Join(t.path, "exercises"))
 	if err != nil {
 		return dirs, err
 	}
@@ -255,7 +235,6 @@ func (t Track) ForegoneViolations() ([]string, error) {
 // DuplicateSlugs detects slugs in multiple config categories.
 // If a problem is deprecated, it means that we have the files for it,
 // we're just not serving it in the default response.
-// If a directory is ignored, it means that it's not a problem.
 // If a slug is foregone, it means that we've chosen not to implement it,
 // and it should not have a directory.
 func (t Track) DuplicateSlugs() ([]string, error) {
@@ -267,10 +246,6 @@ func (t Track) DuplicateSlugs() ([]string, error) {
 	}
 
 	for _, slug := range c.Slugs() {
-		counts[slug] = counts[slug] + 1
-	}
-
-	for _, slug := range c.IgnoredDirs() {
 		counts[slug] = counts[slug] + 1
 	}
 

@@ -40,11 +40,6 @@
     "opal",
     "amethyst"
   ],
-  "ignored": [
-    "ignored",
-    "no-such-dir",
-    "beryl"
-    ],
   "foregone": [
     "diamond",
     "pearl",
