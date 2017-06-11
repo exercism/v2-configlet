@@ -28,9 +28,3 @@ and are at the root of an exercism language track, then you can run the followin
 ```bash
 $ configlet .
 ```
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2015 Katrina Owen, _@kytrinyx.com
