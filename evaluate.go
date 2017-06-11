@@ -27,23 +27,23 @@ func Evaluate(path string) bool {
 	configErrors := []ConfigError{
 		{
 			check: track.MissingProblems,
-			msg:   "-> No directory found for %v.\n",
+			msg:   "-> An exercise with slug '%v' is referenced in config.json, but no implementation was found.\n",
 		},
 		{
 			check: track.UnconfiguredProblems,
-			msg:   "-> config.json does not include %v.\n",
+			msg:   "-> An implementation for '%v' was found, but config.json does not reference this exercise.\n",
 		},
 		{
 			check: track.ProblemsLackingExample,
-			msg:   "-> missing example solution in %v.\n",
+			msg:   "-> The implementation for '%v' is missing an example solution.\n",
 		},
 		{
 			check: track.ForegoneViolations,
-			msg:   "-> %v should not be implemented.\n",
+			msg:   "-> An implementation for '%v' was found, but config.json specifies that it should be foregone (not implemented).\n",
 		},
 		{
 			check: track.DuplicateSlugs,
-			msg:   "-> %v found in multiple categories.\n",
+			msg:   "-> The exercise '%v' was found in multiple (conflicting) categories in config.json.\n",
 		},
 	}
 
@@ -57,7 +57,9 @@ func Evaluate(path string) bool {
 
 		if len(result) > 0 {
 			hasErrors = true
-			fmt.Printf(configError.msg, result)
+			for _, slug := range result {
+				fmt.Printf(configError.msg, slug)
+			}
 		}
 	}
 	return hasErrors
