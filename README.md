@@ -7,12 +7,14 @@ certain assumptions. Configlet makes it simple to verify up-front
 that the changes to existing problems or the addition of new problems
 will play nicely with the API.
 
-There are three common problems that occur:
+Configlet checks for the following configuration issues:
 
-1. The `config.json` [(documented here)](https://github.com/exercism/x-common/blob/master/CONTRIBUTING.md#track-configuration-file) might be invalid.
-1. Problems might be missing a reference solution.
-1. Problems might be implemented (test suite + reference solution), but not configured.
-1. Slugs in the configuration might not have a corresponding problem.
+1. `config.json` contents that are invalid according to [the specification](https://github.com/exercism/x-common/blob/master/CONTRIBUTING.md#track-configuration-file).
+1. Inconsistencies between the lists of track slugs in `config.json` and the corresponding implementation files:
+    * Slugs referenced in `config.json` that have no corresponding implementation.
+    * Slugs referenced in `config.json` whose implementation is missing an example solution.
+    * Implementations for slugs that are not referenced in `config.json`.
+    * Implementations for slugs that have been declared as foregone in `config.json`.
 
 ## Usage
 
