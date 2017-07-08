@@ -1,5 +1,5 @@
 /*
-Command configlet sanity-checks Exercism track configuration.
+Command configlet verifies Exercism's track configuration.
 
 Each track has a script that downloads the binary to run on Travis CI.
 
@@ -9,20 +9,19 @@ Compile the CLI:
 
     $ go build -o out/configlet
 
-Run the command:
+Run the lint command:
 
-    $ path/to/configlet path/to/track
+    $ path/to/configlet lint path/to/track
 
 Cross-compile using the build script:
 
     $ bin/build
 
-To verify the command, use the fixture files:
+To test the tool, use the fixture files:
 
     $ go build -o out/configlet
-    $ out/configlet configlet/fixtures/track
+    $ out/configlet fixtures/numbers
 
 The command should exit with status 1, and output a list of issues.
-
 */
 package main

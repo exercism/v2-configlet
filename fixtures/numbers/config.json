@@ -1,0 +1,31 @@
+{
+  "slug": "numbers",
+  "language": "Numbers",
+  "repository": "https://github.com/exercism/numbers",
+  "active": true,
+  "solution_pattern": "[Ee]xample|\\.meta/solutions/[^/]*\\.ext",
+  "exercises": [
+    {
+      "slug": "one",
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "two",
+      "deprecated": true,
+      "topics": [],
+      "difficulty": 1
+    },
+    {
+      "slug": "bajillion",
+      "topics": [],
+      "difficulty": 1
+    }
+  ],
+  "deprecated": [
+    "three"
+  ],
+  "foregone": [
+    "zero"
+  ]
+}
