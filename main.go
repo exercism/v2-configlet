@@ -30,12 +30,17 @@ func main() {
 		os.Exit(0)
 	}
 
-	if len(os.Args) != 2 {
-		fmt.Println("Usage: configlet path/to/track/repository")
+	var path string
+	switch len(os.Args) {
+	case 3:
+		path = os.Args[2]
+	case 2:
+		path = os.Args[1]
+	default:
+		fmt.Println("Usage: configlet lint path/to/track")
 		os.Exit(1)
 	}
 
-	path := os.Args[1]
 	fmt.Printf("Evaluating %s\n", path)
 
 	hasErrors := Evaluate(path)
