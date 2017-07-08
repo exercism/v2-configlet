@@ -31,7 +31,7 @@ func TestConfigSlugs(t *testing.T) {
 		"cherimoya",
 	}
 
-	path := "./fixtures/exercises.json"
+	path := "./fixtures/valid.json"
 	c, err := Load(path)
 	if err != nil {
 		t.Errorf("failed to load config at %s.", path)
