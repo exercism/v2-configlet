@@ -18,7 +18,7 @@ type ConfigError struct {
 const (
 	// Version represents the latest released version of the project.
 	// Configlet follows semantic versioning.
-	Version = "2.0.1"
+	Version = "2.0.2"
 )
 
 var showVersion = flag.Bool("version", false, "output the version of the tool")
