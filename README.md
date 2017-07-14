@@ -9,7 +9,7 @@ will play nicely with the API.
 
 Configlet checks for the following configuration issues:
 
-1. `config.json` contents that are invalid according to [the specification](https://github.com/exercism/x-common/blob/master/CONTRIBUTING.md#track-configuration-file).
+1. `config.json` contents that are invalid according to [the specification](https://github.com/exercism/problem-specifications/blob/master/CONTRIBUTING.md#track-configuration-file).
 1. Inconsistencies between the lists of track slugs in `config.json` and the corresponding implementation files:
     * Slugs referenced in `config.json` that have no corresponding implementation.
     * Slugs referenced in `config.json` whose implementation is missing an example solution.
@@ -26,5 +26,5 @@ If you have [installed the configlet binary](https://github.com/exercism/configl
 and are at the root of an exercism language track, then you can run the following:
 
 ```bash
-$ configlet .
+$ configlet lint .
 ```
