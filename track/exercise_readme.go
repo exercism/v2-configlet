@@ -14,10 +14,11 @@ const (
 )
 
 var (
-	pathTrackTemplate    = filepath.Join("config", "exercise_readme.go.tmpl")
-	pathTrackInsert      = filepath.Join("config", "exercise-readme-insert.md")
-	pathExerciseTemplate = filepath.Join(".meta", "readme.go.tmpl")
-	pathExerciseInsert   = filepath.Join(".meta", "hints.md")
+	pathTrackTemplate         = filepath.Join("config", "exercise_readme.go.tmpl")
+	pathTrackInsert           = filepath.Join("config", "exercise-readme-insert.md")
+	pathTrackInsertDeprecated = filepath.Join("docs", "EXERCISE_README_INSERT.md")
+	pathExerciseTemplate      = filepath.Join(".meta", "readme.go.tmpl")
+	pathExerciseInsert        = filepath.Join(".meta", "hints.md")
 )
 
 type ExerciseReadme struct {
@@ -51,11 +52,9 @@ func NewExerciseReadme(root, trackID, slug string) (ExerciseReadme, error) {
 	}
 	readme.Hints = string(b)
 
-	b, err = ioutil.ReadFile(filepath.Join(root, trackID, pathTrackInsert))
-	if err != nil && !os.IsNotExist(err) {
+	if err := readme.readTrackInsert(); err != nil {
 		return readme, err
 	}
-	readme.TrackInsert = string(b)
 
 	return readme, nil
 }
@@ -77,6 +76,23 @@ func (readme ExerciseReadme) Write() error {
 		return err
 	}
 	return ioutil.WriteFile(filepath.Join(readme.dir, filenameReadme), []byte(s), 0644)
+}
+
+func (readme *ExerciseReadme) readTrackInsert() error {
+	b, err := ioutil.ReadFile(filepath.Join(readme.trackDir, pathTrackInsert))
+	if err == nil {
+		readme.TrackInsert = string(b)
+		return nil
+	}
+	if !os.IsNotExist(err) {
+		return err
+	}
+	b, err = ioutil.ReadFile(filepath.Join(readme.trackDir, pathTrackInsertDeprecated))
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	readme.TrackInsert = string(b)
+	return nil
 }
 
 func (readme *ExerciseReadme) readTemplate() error {
