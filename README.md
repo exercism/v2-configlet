@@ -26,5 +26,5 @@ If you have [installed the configlet binary](https://github.com/exercism/configl
 and are at the root of an exercism language track, then you can run the following:
 
 ```bash
-$ configlet .
+$ configlet lint .
 ```
