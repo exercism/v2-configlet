@@ -57,3 +57,21 @@ func TestExerciseReadmeTrackInsertDeprecation(t *testing.T) {
 		assert.Equal(t, test.expected, readme.TrackInsert)
 	}
 }
+
+func TestExerciseReadmeHintsDeprecation(t *testing.T) {
+	root := filepath.FromSlash("../fixtures/deprecated")
+
+	tests := []struct {
+		trackID  string
+		expected string
+	}{
+		{"hints-both", "real hints\n"},
+		{"hints-old", "deprecated hints\n"},
+	}
+
+	for _, test := range tests {
+		readme, err := NewExerciseReadme(root, test.trackID, "fake")
+		assert.NoError(t, err)
+		assert.Equal(t, test.expected, readme.Hints)
+	}
+}
