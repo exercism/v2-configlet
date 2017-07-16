@@ -14,6 +14,11 @@ const (
 	filenameMetadata    = "metadata.yml"
 )
 
+var (
+	// ProblemSpecificationsPath is the location of the cloned problem-specifications repository.
+	ProblemSpecificationsPath string
+)
+
 type ProblemSpecification struct {
 	Slug            string
 	Description     string
@@ -23,6 +28,7 @@ type ProblemSpecification struct {
 	trackID         string
 	metadataPath    string
 	descriptionPath string
+	specPath        string
 }
 
 func NewProblemSpecification(root, trackID, slug string) (*ProblemSpecification, error) {
@@ -75,6 +81,9 @@ func (spec *ProblemSpecification) load(path string) error {
 }
 
 func (spec *ProblemSpecification) sharedPath() string {
+	if ProblemSpecificationsPath != "" {
+		return filepath.Join(ProblemSpecificationsPath, "exercises", spec.Slug)
+	}
 	return filepath.Join(spec.root, "problem-specifications", "exercises", spec.Slug)
 }
 

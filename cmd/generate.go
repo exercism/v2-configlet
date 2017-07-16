@@ -10,7 +10,8 @@ import (
 )
 
 var (
-	genSlug string
+	genSlug  string
+	specPath string
 )
 
 // generateCmd represents the generate command
@@ -30,6 +31,8 @@ var generateCmd = &cobra.Command{
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
 		}
+
+		track.ProblemSpecificationsPath = specPath
 		root := filepath.Dir(path)
 		trackID := filepath.Base(path)
 
@@ -63,4 +66,5 @@ var generateCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(generateCmd)
 	generateCmd.Flags().StringVarP(&genSlug, "only", "o", "", "Generate READMEs for just the exercise specified (by the slug).")
+	generateCmd.Flags().StringVarP(&specPath, "spec-path", "p", "", "The location of the problem-specifications directory.")
 }

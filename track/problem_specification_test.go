@@ -11,6 +11,7 @@ func TestNewProblemSpecification(t *testing.T) {
 	tests := []struct {
 		description string
 		slug        string
+		specPath    string
 		expected    ProblemSpecification
 	}{
 		{
@@ -31,9 +32,20 @@ func TestNewProblemSpecification(t *testing.T) {
 				SourceURL:   "",
 			},
 		},
+		{
+			description: "shared spec from alternate problem-specifications location",
+			slug:        "one",
+			specPath:    filepath.FromSlash("../fixtures/alternate/problem-specifications"),
+			expected: ProblemSpecification{
+				Description: "This is the alternate one.\n",
+				Source:      "The internet.",
+				SourceURL:   "http://example.com",
+			},
+		},
 	}
 
 	for _, test := range tests {
+		ProblemSpecificationsPath = test.specPath
 		root := filepath.FromSlash("../fixtures")
 		spec, err := NewProblemSpecification(root, "numbers", test.slug)
 		assert.NoError(t, err)
