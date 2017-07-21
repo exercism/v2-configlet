@@ -2,10 +2,7 @@
 
 A linter for exercism language track repositories.
 
-The API that delivers language-specific exercism problems makes
-certain assumptions. Configlet makes it simple to verify up-front
-that the changes to existing problems or the addition of new problems
-will play nicely with the API.
+Exercism makes certain assumptions about language tracks. Configlet makes it simple to verify up-front that the changes to existing exercises, or the addition of new exercises will play nicely with the website.
 
 Configlet checks for the following configuration issues:
 
@@ -19,7 +16,7 @@ Configlet checks for the following configuration issues:
 ## Usage
 
 ```bash
-$ configlet path/to/problem/repository
+$ configlet lint path/to/track
 ```
 
 If you have [installed the configlet binary](https://github.com/exercism/configlet/releases/latest)
