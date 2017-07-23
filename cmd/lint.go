@@ -56,6 +56,10 @@ func lintTrack(path string) bool {
 			msg:   "-> The implementation for '%v' is missing an example solution.\n",
 		},
 		{
+			check: missingTestSuite,
+			msg:   "-> The implementation for '%v' is missing a test suite.\n",
+		},
+		{
 			check: foregoneViolations,
 			msg:   "-> An implementation for '%v' was found, but config.json specifies that it should be foregone (not implemented).\n",
 		},
@@ -139,6 +143,25 @@ func missingSolution(t track.Track) []string {
 
 	slugs := []string{}
 	for slug, ok := range solutions {
+		if !ok {
+			slugs = append(slugs, slug)
+		}
+	}
+	return slugs
+}
+
+func missingTestSuite(t track.Track) []string {
+	tests := map[string]bool{}
+	for _, exercise := range t.Exercises {
+		tests[exercise.Slug] = exercise.HasTestSuite()
+	}
+	// Don't complain about missing test suite in foregone exercises.
+	for _, slug := range t.Config.ForegoneSlugs {
+		tests[slug] = true
+	}
+
+	slugs := []string{}
+	for slug, ok := range tests {
 		if !ok {
 			slugs = append(slugs, slug)
 		}

@@ -3,7 +3,6 @@ package track
 import (
 	"io/ioutil"
 	"path/filepath"
-	"regexp"
 )
 
 // Track is a collection of Exercism exercises for a programming language.
@@ -31,13 +30,15 @@ func New(path string) (Track, error) {
 		return track, err
 	}
 
-	rgx, err := regexp.Compile(track.Config.SolutionPattern)
 	for _, file := range files {
 		if file.IsDir() {
-			ex, err := NewExercise(filepath.Join(dir, file.Name()), rgx)
+			fp := filepath.Join(dir, file.Name())
+
+			ex, err := NewExercise(fp, track.Config.PatternGroup)
 			if err != nil {
 				return track, err
 			}
+
 			track.Exercises = append(track.Exercises, ex)
 		}
 	}
