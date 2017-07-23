@@ -11,10 +11,8 @@ var errInvalidConfig = errors.New("invalid config file - try jsonlint.com")
 
 // Config is an Exercism track configuration.
 type Config struct {
-	Slug            string
 	Language        string
 	Active          bool
-	Repository      string
 	Exercises       []ExerciseMetadata
 	DeprecatedSlugs []string `json:"deprecated"`
 	ForegoneSlugs   []string `json:"foregone"`
