@@ -1,0 +1,12 @@
+{
+  "docs_url": "http://example.com/docs",
+  "maintainers": [
+    {
+      "alumnus": false,
+      "bio": null,
+      "github_username": "alice",
+      "name": "Alice Jones",
+      "show_on_website": false
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "language": "Numbers",
+  "active": true,
+  "blurb": "",
+  "ignore_pattern": "example(?!.*test)",
+  "foregone": [
+    "three",
+    "four"
+  ],
+  "exercises": [
+{
+      "uuid": "001",
+      "slug": "one",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 1,
+      "topics": [
+            "Control-flow (conditionals)",
+            "Logic",
+            "Booleans",
+            "Integers"
+      ]
+    },
+    {
+      "uuid": "002",
+      "slug": "two",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 1,
+      "topics": [
+        "Time",
+        "Mathematics",
+        "Text formatting",
+        "Equality"
+      ]}]}
