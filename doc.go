@@ -20,7 +20,7 @@ Cross-compile using the build script:
 To test the tool, use the fixture files:
 
     $ go build -o out/configlet
-    $ out/configlet fixtures/numbers
+    $ out/configlet lint fixtures/numbers
 
 The command should exit with status 1, and output a list of issues.
 */
