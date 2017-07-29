@@ -1,0 +1,9 @@
+{
+  "maintainers": [
+    {
+       "github_username": "alice",
+       "show_on_website": false,
+    }
+  ],
+  "docs_url": "http://example.com/docs"
+}
