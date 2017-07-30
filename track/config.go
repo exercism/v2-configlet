@@ -2,12 +2,9 @@ package track
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 )
-
-var errInvalidConfig = errors.New("invalid config file - try jsonlint.com")
 
 // Config is an Exercism track configuration.
 type Config struct {
