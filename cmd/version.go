@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Version is the current version of the tool.
 const Version = "3.1.0"
 
 // versionCmd represents the version command

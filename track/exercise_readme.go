@@ -22,6 +22,8 @@ var (
 	pathExerciseInsertDeprecated = "HINTS.md"
 )
 
+// ExerciseReadme contains the data necessary to generate a README
+// for an Exercism exercise.
 type ExerciseReadme struct {
 	Spec        *ProblemSpecification
 	Hints       string
@@ -31,6 +33,7 @@ type ExerciseReadme struct {
 	dir         string
 }
 
+// NewExerciseReadme locates and reads all the data to create an ExerciseReadme.
 func NewExerciseReadme(root, trackID, slug string) (ExerciseReadme, error) {
 	readme := ExerciseReadme{
 		trackDir: filepath.Join(root, trackID),
@@ -58,6 +61,7 @@ func NewExerciseReadme(root, trackID, slug string) (ExerciseReadme, error) {
 	return readme, nil
 }
 
+// Generate produces a README from the template and data.
 func (readme ExerciseReadme) Generate() (string, error) {
 	t, err := template.New("readme").Parse(readme.template)
 	if err != nil {
@@ -69,6 +73,7 @@ func (readme ExerciseReadme) Generate() (string, error) {
 	return bb.String(), nil
 }
 
+// Write generates and writes the README to a file.
 func (readme ExerciseReadme) Write() error {
 	s, err := readme.Generate()
 	if err != nil {
