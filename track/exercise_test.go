@@ -2,7 +2,6 @@ package track
 
 import (
 	"path/filepath"
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,55 +10,75 @@ import (
 func TestExerciseSlug(t *testing.T) {
 	path := filepath.FromSlash("../fixtures/fake-exercise")
 
-	rgx, err := regexp.Compile("")
-	assert.NoError(t, err)
-
-	ex, err := NewExercise(path, rgx)
+	ex, err := NewExercise(path, PatternGroup{})
 	assert.NoError(t, err)
 	assert.Equal(t, "fake-exercise", ex.Slug)
 }
 
 func TestExerciseSolutionPaths(t *testing.T) {
 	tests := []struct {
-		solution string
-		pattern  string
+		PatternGroup
+		path string
 	}{
 		{
 			// It finds files in the root of the exercise directory.
-			pattern:  "[Ee]xample",
-			solution: "example.ext",
+			PatternGroup{SolutionPattern: "[Ee]xample"},
+			"example.ext",
 		},
 		{
 			// It finds files in a subdirectory.
-			pattern:  "solution",
-			solution: "subdir/solution.ext",
+			PatternGroup{SolutionPattern: "solution"},
+			"subdir/solution.ext",
 		},
 		{
 			// It only matches files, not directories.
-			pattern:  "subdir",
-			solution: "subdir/solution.ext",
+			PatternGroup{SolutionPattern: "subdir"},
+			"subdir/solution.ext",
 		},
 		// It finds hidden files.
 		{
-			pattern:  "secret",
-			solution: "subdir/.secret-solution.ext",
+			PatternGroup{SolutionPattern: "secret-solution"},
+			"subdir/.secret-solution.ext",
 		},
 		// it finds files in hidden directories
 		{
-			pattern:  "hidden.file\\.ext",
-			solution: ".hidden/file.ext",
+			PatternGroup{SolutionPattern: "hidden.file\\.ext"},
+			".hidden/file.ext",
 		},
 	}
 
+	path := filepath.FromSlash("../fixtures/fake-exercise")
+
 	for _, test := range tests {
-		path := filepath.FromSlash("../fixtures/fake-exercise")
-
-		rgx, err := regexp.Compile(test.pattern)
+		ex, err := NewExercise(path, test.PatternGroup)
 		assert.NoError(t, err)
 
-		ex, err := NewExercise(path, rgx)
+		assert.Equal(t, test.path, ex.SolutionPath)
+	}
+}
+func TestExerciseTestSuitePaths(t *testing.T) {
+	tests := []struct {
+		PatternGroup
+		path string
+	}{
+		{
+			// It finds files in the root of the exercise directory.
+			PatternGroup{TestPattern: "(?i)test"},
+			"fake_test.ext",
+		},
+		{
+			// It finds files in a subdirectory.
+			PatternGroup{TestPattern: "specs"},
+			"specs/file.ext",
+		},
+	}
+
+	path := filepath.FromSlash("../fixtures/fake-exercise")
+
+	for _, test := range tests {
+		ex, err := NewExercise(path, test.PatternGroup)
 		assert.NoError(t, err)
 
-		assert.Equal(t, test.solution, ex.SolutionPath)
+		assert.Equal(t, test.path, ex.TestSuitePath)
 	}
 }
