@@ -19,6 +19,7 @@ var (
 	ProblemSpecificationsPath string
 )
 
+// ProblemSpecification contains metadata describing an exercise.
 type ProblemSpecification struct {
 	Slug            string
 	Description     string
@@ -31,6 +32,9 @@ type ProblemSpecification struct {
 	specPath        string
 }
 
+// NewProblemSpecification loads the specification from files on disk.
+// It will default to a custom specification, falling back to the generic specification
+// if no custom one is found.
 func NewProblemSpecification(root, trackID, slug string) (*ProblemSpecification, error) {
 	spec := &ProblemSpecification{
 		root:    root,
@@ -53,6 +57,7 @@ func (spec *ProblemSpecification) Name() string {
 	return strings.Title(strings.Join(strings.Split(spec.Slug, "-"), " "))
 }
 
+// Credits are a markdown-formatted version of the source of the exercise.
 func (spec *ProblemSpecification) Credits() string {
 	if spec.SourceURL == "" {
 		return spec.Source
