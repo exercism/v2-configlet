@@ -8,20 +8,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// lintCmd defines the lint command.
-var lintCmd = &cobra.Command{
-	Use:   "lint",
-	Short: "Ensure that the track is configured.",
-	Long: `Verify that the config.json file is valid, and that the exercises are complete.
+var (
+	// lintCmd defines the lint command.
+	lintCmd = &cobra.Command{
+		Use:   "lint",
+		Short: "Ensure that the track is configured.",
+		Long: `Verify that the config.json file is valid, and that the exercises are complete.
 
 Call lint command with path to track:
 
-  configlet lint path/to/track
+  configlet lint <path/to/track>
 `,
-	Run: lint,
-}
+		Run: lint,
+	}
+	lintUsageText = "USAGE: configlet lint <path/to/track>\n"
+)
 
 func lint(cmd *cobra.Command, args []string) {
+	if len(args) == 0 {
+		lintUsageFunc(cmd)
+		os.Exit(1)
+	}
 	var hasErrors bool
 	for _, arg := range args {
 		if failed := lintTrack(arg); failed {
@@ -206,6 +213,12 @@ func duplicateSlugs(t track.Track) []string {
 	return slugs
 }
 
+func lintUsageFunc(cmd *cobra.Command) error {
+	fmt.Fprintf(os.Stderr, lintUsageText)
+	return nil
+}
+
 func init() {
 	RootCmd.AddCommand(lintCmd)
+	lintCmd.SetUsageFunc(lintUsageFunc)
 }
