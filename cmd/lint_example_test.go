@@ -1,7 +1,9 @@
 package cmd
 
+import "path/filepath"
+
 func ExampleLint() {
-	lintTrack("../fixtures/numbers")
+	lintTrack(filepath.FromSlash("../fixtures/numbers"))
 	// Output:
 	// -> An exercise with slug 'bajillion' is referenced in config.json, but no implementation was found.
 	// -> The implementation for 'three' is missing an example solution.
@@ -10,7 +12,7 @@ func ExampleLint() {
 }
 
 func ExampleLintMaintainers() {
-	lintTrack("../fixtures/broken-maintainers")
+	lintTrack(filepath.FromSlash("../fixtures/broken-maintainers"))
 	// Output:
 	// -> invalid config ../fixtures/broken-maintainers/config/maintainers.json -- invalid character '}' looking for beginning of object key string
 }
