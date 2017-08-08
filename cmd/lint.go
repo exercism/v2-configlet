@@ -8,26 +8,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	// lintCmd defines the lint command.
-	lintCmd = &cobra.Command{
-		Use:   "lint",
-		Short: "Ensure that the track is configured.",
-		Long: `Verify that the config.json file is valid, and that the exercises are complete.
+// lintCmd defines the lint command.
+var lintCmd = &cobra.Command{
+	Use:   "lint",
+	Short: "Ensure that the track is configured.",
+	Long: `The lint command checks for any discrepancies in a track's configuration files.
 
-Call lint command with path to track:
+It ensures the following files are valid JSON:
+	config.json, maintainers.json
 
-  configlet lint <path/to/track>
+It also checks that the exercises defined in the config.json file are complete.
 `,
-		Run: lint,
-	}
-	lintUsageText = "USAGE: configlet lint <path/to/track>\n"
-)
+	Run: lint,
+}
+
+// lintUsageText defines how to use the lint command
+var lintUsageText = "Usage:\n  configlet lint <path/to/track>\n"
 
 func lint(cmd *cobra.Command, args []string) {
 	if len(args) == 0 {
 		lintUsageFunc(cmd)
-		os.Exit(1)
+		return
 	}
 	var hasErrors bool
 	for _, arg := range args {
