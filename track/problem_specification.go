@@ -57,6 +57,11 @@ func (spec *ProblemSpecification) Name() string {
 	return strings.Title(strings.Join(strings.Split(spec.Slug, "-"), " "))
 }
 
+// MixedCaseName returns the name with all spaces removed.
+func (spec *ProblemSpecification) MixedCaseName() string {
+	return strings.Replace(spec.Name(), " ", "", -1)
+}
+
 // Credits are a markdown-formatted version of the source of the exercise.
 func (spec *ProblemSpecification) Credits() string {
 	if spec.SourceURL == "" {
