@@ -64,26 +64,31 @@ func TestMissingProblemSpecification(t *testing.T) {
 
 func TestProblemSpecificationName(t *testing.T) {
 	tests := []struct {
-		slug string
-		name string
+		slug  string
+		name  string
+		mixed string
 	}{
 		{
-			slug: "apple",
-			name: "Apple",
+			slug:  "apple",
+			name:  "Apple",
+			mixed: "Apple",
 		},
 		{
-			slug: "apple-pie",
-			name: "Apple Pie",
+			slug:  "apple-pie",
+			name:  "Apple Pie",
+			mixed: "ApplePie",
 		},
 		{
-			slug: "1-apple-per-day",
-			name: "1 Apple Per Day",
+			slug:  "1-apple-per-day",
+			name:  "1 Apple Per Day",
+			mixed: "1ApplePerDay",
 		},
 	}
 
 	for _, test := range tests {
 		spec := ProblemSpecification{Slug: test.slug}
 		assert.Equal(t, test.name, spec.Name())
+		assert.Equal(t, test.mixed, spec.MixedCaseName())
 	}
 }
 
