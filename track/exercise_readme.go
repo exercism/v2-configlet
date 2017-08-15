@@ -40,15 +40,15 @@ func NewExerciseReadme(root, trackID, slug string) (ExerciseReadme, error) {
 		dir:      filepath.Join(root, trackID, dirExercises, slug),
 	}
 
+	spec, err := NewProblemSpecification(root, trackID, slug)
+	if err != nil {
+		return readme, err
+	}
+	readme.Spec = spec
+
 	if err := readme.readTemplate(); err != nil {
 		return readme, err
 	}
-
-	spec, err := NewProblemSpecification(root, trackID, slug)
-	if err != nil {
-		spec = &ProblemSpecification{}
-	}
-	readme.Spec = spec
 
 	if err := readme.readHints(); err != nil {
 		return readme, err
