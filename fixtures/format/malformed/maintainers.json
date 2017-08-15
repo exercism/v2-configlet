@@ -1,0 +1,9 @@
+{ "maintainers": [ {
+              "show_on_website": false,
+            "bio": null,
+                "name": "Alice Jones",
+        "github_username": "alice",
+"alumnus": false
+    }
+  ], "docs_url": "http://example.com/docs"
+}

@@ -1,10 +1,12 @@
 # Configlet
 
-A linter for exercism language track repositories.
+A tool for managing Exercism language track repositories.
 
-Exercism makes certain assumptions about language tracks. Configlet makes it simple to verify up-front that the changes to existing exercises, or the addition of new exercises will play nicely with the website.
+## Linter
 
-Configlet checks for the following configuration issues:
+Exercism makes certain assumptions about language tracks. The configlet `lint` command makes it simple to verify up-front that the changes to a track's configuration, as well as changes and additions to the exercises will play nicely with the website.
+
+`configlet lint` checks for the following configuration issues:
 
 1. `config.json` contents that are invalid according to [the specification](https://github.com/exercism/problem-specifications/blob/master/CONTRIBUTING.md#track-configuration-file).
 1. Inconsistencies between the lists of track slugs in `config.json` and the corresponding implementation files:
@@ -13,15 +15,27 @@ Configlet checks for the following configuration issues:
     * Implementations for slugs that are not referenced in `config.json`.
     * Implementations for slugs that have been declared as foregone in `config.json`.
 
-## Usage
+## Formatter
+
+Inspired by Go's [`gofmt`](https://blog.golang.org/go-fmt-your-code) tool, configlet's `fmt` command will consistently format a track's configuration files.
+
+`configlet fmt` formats according to the following rules:
+
+1. The JSON files, `config.json` and `maintainers.json` will be indented by 2 spaces.
+1. In the `config.json` file:
+    * Exercises will have their list of topics sorted alphabetically.
+    * Topics names will be normalised to be lowercase and contain hyphens in place of spaces.
+
+### Usage
 
 ```bash
-$ configlet lint path/to/track
+$ configlet [command] <path/to/track>
 ```
 
 If you have [installed the configlet binary](https://github.com/exercism/configlet/releases/latest)
 and are at the root of an exercism language track, then you can run the following:
 
 ```bash
-$ configlet lint .
+$ configlet [command] .
 ```
+
