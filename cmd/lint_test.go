@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"sort"
 	"testing"
 
@@ -149,4 +152,70 @@ func TestDuplicateSlugs(t *testing.T) {
 
 	assert.Equal(t, "apple", slugs[0])
 	assert.Equal(t, "banana", slugs[1])
+}
+
+func TestDuplicateUUID(t *testing.T) {
+	tests := []struct {
+		desc     string
+		expected int
+		config   track.Config
+	}{
+		{
+			desc:     "should not complain about a conflicting UUID for exercises with missing UUIDs.",
+			expected: 0,
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{Slug: "apple", UUID: ""},
+					{Slug: "banana", UUID: ""},
+				},
+			},
+		},
+		{
+			desc:     "should complain that multiple exercises have a conflicting UUID.",
+			expected: 1,
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{Slug: "cherry", UUID: "ccc"},
+					{Slug: "diakon", UUID: "abc"},
+					{Slug: "eggplant", UUID: "ccc"},
+				},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		track := track.Track{Config: test.config}
+		uuids := duplicateUUID(track)
+
+		assert.Equal(t, test.expected, len(uuids), test.desc)
+	}
+}
+
+func TestDuplicateTrackUUID(t *testing.T) {
+	fakeEndpoint := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusConflict)
+		fmt.Fprintln(w, `{"uuids": ["ccc"]}`)
+	})
+
+	ts := httptest.NewServer(fakeEndpoint)
+	defer ts.Close()
+
+	saved := UUIDValidationURL
+	UUIDValidationURL = ts.URL
+	defer func() { UUIDValidationURL = saved }()
+
+	expected := []string{"ccc"}
+	track := track.Track{
+		Config: track.Config{
+			Exercises: []track.ExerciseMetadata{
+				{Slug: "apple", UUID: "abc"},
+				{Slug: "banana", UUID: expected[0]},
+			},
+		},
+	}
+
+	uuids := duplicateTrackUUID(track)
+	assert.Equal(t, len(expected), len(uuids))
+	assert.Equal(t, expected[0], uuids[0])
+
 }

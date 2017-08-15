@@ -3,6 +3,10 @@ package cmd
 import "path/filepath"
 
 func ExampleLint() {
+	saved := disableHTTPChecks
+	disableHTTPChecks = true
+	defer func() { disableHTTPChecks = saved }()
+
 	lintTrack(filepath.FromSlash("../fixtures/numbers"))
 	// Output:
 	// -> An exercise with slug 'bajillion' is referenced in config.json, but no implementation was found.
@@ -13,6 +17,10 @@ func ExampleLint() {
 }
 
 func ExampleLintMaintainers() {
+	saved := disableHTTPChecks
+	disableHTTPChecks = true
+	defer func() { disableHTTPChecks = saved }()
+
 	lintTrack(filepath.FromSlash("../fixtures/broken-maintainers"))
 	// Output:
 	// -> invalid config ../fixtures/broken-maintainers/config/maintainers.json -- invalid character '}' looking for beginning of object key string

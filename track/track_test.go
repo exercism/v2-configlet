@@ -10,6 +10,7 @@ func TestNewTrack(t *testing.T) {
 	track, err := New("../fixtures/numbers")
 	assert.NoError(t, err)
 
+	assert.Equal(t, "numbers", track.ID)
 	assert.Equal(t, "Numbers", track.Config.Language)
 
 	slugs := map[string]bool{

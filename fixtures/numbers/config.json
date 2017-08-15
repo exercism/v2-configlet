@@ -11,20 +11,20 @@
       "difficulty": 1
     },
     {
-      "uuid": "3d0343ec-0658-7a80-9d1d-d48bed03cc2397805f5",
+      "uuid": "bbb",
       "slug": "two",
       "deprecated": true,
       "topics": [],
       "difficulty": 1
     },
     {
-      "uuid": "cff27211-0179-4a80-e456-f8ed3b8194a2b7480cb",
+      "uuid": "ccc",
       "slug": "three",
       "topics": [],
       "difficulty": 1
     },
     {
-      "uuid": "5c37ad59-07b3-1c80-cb0c-44d06708095a02a6760",
+      "uuid": "ddd",
       "slug": "bajillion",
       "topics": [],
       "difficulty": 1
