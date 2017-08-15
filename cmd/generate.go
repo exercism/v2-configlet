@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/exercism/configlet/track"
+	"github.com/hashicorp/go-multierror"
 	"github.com/spf13/cobra"
 )
 
@@ -35,13 +36,20 @@ func generate(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
 	}
-
-	track.ProblemSpecificationsPath = specPath
 	root := filepath.Dir(path)
 	trackID := filepath.Base(path)
 
-	var exercises []track.Exercise
+	track.ProblemSpecificationsPath = filepath.Join(root, track.ProblemSpecificationsDir)
+	if specPath != "" {
+		track.ProblemSpecificationsPath = specPath
+	}
 
+	if _, err := os.Stat(track.ProblemSpecificationsPath); os.IsNotExist(err) {
+		fmt.Fprintf(os.Stderr, "path not found: %s\n", track.ProblemSpecificationsPath)
+		os.Exit(1)
+	}
+
+	var exercises []track.Exercise
 	if genSlug != "" {
 		exercises = append(exercises, track.Exercise{Slug: genSlug})
 	} else {
@@ -53,17 +61,24 @@ func generate(cmd *cobra.Command, args []string) {
 		exercises = track.Exercises
 	}
 
-	errs := []error{}
+	errs := &multierror.Error{}
 	for _, exercise := range exercises {
 		readme, err := track.NewExerciseReadme(root, trackID, exercise.Slug)
 		if err != nil {
-			errs = append(errs, err)
+			errs = multierror.Append(errs, err)
 			continue
 		}
+
 		if err := readme.Write(); err != nil {
-			errs = append(errs, err)
+			errs = multierror.Append(errs, err)
 		}
 	}
+
+	if err := errs.ErrorOrNil(); err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+		os.Exit(1)
+	}
+
 }
 
 func init() {

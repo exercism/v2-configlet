@@ -10,8 +10,10 @@ import (
 )
 
 const (
-	filenameDescription = "description.md"
-	filenameMetadata    = "metadata.yml"
+	// ProblemSpecificationsDir is the default name of the cloned problem-specifications repository.
+	ProblemSpecificationsDir = "problem-specifications"
+	filenameDescription      = "description.md"
+	filenameMetadata         = "metadata.yml"
 )
 
 var (
@@ -94,7 +96,7 @@ func (spec *ProblemSpecification) sharedPath() string {
 	if ProblemSpecificationsPath != "" {
 		return filepath.Join(ProblemSpecificationsPath, "exercises", spec.Slug)
 	}
-	return filepath.Join(spec.root, "problem-specifications", "exercises", spec.Slug)
+	return filepath.Join(spec.root, ProblemSpecificationsDir, "exercises", spec.Slug)
 }
 
 func (spec *ProblemSpecification) customPath() string {

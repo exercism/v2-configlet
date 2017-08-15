@@ -51,6 +51,7 @@ func TestExerciseReadmeTrackInsertDeprecation(t *testing.T) {
 		{"inserts-old", "deprecated insert\n"},
 	}
 
+	ProblemSpecificationsPath = filepath.FromSlash("../fixtures/problem-specifications")
 	for _, test := range tests {
 		readme, err := NewExerciseReadme(root, test.trackID, "fake")
 		assert.NoError(t, err)
@@ -69,6 +70,7 @@ func TestExerciseReadmeHintsDeprecation(t *testing.T) {
 		{"hints-old", "deprecated hints\n"},
 	}
 
+	ProblemSpecificationsPath = filepath.FromSlash("../fixtures/problem-specifications")
 	for _, test := range tests {
 		readme, err := NewExerciseReadme(root, test.trackID, "fake")
 		assert.NoError(t, err)
