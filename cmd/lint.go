@@ -10,8 +10,8 @@ import (
 
 // lintCmd defines the lint command.
 var lintCmd = &cobra.Command{
-	Use:   "lint",
-	Short: "Ensure that the track is configured.",
+	Use:   "lint " + pathExample,
+	Short: "Ensure that the track is configured correctly",
 	Long: `The lint command checks for any discrepancies in a track's configuration files.
 
 It ensures the following files are valid JSON:
@@ -19,17 +19,12 @@ It ensures the following files are valid JSON:
 
 It also checks that the exercises defined in the config.json file are complete.
 `,
-	Run: lint,
+	Example: fmt.Sprintf("  %s lint %s", binaryName, pathExample),
+	Run:     runLint,
+	Args:    cobra.MinimumNArgs(1),
 }
 
-// lintUsageText defines how to use the lint command
-var lintUsageText = "Usage:\n  configlet lint <path/to/track>\n"
-
-func lint(cmd *cobra.Command, args []string) {
-	if len(args) == 0 {
-		lintUsageFunc(cmd)
-		return
-	}
+func runLint(cmd *cobra.Command, args []string) {
 	var hasErrors bool
 	for _, arg := range args {
 		if failed := lintTrack(arg); failed {
@@ -214,12 +209,6 @@ func duplicateSlugs(t track.Track) []string {
 	return slugs
 }
 
-func lintUsageFunc(cmd *cobra.Command) error {
-	fmt.Fprintf(os.Stderr, lintUsageText)
-	return nil
-}
-
 func init() {
 	RootCmd.AddCommand(lintCmd)
-	lintCmd.SetUsageFunc(lintUsageFunc)
 }

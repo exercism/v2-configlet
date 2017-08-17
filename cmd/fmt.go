@@ -18,8 +18,8 @@ var fmtVerbose bool
 
 // fmtCmd defines the fmt command
 var fmtCmd = &cobra.Command{
-	Use:   "fmt",
-	Short: "Format the track configuration files.",
+	Use:   "fmt " + pathExample,
+	Short: "Format the track configuration files",
 	Long: `The fmt command formats the track's configuration files.
 
 It ensures the following files have consistent JSON syntax and indentation:
@@ -27,21 +27,15 @@ It ensures the following files have consistent JSON syntax and indentation:
 	
 It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
-	Run: format,
+	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
+	Run:     runFmt,
+	Args:    cobra.MinimumNArgs(1),
 }
 
 // formatter applies additional formatting to unmarshalled JSON files.
 type formatter func(m map[string]interface{})
 
-// formatUsageText defines how to use the fmt command
-var formatUsageText = "Usage:\n  configlet fmt <path/to/track>\n"
-
-func format(cmd *cobra.Command, args []string) {
-	if len(args) == 0 {
-		formatUsageFunc(cmd)
-		return
-	}
-
+func runFmt(cmd *cobra.Command, args []string) {
 	path := args[0]
 	var fs = []struct {
 		path string
@@ -155,13 +149,7 @@ func normaliseTopic(t string) string {
 	return s
 }
 
-func formatUsageFunc(cmd *cobra.Command) error {
-	fmt.Fprintf(os.Stderr, formatUsageText)
-	return nil
-}
-
 func init() {
 	RootCmd.AddCommand(fmtCmd)
-	fmtCmd.SetUsageFunc(formatUsageFunc)
 	fmtCmd.Flags().BoolVarP(&fmtVerbose, "verbose", "v", false, "display the diff of the formatted changes.")
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/exercism/configlet/track"
 	"github.com/hashicorp/go-multierror"
@@ -18,19 +19,25 @@ var (
 var (
 	// generateCmd represents the generate command
 	generateCmd = &cobra.Command{
-		Use:   "generate <path/to/track>",
-		Short: "Generate exercise READMEs for an Exercism language track",
-		Long:  `Generate READMEs for Exercism exercises based on the contents of various files.`,
-		Example: `  configlet generate <path/to/track> --only hello-world
-
-  configlet generate <path/to/track> --spec-path <path/to/problem-specifications>
-`,
-		Run:  generate,
-		Args: cobra.MinimumNArgs(1),
+		Use:     "generate " + pathExample,
+		Short:   "Generate exercise READMEs for an Exercism language track",
+		Long:    `Generate READMEs for Exercism exercises based on the contents of various files.`,
+		Example: generateExampleText(),
+		Run:     runGenerate,
+		Args:    cobra.MinimumNArgs(1),
 	}
 )
 
-func generate(cmd *cobra.Command, args []string) {
+func generateExampleText() string {
+	cmds := []string{
+		"%[1]s generate %[2]s --only <exercise>",
+		"%[1]s generate %[2]s --spec-path <path/to/problem-specifications>",
+	}
+	s := "  " + strings.Join(cmds, "\n\n  ")
+	return fmt.Sprintf(s, binaryName, pathExample)
+}
+
+func runGenerate(cmd *cobra.Command, args []string) {
 	path, err := filepath.Abs(filepath.FromSlash(args[0]))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
