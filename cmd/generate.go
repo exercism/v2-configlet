@@ -17,21 +17,19 @@ var (
 var (
 	// generateCmd represents the generate command
 	generateCmd = &cobra.Command{
-		Use:   "generate",
+		Use:   "generate <path/to/track>",
 		Short: "Generate exercise READMEs for an Exercism language track",
-		Long: `Generate READMEs for Exercism exercises based on contents of
-a number of different files.`,
-		Run: generate,
+		Long:  `Generate READMEs for Exercism exercises based on the contents of various files.`,
+		Example: `  configlet generate <path/to/track> --only hello-world
+
+  configlet generate <path/to/track> --spec-path <path/to/problem-specifications>
+`,
+		Run:  generate,
+		Args: cobra.MinimumNArgs(1),
 	}
-	generateUsageText = "USAGE: configlet generate <path/to/track>\n"
 )
 
 func generate(cmd *cobra.Command, args []string) {
-	if len(args) == 0 {
-		generateUsageFunc(cmd)
-		os.Exit(1)
-	}
-
 	path, err := filepath.Abs(filepath.FromSlash(args[0]))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
@@ -68,14 +66,8 @@ func generate(cmd *cobra.Command, args []string) {
 	}
 }
 
-func generateUsageFunc(cmd *cobra.Command) error {
-	fmt.Fprintf(os.Stderr, generateUsageText)
-	return nil
-}
-
 func init() {
 	RootCmd.AddCommand(generateCmd)
-	generateCmd.SetUsageFunc(generateUsageFunc)
 	generateCmd.Flags().StringVarP(&genSlug, "only", "o", "", "Generate READMEs for just the exercise specified (by the slug).")
 	generateCmd.Flags().StringVarP(&specPath, "spec-path", "p", "", "The location of the problem-specifications directory.")
 }
