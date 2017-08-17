@@ -29,7 +29,7 @@
   branch = "master"
   name = "github.com/spf13/cobra"
   packages = ["."]
-  revision = "b26b538f693051ac6518e65672de3144ce3fbedc"
+  revision = "cb731b898346822cc0c225c28550a8a29d93c732"
 
 [[projects]]
   name = "github.com/spf13/pflag"
@@ -47,11 +47,11 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "25c4ec802a7d637f88d584ab26798e94ad14c13b"
+  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9c9b4be2565453cbd659554e7905e2a9a413f5d1de43914204330564f9cbc093"
+  inputs-digest = "6f58fa0c4ebe7a408c17780d5b18c5d7ca958646172dc0f6e70c38468cacf8aa"
   solver-name = "gps-cdcl"
   solver-version = 1
