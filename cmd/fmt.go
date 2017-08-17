@@ -13,6 +13,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// verbose flag for fmt command.
+var fmtVerbose bool
+
 // fmtCmd defines the fmt command
 var fmtCmd = &cobra.Command{
 	Use:   "fmt",
@@ -54,6 +57,8 @@ func format(cmd *cobra.Command, args []string) {
 		},
 	}
 
+	var changes string
+
 	for _, f := range fs {
 		if _, err := os.Stat(f.path); os.IsNotExist(err) {
 			fmt.Fprintln(os.Stderr, err.Error())
@@ -72,7 +77,14 @@ func format(cmd *cobra.Command, args []string) {
 			fmt.Fprintln(os.Stderr, err.Error())
 			continue
 		}
-		fmt.Printf("Changes made to %s:\n\n%s", f.path, diff)
+		if fmtVerbose {
+			fmt.Printf("%s\n\n%s\n", f.path, diff)
+		}
+		changes += fmt.Sprintf("%s\n", f.path)
+	}
+
+	if changes != "" {
+		fmt.Printf("Changes made to:\n%s", changes)
 	}
 	return
 }
@@ -151,4 +163,5 @@ func formatUsageFunc(cmd *cobra.Command) error {
 func init() {
 	RootCmd.AddCommand(fmtCmd)
 	fmtCmd.SetUsageFunc(formatUsageFunc)
+	fmtCmd.Flags().BoolVarP(&fmtVerbose, "verbose", "v", false, "display the diff of the formatted changes.")
 }
