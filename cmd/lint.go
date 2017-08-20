@@ -67,6 +67,10 @@ func lintTrack(path string) bool {
 			msg:   "-> The implementation for '%v' is missing a test suite.\n",
 		},
 		{
+			check: missingUUID,
+			msg:   "-> The exercise '%v' was found in config.json, but does not have a UUID.\n",
+		},
+		{
 			check: foregoneViolations,
 			msg:   "-> An implementation for '%v' was found, but config.json specifies that it should be foregone (not implemented).\n",
 		},
@@ -173,6 +177,17 @@ func missingTestSuite(t track.Track) []string {
 			slugs = append(slugs, slug)
 		}
 	}
+	return slugs
+}
+
+func missingUUID(t track.Track) []string {
+	slugs := []string{}
+	for _, exercise := range t.Config.Exercises {
+		if exercise.UUID == "" {
+			slugs = append(slugs, exercise.Slug)
+		}
+	}
+
 	return slugs
 }
 
