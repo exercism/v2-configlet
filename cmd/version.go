@@ -19,7 +19,7 @@ var versionCmd = &cobra.Command{
 }
 
 func runVersion(cmd *cobra.Command, args []string) {
-	fmt.Printf("%s v%s\n", binaryName, Version)
+	fmt.Printf("%s version %s\n", binaryName, Version)
 }
 
 func init() {

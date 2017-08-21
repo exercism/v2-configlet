@@ -40,7 +40,7 @@ func generateExampleText() string {
 func runGenerate(cmd *cobra.Command, args []string) {
 	path, err := filepath.Abs(filepath.FromSlash(args[0]))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, err.Error())
+		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
 	root := filepath.Dir(path)
@@ -62,7 +62,7 @@ func runGenerate(cmd *cobra.Command, args []string) {
 	} else {
 		track, err := track.New(path)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, err.Error())
+			fmt.Fprintln(os.Stderr, err.Error())
 			os.Exit(1)
 		}
 		exercises = track.Exercises
@@ -82,7 +82,7 @@ func runGenerate(cmd *cobra.Command, args []string) {
 	}
 
 	if err := errs.ErrorOrNil(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
 
