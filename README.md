@@ -2,7 +2,7 @@
 
 A tool for managing Exercism language track repositories.
 
-## Linter
+## Lint
 
 Exercism makes certain assumptions about language tracks. The configlet `lint` command makes it simple to verify up-front that the changes to a track's configuration, as well as changes and additions to the exercises will play nicely with the website.
 
@@ -15,7 +15,7 @@ Exercism makes certain assumptions about language tracks. The configlet `lint` c
     * Implementations for slugs that are not referenced in `config.json`.
     * Implementations for slugs that have been declared as foregone in `config.json`.
 
-## Formatter
+## Format
 
 Inspired by Go's [`gofmt`](https://blog.golang.org/go-fmt-your-code) tool, configlet's `fmt` command will consistently format a track's configuration files.
 
