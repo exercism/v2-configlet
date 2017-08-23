@@ -27,7 +27,7 @@ func ExampleFormat() {
 	// +      "slug": "one",
 	// +      "topics": [
 	// +        "booleans",
-	// +        "control-flow-(conditionals)",
+	// +        "control_flow_conditionals",
 	// +        "integers",
 	// +        "logic"
 	// +      ],
@@ -41,7 +41,7 @@ func ExampleFormat() {
 	// +      "topics": [
 	// +        "equality",
 	// +        "mathematics",
-	// +        "text-formatting",
+	// +        "text_formatting",
 	// +        "time"
 	// +      ],
 	// +      "unlocked_by": null,
@@ -90,7 +90,7 @@ func ExampleFormat() {
 	//       "slug": "one",
 	//       "topics": [
 	//         "booleans",
-	//         "control-flow-(conditionals)",
+	//         "control_flow_conditionals",
 	//         "integers",
 	//         "logic"
 	//       ],
@@ -104,7 +104,7 @@ func ExampleFormat() {
 	//       "topics": [
 	//         "equality",
 	//         "mathematics",
-	//         "text-formatting",
+	//         "text_formatting",
 	//         "time"
 	//       ],
 	//       "unlocked_by": null,

@@ -4,7 +4,7 @@
       "core": false,
       "difficulty": 1,
       "slug": "one",
-      "topics": [ "integers", "Control-Flow (conditionals)", "Booleans", "logic" ],
+      "topics": [ "integers", "Control-Flow    (conditionals)", "Booleans", "logic" ],
       "unlocked_by": null,
       "uuid": "001"
     },
@@ -15,7 +15,7 @@
       "topics": [
 "equality",
              "mathematics",
-                    "text-formatting",
+                    "text--formatting",
                 "time"
       ],
       "unlocked_by": null,

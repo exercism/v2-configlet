@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -145,7 +146,17 @@ func formatTopics(m map[string]interface{}) {
 
 func normaliseTopic(t string) string {
 	s := strings.ToLower(t)
-	s = strings.Replace(s, " ", "-", -1)
+
+	// we only want to let through letters and underscores
+	// for the final output.
+	// hyphens and whitespace are allowed through for now
+	// as word delimiters to be replaced with underscores.
+	reg := regexp.MustCompile("[^a-z\\s-_]+")
+	s = reg.ReplaceAllString(s, "")
+
+	// output to be snake_case
+	reg = regexp.MustCompile("[\\s-]+")
+	s = reg.ReplaceAllString(s, "_")
 	return s
 }
 
