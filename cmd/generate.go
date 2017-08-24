@@ -40,7 +40,7 @@ func generateExampleText() string {
 func runGenerate(cmd *cobra.Command, args []string) {
 	path, err := filepath.Abs(filepath.FromSlash(args[0]))
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+		fmt.Printf("-> %s\n", err)
 		os.Exit(1)
 	}
 	root := filepath.Dir(path)
@@ -52,7 +52,7 @@ func runGenerate(cmd *cobra.Command, args []string) {
 	}
 
 	if _, err := os.Stat(track.ProblemSpecificationsPath); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "path not found: %s\n", track.ProblemSpecificationsPath)
+		fmt.Fprintf(os.Stderr, "-> path not found: %s\n", track.ProblemSpecificationsPath)
 		os.Exit(1)
 	}
 
@@ -62,7 +62,7 @@ func runGenerate(cmd *cobra.Command, args []string) {
 	} else {
 		track, err := track.New(path)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Fprintf(os.Stderr, "-> %s", err.Error())
 			os.Exit(1)
 		}
 		exercises = track.Exercises
@@ -82,7 +82,7 @@ func runGenerate(cmd *cobra.Command, args []string) {
 	}
 
 	if err := errs.ErrorOrNil(); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+		fmt.Fprintf(os.Stderr, "-> %s", err.Error())
 		os.Exit(1)
 	}
 

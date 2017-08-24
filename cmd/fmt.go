@@ -55,12 +55,12 @@ func runFmt(cmd *cobra.Command, args []string) {
 
 	for _, f := range fs {
 		if _, err := os.Stat(f.path); os.IsNotExist(err) {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Fprintf(os.Stderr, "-> path not found: %s\n", f.path)
 			os.Exit(1)
 		}
 		diff, formatted, err := formatFile(f.path, f.formatter)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Fprintf(os.Stderr, "-> %s", err.Error())
 			continue
 		}
 		if diff == "" {
@@ -68,17 +68,17 @@ func runFmt(cmd *cobra.Command, args []string) {
 		}
 		err = ioutil.WriteFile(f.path, formatted, os.FileMode(0644))
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			fmt.Fprintf(os.Stderr, "-> %s", err.Error())
 			continue
 		}
 		if fmtVerbose {
-			fmt.Printf("%s\n\n%s\n", f.path, diff)
+			fmt.Printf("-> %s\n\n%s\n", f.path, diff)
 		}
 		changes += fmt.Sprintf("%s\n", f.path)
 	}
 
 	if changes != "" {
-		fmt.Printf("Changes made to:\n%s", changes)
+		fmt.Printf("-> changes made to:\n%s", changes)
 	}
 	return
 }
