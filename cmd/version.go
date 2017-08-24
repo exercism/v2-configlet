@@ -16,6 +16,7 @@ var versionCmd = &cobra.Command{
 	Long:    "Output the current version of the tool",
 	Example: fmt.Sprintf("  %s version", binaryName),
 	Run:     runVersion,
+	Args:    cobra.ExactArgs(0),
 }
 
 func runVersion(cmd *cobra.Command, args []string) {

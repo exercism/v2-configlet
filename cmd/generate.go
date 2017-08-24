@@ -24,7 +24,7 @@ var (
 		Long:    `Generate READMEs for Exercism exercises based on the contents of various files.`,
 		Example: generateExampleText(),
 		Run:     runGenerate,
-		Args:    cobra.MinimumNArgs(1),
+		Args:    cobra.ExactArgs(1),
 	}
 )
 

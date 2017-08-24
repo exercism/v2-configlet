@@ -29,7 +29,7 @@ It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
 	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
 	Run:     runFmt,
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.ExactArgs(1),
 }
 
 // formatter applies additional formatting to unmarshalled JSON files.

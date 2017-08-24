@@ -20,7 +20,7 @@ UUIDs, even though they are based on the same problem specification.
 `,
 	Example: fmt.Sprintf("  %s uuid", binaryName),
 	Run:     runUUID,
-	Args:    cobra.MaximumNArgs(0),
+	Args:    cobra.ExactArgs(0),
 }
 
 // runUUID prints out a unique exercise UUID

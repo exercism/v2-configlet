@@ -21,7 +21,7 @@ It also checks that the exercises defined in the config.json file are complete.
 `,
 	Example: fmt.Sprintf("  %s lint %s", binaryName, pathExample),
 	Run:     runLint,
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.ExactArgs(1),
 }
 
 func runLint(cmd *cobra.Command, args []string) {
