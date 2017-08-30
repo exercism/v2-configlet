@@ -21,7 +21,7 @@ It also checks that the exercises defined in the config.json file are complete.
 `,
 	Example: fmt.Sprintf("  %s lint %s", binaryName, pathExample),
 	Run:     runLint,
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.ExactArgs(1),
 }
 
 func runLint(cmd *cobra.Command, args []string) {
@@ -37,6 +37,10 @@ func runLint(cmd *cobra.Command, args []string) {
 }
 
 func lintTrack(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		fmt.Fprintf(os.Stderr, "-> path not found: %s\n", path)
+		os.Exit(1)
+	}
 	t, err := track.New(path)
 	if err != nil {
 		fmt.Printf("-> %s\n", err)
