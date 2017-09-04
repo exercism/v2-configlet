@@ -19,7 +19,12 @@ func New(path string) (Track, error) {
 	track := Track{
 		path: filepath.FromSlash(path),
 	}
-	track.ID = filepath.Base(path)
+
+	ap, err := filepath.Abs(track.path)
+	if err != nil {
+		return track, err
+	}
+	track.ID = filepath.Base(ap)
 
 	c, err := NewConfig(filepath.Join(path, "config.json"))
 	if err != nil {
