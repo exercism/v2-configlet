@@ -1,12 +1,21 @@
 package cmd
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/exercism/configlet/track"
 	"github.com/spf13/cobra"
 )
+
+// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
+var UUIDValidationURL = "http://exercism.io/api/v1/uuids"
+
+// disableHTTPChecks flag skips HTTP based checks when passed.
+var disableHTTPChecks bool
 
 // lintCmd defines the lint command.
 var lintCmd = &cobra.Command{
@@ -67,6 +76,10 @@ func lintTrack(path string) bool {
 			msg:   "-> The implementation for '%v' is missing a test suite.\n",
 		},
 		{
+			check: missingUUID,
+			msg:   "-> The exercise '%v' was found in config.json, but does not have a UUID.\n",
+		},
+		{
 			check: foregoneViolations,
 			msg:   "-> An implementation for '%v' was found, but config.json specifies that it should be foregone (not implemented).\n",
 		},
@@ -74,16 +87,24 @@ func lintTrack(path string) bool {
 			check: duplicateSlugs,
 			msg:   "-> The exercise '%v' was found in multiple (conflicting) categories in config.json.\n",
 		},
+		{
+			check: duplicateUUID,
+			msg:   "-> The following UUID occurs multiple times. Each exercise UUID must be unique.\n%v\n",
+		},
+		{
+			check: duplicateTrackUUID,
+			msg:   "-> The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v\n",
+		},
 	}
 
 	hasErrors := false
 	for _, configError := range configErrors {
-		slugs := configError.check(t)
+		failedItems := configError.check(t)
 
-		if len(slugs) > 0 {
+		if len(failedItems) > 0 {
 			hasErrors = true
-			for _, slug := range slugs {
-				fmt.Printf(configError.msg, slug)
+			for _, item := range failedItems {
+				fmt.Printf(configError.msg, item)
 			}
 		}
 	}
@@ -176,6 +197,17 @@ func missingTestSuite(t track.Track) []string {
 	return slugs
 }
 
+func missingUUID(t track.Track) []string {
+	slugs := []string{}
+	for _, exercise := range t.Config.Exercises {
+		if exercise.UUID == "" {
+			slugs = append(slugs, exercise.Slug)
+		}
+	}
+
+	return slugs
+}
+
 func foregoneViolations(t track.Track) []string {
 	violations := map[string]bool{}
 	for _, slug := range t.Config.ForegoneSlugs {
@@ -213,6 +245,73 @@ func duplicateSlugs(t track.Track) []string {
 	return slugs
 }
 
+func duplicateUUID(t track.Track) []string {
+	uuids := []string{}
+	seen := map[string]bool{}
+	for _, exercise := range t.Config.Exercises {
+		if exercise.UUID == "" {
+			continue
+		}
+
+		if seen[exercise.UUID] {
+			uuids = append(uuids, exercise.UUID)
+		}
+
+		seen[exercise.UUID] = true
+	}
+
+	return uuids
+}
+
+func duplicateTrackUUID(t track.Track) []string {
+	if disableHTTPChecks {
+		return []string{}
+	}
+
+	// Build up set of uuids to validate.
+	uuids := []string{}
+	for _, exercise := range t.Config.Exercises {
+		if exercise.UUID == "" {
+			continue
+		}
+		uuids = append(uuids, exercise.UUID)
+	}
+
+	payload := struct {
+		TrackID string   `json:"track_id"`
+		UUIDs   []string `json:"uuids"`
+	}{
+		TrackID: t.ID,
+		UUIDs:   uuids,
+	}
+
+	body, err := json.Marshal(payload)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	resp, err := http.Post(UUIDValidationURL, "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusConflict {
+		result := struct{ UUIDs []string }{}
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+			os.Exit(1)
+		}
+
+		return result.UUIDs
+	}
+
+	return []string{}
+}
+
 func init() {
 	RootCmd.AddCommand(lintCmd)
+	lintCmd.Flags().BoolVar(&disableHTTPChecks, "no-http", false, "Disable remote HTTP-based linting.")
 }

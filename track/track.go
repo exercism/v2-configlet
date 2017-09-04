@@ -7,10 +7,11 @@ import (
 
 // Track is a collection of Exercism exercises for a programming language.
 type Track struct {
-	path             string
+	ID               string
 	Config           Config
 	MaintainerConfig MaintainerConfig
 	Exercises        []Exercise
+	path             string
 }
 
 // New loads a track.
@@ -18,6 +19,7 @@ func New(path string) (Track, error) {
 	track := Track{
 		path: filepath.FromSlash(path),
 	}
+	track.ID = filepath.Base(path)
 
 	c, err := NewConfig(filepath.Join(path, "config.json"))
 	if err != nil {
