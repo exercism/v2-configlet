@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 
 	"github.com/exercism/configlet/track"
 	"github.com/exercism/configlet/ui"
@@ -95,6 +96,10 @@ func lintTrack(path string) bool {
 		{
 			check: duplicateTrackUUID,
 			msg:   "The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v",
+		},
+		{
+			check: invalidRegexPatterns,
+			msg:   "-> The following pattern %q failed to compile. Please check the Regex pattern.\n",
 		},
 	}
 
@@ -311,6 +316,19 @@ func duplicateTrackUUID(t track.Track) []string {
 	}
 
 	return []string{}
+}
+
+func invalidRegexPatterns(t track.Track) []string {
+	patterns := t.Config.Patterns()
+
+	failedPatterns := []string{}
+	for _, pattern := range patterns {
+		if _, err := regexp.Compile(pattern); err != nil {
+			failedPatterns = append(failedPatterns, regexp.QuoteMeta(pattern))
+		}
+	}
+
+	return failedPatterns
 }
 
 func init() {
