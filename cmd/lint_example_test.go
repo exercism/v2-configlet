@@ -1,8 +1,14 @@
 package cmd
 
-import "path/filepath"
+import (
+	"os"
+	"path/filepath"
+
+	"github.com/exercism/configlet/ui"
+)
 
 func ExampleLint() {
+	ui.Out = os.Stdout
 	saved := disableHTTPChecks
 	disableHTTPChecks = true
 	defer func() { disableHTTPChecks = saved }()
@@ -17,6 +23,7 @@ func ExampleLint() {
 }
 
 func ExampleLintMaintainers() {
+	ui.ErrOut = os.Stdout
 	saved := disableHTTPChecks
 	disableHTTPChecks = true
 	defer func() { disableHTTPChecks = saved }()

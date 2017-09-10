@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/exercism/configlet/ui"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/spf13/cobra"
 )
@@ -56,12 +57,12 @@ func runFmt(cmd *cobra.Command, args []string) {
 
 	for _, f := range fs {
 		if _, err := os.Stat(f.path); os.IsNotExist(err) {
-			fmt.Fprintf(os.Stderr, "-> path not found: %s\n", f.path)
+			ui.PrintError("path not found:", f.path)
 			os.Exit(1)
 		}
 		diff, formatted, err := formatFile(f.path, f.formatter)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "-> %s", err.Error())
+			ui.PrintError(err.Error())
 			continue
 		}
 		if diff == "" {
@@ -69,17 +70,17 @@ func runFmt(cmd *cobra.Command, args []string) {
 		}
 		err = ioutil.WriteFile(f.path, formatted, os.FileMode(0644))
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "-> %s", err.Error())
+			ui.PrintError(err.Error())
 			continue
 		}
 		if fmtVerbose {
-			fmt.Printf("-> %s\n\n%s\n", f.path, diff)
+			ui.Print(f.path, "\n\n", diff)
 		}
 		changes += fmt.Sprintf("%s\n", f.path)
 	}
 
 	if changes != "" {
-		fmt.Printf("-> changes made to:\n%s", changes)
+		ui.Print("changes made to:\n", changes)
 	}
 	return
 }

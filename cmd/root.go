@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +40,7 @@ func rootExampleText() string {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		ui.PrintError(err.Error())
 		os.Exit(-1)
 	}
 }

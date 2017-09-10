@@ -20,6 +20,7 @@ var versionCmd = &cobra.Command{
 }
 
 func runVersion(cmd *cobra.Command, args []string) {
+	// we don't want any UI formatting prepended to this
 	fmt.Printf("%s version %s\n", binaryName, Version)
 }
 
