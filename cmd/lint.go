@@ -331,6 +331,37 @@ func invalidRegexPatterns(t track.Track) []string {
 	return failedPatterns
 }
 
+func invalidRubyRegexPatterns(t track.Track) []string {
+	if disableHTTPChecks {
+		return []string{}
+	}
+
+	body, err := json.Marshal(t.Config.PatternGroup)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	resp, err := http.Post(UUIDValidationURL, "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusUnprocessableEntity {
+		result := struct{ Patterns []string }{}
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+			os.Exit(1)
+		}
+
+		return result.Patterns
+	}
+
+	return []string{}
+}
+
 func init() {
 	RootCmd.AddCommand(lintCmd)
 	lintCmd.Flags().BoolVar(&disableHTTPChecks, "no-http", false, "Disable remote HTTP-based linting.")

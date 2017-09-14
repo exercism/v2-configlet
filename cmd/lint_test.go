@@ -219,3 +219,32 @@ func TestDuplicateTrackUUID(t *testing.T) {
 	assert.Equal(t, expected[0], uuids[0])
 
 }
+
+func TestInvalidRubyRegexPatterns(t *testing.T) {
+	fakeEndpoint := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		fmt.Fprintln(w, `{"patterns": ["ignore_pattern"]}`)
+	})
+
+	ts := httptest.NewServer(fakeEndpoint)
+	defer ts.Close()
+
+	saved := UUIDValidationURL
+	UUIDValidationURL = ts.URL
+	defer func() { UUIDValidationURL = saved }()
+
+	expected := []string{"ignore_pattern"}
+	track := track.Track{
+		Config: track.Config{
+			PatternGroup: track.PatternGroup{
+				IgnorePattern:   "example(?!_test.go)",
+				SolutionPattern: "example",
+			},
+		},
+	}
+
+	uuids := invalidRubyRegexPatterns(track)
+	assert.Equal(t, len(expected), len(uuids))
+	assert.Equal(t, expected[0], uuids[0])
+
+}
