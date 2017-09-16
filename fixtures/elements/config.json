@@ -1,0 +1,17 @@
+{
+  "slug": "elements",
+  "language": "Elements",
+  "repository": "https://github.com/exercism/elements",
+  "active": true,
+  "solution_pattern": "[Ee]xample",
+  "test_pattern": "(?i)test",
+  "exercises": [
+    {
+      "uuid": "aaa",
+      "slug": "aluminum",
+      "topics": [],
+      "difficulty": 1
+    }
+  ],
+  "foregone": []
+}

@@ -4,12 +4,42 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"sort"
 	"testing"
 
 	"github.com/exercism/configlet/track"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestLintTrack(t *testing.T) {
+	lintTests := []struct {
+		desc     string
+		path     string
+		expected bool
+	}{
+		{
+			desc:     "should fail when given a track containing one or more lint failures.",
+			path:     "../fixtures/numbers",
+			expected: true,
+		},
+		{
+			desc:     "should fail when given a track containing malformed configuration data.",
+			path:     "../fixtures/broken-maintainers",
+			expected: true,
+		},
+		{
+			desc:     "should not fail when given a track with all of its bits in place.",
+			path:     "../fixtures/elements",
+			expected: false,
+		},
+	}
+
+	for _, tt := range lintTests {
+		failed := lintTrack(filepath.FromSlash(tt.path))
+		assert.Equal(t, tt.expected, failed, tt.desc)
+	}
+}
 
 func TestMissingImplementations(t *testing.T) {
 	track := track.Track{
@@ -155,7 +185,7 @@ func TestDuplicateSlugs(t *testing.T) {
 }
 
 func TestDuplicateUUID(t *testing.T) {
-	tests := []struct {
+	uuidTests := []struct {
 		desc     string
 		expected int
 		config   track.Config
@@ -183,11 +213,11 @@ func TestDuplicateUUID(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
-		track := track.Track{Config: test.config}
+	for _, tt := range uuidTests {
+		track := track.Track{Config: tt.config}
 		uuids := duplicateUUID(track)
 
-		assert.Equal(t, test.expected, len(uuids), test.desc)
+		assert.Equal(t, tt.expected, len(uuids), tt.desc)
 	}
 }
 
