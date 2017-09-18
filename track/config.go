@@ -30,7 +30,7 @@ type Config struct {
 func NewConfig(path string) (Config, error) {
 	c := Config{
 		PatternGroup: PatternGroup{
-			IgnorePattern:   "(?i)[Ee]xample",
+			IgnorePattern:   "[Ee]xample",
 			SolutionPattern: "[Ee]xample",
 			TestPattern:     "(?i)test",
 		},
@@ -45,12 +45,4 @@ func NewConfig(path string) (Config, error) {
 		return c, fmt.Errorf("invalid config %s -- %s", path, err.Error())
 	}
 	return c, nil
-}
-
-func (c Config) Patterns() []string {
-	return []string{
-		c.IgnorePattern,
-		c.SolutionPattern,
-		c.TestPattern,
-	}
 }

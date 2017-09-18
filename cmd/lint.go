@@ -13,8 +13,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
-var UUIDValidationURL = "http://exercism.io/api/v1/uuids"
+var (
+	// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
+	UUIDValidationURL = "http://exercism.io/api/v1/uuids"
+
+	// RegexValidationURL is the endpoint to Exercism's regex pattern validation service.
+	RegexValidationURL = "http://httpbin.org/post"
+)
 
 // disableHTTPChecks flag skips HTTP based checks when passed.
 var disableHTTPChecks bool
@@ -98,8 +103,8 @@ func lintTrack(path string) bool {
 			msg:   "The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v",
 		},
 		{
-			check: invalidRegexPatterns,
-			msg:   "-> The following pattern %q failed to compile. Please check the Regex pattern.\n",
+			check: unsupportedRegexPatterns,
+			msg:   "-> The pattern '%v' contains an unsupported regular expression.\n",
 		},
 	}
 
@@ -318,31 +323,34 @@ func duplicateTrackUUID(t track.Track) []string {
 	return []string{}
 }
 
-func invalidRegexPatterns(t track.Track) []string {
-	patterns := t.Config.Patterns()
-
-	failedPatterns := []string{}
-	for _, pattern := range patterns {
-		if _, err := regexp.Compile(pattern); err != nil {
-			failedPatterns = append(failedPatterns, regexp.QuoteMeta(pattern))
-		}
-	}
-
-	return failedPatterns
-}
-
-func invalidRubyRegexPatterns(t track.Track) []string {
-	if disableHTTPChecks {
-		return []string{}
-	}
-
-	body, err := json.Marshal(t.Config.PatternGroup)
+func unsupportedRegexPatterns(t track.Track) []string {
+	// TODO find a better way to convert struct to map, with json tags as keys
+	data, err := json.Marshal(t.Config.PatternGroup)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
 		os.Exit(1)
 	}
 
-	resp, err := http.Post(UUIDValidationURL, "application/json", bytes.NewBuffer(body))
+	var patterns map[string]string
+	err = json.Unmarshal(data, &patterns)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	failedPatterns := []string{}
+	for name, pattern := range patterns {
+		if _, err := regexp.Compile(pattern); err != nil {
+			failedPatterns = append(failedPatterns, name)
+		}
+	}
+
+	if len(failedPatterns) > 0 || disableHTTPChecks {
+		return failedPatterns
+	}
+
+	// TODO breakout extended regex check.
+	resp, err := http.Post(RegexValidationURL, "application/json", bytes.NewBuffer(data))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
 		os.Exit(1)
@@ -359,7 +367,7 @@ func invalidRubyRegexPatterns(t track.Track) []string {
 		return result.Patterns
 	}
 
-	return []string{}
+	return failedPatterns
 }
 
 func init() {

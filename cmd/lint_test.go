@@ -220,7 +220,21 @@ func TestDuplicateTrackUUID(t *testing.T) {
 
 }
 
-func TestInvalidRubyRegexPatterns(t *testing.T) {
+func TestUnsupportedGoRegexPatterns(t *testing.T) {
+	track := track.Track{
+		Config: track.Config{
+			PatternGroup: track.PatternGroup{
+				SolutionPattern: "example(?!_test.go)",
+			},
+		},
+	}
+
+	// An unsupported regexp pattern should fail when being compile by Go.
+	patterns := unsupportedRegexPatterns(track)
+	assert.Equal(t, "solution_pattern", patterns[0])
+}
+
+func TestUnsupportedRubyRegexPatterns(t *testing.T) {
 	fakeEndpoint := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		fmt.Fprintln(w, `{"patterns": ["ignore_pattern"]}`)
@@ -229,22 +243,21 @@ func TestInvalidRubyRegexPatterns(t *testing.T) {
 	ts := httptest.NewServer(fakeEndpoint)
 	defer ts.Close()
 
-	saved := UUIDValidationURL
-	UUIDValidationURL = ts.URL
-	defer func() { UUIDValidationURL = saved }()
+	saved := RegexValidationURL
+	RegexValidationURL = ts.URL
+	defer func() { RegexValidationURL = saved }()
 
 	expected := []string{"ignore_pattern"}
 	track := track.Track{
 		Config: track.Config{
 			PatternGroup: track.PatternGroup{
-				IgnorePattern:   "example(?!_test.go)",
-				SolutionPattern: "example",
+				IgnorePattern:   "example(?s:_test.go)",
+				SolutionPattern: "[Ee]xample",
 			},
 		},
 	}
 
-	uuids := invalidRubyRegexPatterns(track)
-	assert.Equal(t, len(expected), len(uuids))
-	assert.Equal(t, expected[0], uuids[0])
-
+	patterns := unsupportedRegexPatterns(track)
+	assert.Equal(t, len(expected), len(patterns))
+	assert.Equal(t, expected[0], patterns[0])
 }
