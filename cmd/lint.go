@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/exercism/configlet/track"
+	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -47,12 +48,12 @@ func runLint(cmd *cobra.Command, args []string) {
 
 func lintTrack(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, "-> path not found: %s\n", path)
+		ui.PrintError("path not found:", path)
 		os.Exit(1)
 	}
 	t, err := track.New(path)
 	if err != nil {
-		fmt.Printf("-> %s\n", err)
+		ui.PrintError(err.Error())
 	}
 
 	configErrors := []struct {
@@ -61,39 +62,39 @@ func lintTrack(path string) bool {
 	}{
 		{
 			check: missingImplementations,
-			msg:   "-> An exercise with slug '%v' is referenced in config.json, but no implementation was found.\n",
+			msg:   "An exercise with slug '%v' is referenced in config.json, but no implementation was found.",
 		},
 		{
 			check: missingMetadata,
-			msg:   "-> An implementation for '%v' was found, but config.json does not reference this exercise.\n",
+			msg:   "An implementation for '%v' was found, but config.json does not reference this exercise.",
 		},
 		{
 			check: missingSolution,
-			msg:   "-> The implementation for '%v' is missing an example solution.\n",
+			msg:   "The implementation for '%v' is missing an example solution.",
 		},
 		{
 			check: missingTestSuite,
-			msg:   "-> The implementation for '%v' is missing a test suite.\n",
+			msg:   "The implementation for '%v' is missing a test suite.",
 		},
 		{
 			check: missingUUID,
-			msg:   "-> The exercise '%v' was found in config.json, but does not have a UUID.\n",
+			msg:   "The exercise '%v' was found in config.json, but does not have a UUID.",
 		},
 		{
 			check: foregoneViolations,
-			msg:   "-> An implementation for '%v' was found, but config.json specifies that it should be foregone (not implemented).\n",
+			msg:   "An implementation for '%v' was found, but config.json specifies that it should be foregone (not implemented).",
 		},
 		{
 			check: duplicateSlugs,
-			msg:   "-> The exercise '%v' was found in multiple (conflicting) categories in config.json.\n",
+			msg:   "The exercise '%v' was found in multiple (conflicting) categories in config.json.",
 		},
 		{
 			check: duplicateUUID,
-			msg:   "-> The following UUID occurs multiple times. Each exercise UUID must be unique.\n%v\n",
+			msg:   "The following UUID occurs multiple times. Each exercise UUID must be unique.\n%v",
 		},
 		{
 			check: duplicateTrackUUID,
-			msg:   "-> The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v\n",
+			msg:   "The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v",
 		},
 	}
 
@@ -104,7 +105,8 @@ func lintTrack(path string) bool {
 		if len(failedItems) > 0 {
 			hasErrors = true
 			for _, item := range failedItems {
-				fmt.Printf(configError.msg, item)
+				ui.Print(fmt.Sprintf(configError.msg, item))
+
 			}
 		}
 	}
@@ -287,13 +289,13 @@ func duplicateTrackUUID(t track.Track) []string {
 
 	body, err := json.Marshal(payload)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		ui.PrintError(err.Error())
 		os.Exit(1)
 	}
 
 	resp, err := http.Post(UUIDValidationURL, "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		ui.PrintError(err.Error())
 		os.Exit(1)
 	}
 	defer resp.Body.Close()
@@ -301,7 +303,7 @@ func duplicateTrackUUID(t track.Track) []string {
 	if resp.StatusCode == http.StatusConflict {
 		result := struct{ UUIDs []string }{}
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-			fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+			ui.PrintError(err.Error())
 			os.Exit(1)
 		}
 
