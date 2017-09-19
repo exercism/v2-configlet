@@ -15,6 +15,12 @@ import (
 )
 
 func TestLintTrack(t *testing.T) {
+	originalNoHTTP := noHTTP
+	noHTTP = true
+	defer func() {
+		noHTTP = originalNoHTTP
+	}()
+
 	originalOut := ui.Out
 	originalErrOut := ui.ErrOut
 	ui.Out = ioutil.Discard
@@ -23,6 +29,7 @@ func TestLintTrack(t *testing.T) {
 		ui.Out = originalOut
 		ui.ErrOut = originalErrOut
 	}()
+
 	lintTests := []struct {
 		desc     string
 		path     string
@@ -240,9 +247,9 @@ func TestDuplicateTrackUUID(t *testing.T) {
 	ts := httptest.NewServer(fakeEndpoint)
 	defer ts.Close()
 
-	saved := UUIDValidationURL
+	originalUUIDValidationURL := UUIDValidationURL
 	UUIDValidationURL = ts.URL
-	defer func() { UUIDValidationURL = saved }()
+	defer func() { UUIDValidationURL = originalUUIDValidationURL }()
 
 	expected := []string{"ccc"}
 	track := track.Track{

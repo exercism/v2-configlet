@@ -1,0 +1,12 @@
+{
+  "slug": "titled-exercises",
+  "language": "titled-exercises",
+  "exercises": [
+    {
+      "slug": "slug-as-title"
+    },
+    {
+      "slug": "explicit-title"
+    }
+  ]
+}
