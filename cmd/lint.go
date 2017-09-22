@@ -49,11 +49,13 @@ func runLint(cmd *cobra.Command, args []string) {
 func lintTrack(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		ui.PrintError("path not found:", path)
-		os.Exit(1)
+		return true
 	}
+
 	t, err := track.New(path)
 	if err != nil {
 		ui.PrintError(err.Error())
+		return true
 	}
 
 	configErrors := []struct {
@@ -98,7 +100,7 @@ func lintTrack(path string) bool {
 		},
 	}
 
-	hasErrors := false
+	var hasErrors bool
 	for _, configError := range configErrors {
 		failedItems := configError.check(t)
 
