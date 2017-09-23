@@ -7,6 +7,11 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 ## Next Release
 
 * [**Your contribution here**](/CONTRIBUTING.md)
+
+## v3.5.1 (23rd September 2017)
+
+* [#78](https://github.com/exercism/configlet/pull/78) Fix error handling for malformed config files - [@nywilken]
+* [#72](https://github.com/exercism/configlet/pull/72) Implement UI printer - [@robphoenix]
 * [#73](https://github.com/exercism/configlet/pull/73) Update CONTRIBUTING.md - [@rpottsoh]
 * [#71](https://github.com/exercism/configlet/pull/71) Update the list of supported Go versions - [@nywilken]
 * [#68](https://github.com/exercism/configlet/pull/68) Document the basic release process - [@kytrinyx]
