@@ -77,3 +77,12 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 * [#9](https://github.com/exercism/configlet/pull/9) Simplify gofmt style - [@ferhatelmas]
 * [#6](https://github.com/exercism/configlet/pull/6) Run tests on travis - [@kytrinyx]
 * [#5](https://github.com/exercism/configlet/pull/5) Ignore img directory - [@ryanplusplus]
+
+[@Insti]: https://github.com/Insti
+[@ferhatelmas]: https://github.com/ferhatelmas
+[@kytrinyx]: https://github.com/kytrinyx
+[@nywilken]: https://github.com/nywilken
+[@robphoenix]: https://github.com/robphoenix
+[@rpottsoh]: https://github.com/rpottsoh
+[@ryanplusplus]: https://github.com/ryanplusplus
+[@stkent]: https://github.com/stkent
