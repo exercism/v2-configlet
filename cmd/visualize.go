@@ -49,7 +49,7 @@ exercises at root and unlocks located under their locking exercises.
 
 Bonus exercises are left in a list at the bottom after the tree display.
 
-example output:
+Example output:
 
 Go
 --
@@ -67,11 +67,11 @@ Go
 	Args:    cobra.ExactArgs(1),
 }
 
-// slugToExercise is a global lookup table of slugs to exercises
+// slugToExercise is a global lookup table of slugs to exercises.
 var slugToExercise = map[string]*exerciseUnlocks{}
 
-// exerciseUnlocks is an extension of the exercise metatata type
-// with with the exercises it unlocks
+// exerciseUnlocks is an extension of the exercise metatata type with with
+// the exercises it unlocks.
 type exerciseUnlocks struct {
 	track.ExerciseMetadata
 	Unlocks []string // slugs of unlocked exercises
@@ -79,7 +79,7 @@ type exerciseUnlocks struct {
 
 // getDescription is a utility that will return the description for
 // an exerciseUnlock with the difficulty appended if the --difficulty
-// flag was set
+// flag was set.
 func (e exerciseUnlocks) getDescription() string {
 
 	if showDifficulty {
