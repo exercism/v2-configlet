@@ -9,14 +9,16 @@ import (
 
 func TestNewProblemSpecification(t *testing.T) {
 	tests := []struct {
-		desc     string
-		slug     string
-		specPath string
-		expected ProblemSpecification
+		desc      string
+		slug      string
+		trackPath string
+		specPath  string
+		expected  ProblemSpecification
 	}{
 		{
-			desc: "shared spec if custom is missing",
-			slug: "one",
+			desc:      "shared spec if custom is missing",
+			slug:      "one",
+			trackPath: filepath.FromSlash("../fixtures/numbers"),
 			expected: ProblemSpecification{
 				Description: "This is one.\n",
 				Source:      "The internet.",
@@ -24,8 +26,9 @@ func TestNewProblemSpecification(t *testing.T) {
 			},
 		},
 		{
-			desc: "custom spec overrides shared",
-			slug: "two",
+			desc:      "custom spec overrides shared",
+			slug:      "two",
+			trackPath: filepath.FromSlash("../fixtures/numbers"),
 			expected: ProblemSpecification{
 				Description: "This is two, customized.\n",
 				Source:      "The web.",
@@ -33,29 +36,51 @@ func TestNewProblemSpecification(t *testing.T) {
 			},
 		},
 		{
-			desc:     "shared spec from alternate problem-specifications location",
-			slug:     "one",
-			specPath: filepath.FromSlash("../fixtures/alternate/problem-specifications"),
+			desc:      "shared spec from alternate problem-specifications location",
+			slug:      "one",
+			trackPath: filepath.FromSlash("../fixtures/numbers"),
+			specPath:  filepath.FromSlash("../fixtures/alternate/problem-specifications"),
 			expected: ProblemSpecification{
 				Description: "This is the alternate one.\n",
 				Source:      "The internet.",
 				SourceURL:   "http://example.com",
 			},
 		},
+		{
+			desc:      "custom spec metadata with shared description",
+			slug:      "metadata-example",
+			trackPath: filepath.FromSlash("../fixtures/granular-metadata-overrides"),
+			specPath:  filepath.FromSlash("../fixtures/granular-metadata-overrides/problem-specifications"),
+			expected: ProblemSpecification{
+				Description: "This is a shared description.\n",
+				Source:      "The web.",
+				SourceURL:   "",
+			},
+		},
+		{
+			desc:      "shared spec metadata with custom description",
+			slug:      "description-example",
+			trackPath: filepath.FromSlash("../fixtures/granular-metadata-overrides"),
+			specPath:  filepath.FromSlash("../fixtures/granular-metadata-overrides/problem-specifications"),
+			expected: ProblemSpecification{
+				Description: "This is a custom description.\n",
+				Source:      "The internet.",
+				SourceURL:   "http://example.com",
+			},
+		},
 	}
-
 	originalSpecPath := ProblemSpecificationsPath
 	defer func() { ProblemSpecificationsPath = originalSpecPath }()
 
 	for _, test := range tests {
 		ProblemSpecificationsPath = test.specPath
-		root := filepath.FromSlash("../fixtures")
-		spec, err := NewProblemSpecification(root, "numbers", test.slug)
+		root, trackID := filepath.Dir(test.trackPath), filepath.Base(test.trackPath)
+		spec, err := NewProblemSpecification(root, trackID, test.slug)
 		assert.NoError(t, err)
 
-		assert.Equal(t, test.expected.Description, spec.Description)
 		assert.Equal(t, test.expected.Source, spec.Source)
 		assert.Equal(t, test.expected.SourceURL, spec.SourceURL)
+		assert.Equal(t, test.expected.Description, spec.Description)
 	}
 }
 

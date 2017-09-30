@@ -3,6 +3,7 @@ package track
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -32,7 +33,6 @@ type ProblemSpecification struct {
 	trackID         string
 	metadataPath    string
 	descriptionPath string
-	specPath        string
 }
 
 // NewProblemSpecification loads the specification from files on disk.
@@ -46,15 +46,15 @@ func NewProblemSpecification(root, trackID, slug string) (*ProblemSpecification,
 	}
 	spec.Title = spec.titleCasedSlug()
 
-	err := spec.load(spec.customPath())
-	if err == nil {
-		return spec, nil
+	if err := spec.loadMetadata(); err != nil {
+		return nil, err
 	}
-	err = spec.load(spec.sharedPath())
-	if err == nil {
-		return spec, nil
+
+	if err := spec.loadDescription(); err != nil {
+		return nil, err
 	}
-	return nil, err
+
+	return spec, nil
 }
 
 // Name is a readable version of the slug.
@@ -90,9 +90,26 @@ func (spec *ProblemSpecification) titleCasedSlug() string {
 	return strings.Title(strings.Join(strings.Split(spec.Slug, "-"), " "))
 }
 
-func (spec *ProblemSpecification) load(path string) error {
-	spec.descriptionPath = filepath.Join(path, filenameDescription)
-	spec.metadataPath = filepath.Join(path, filenameMetadata)
+func (spec *ProblemSpecification) loadMetadata() error {
+	metadataPath := filepath.Join(spec.customPath(), filenameMetadata)
+	if _, err := os.Stat(metadataPath); os.IsNotExist(err) {
+		metadataPath = filepath.Join(spec.sharedPath(), filenameMetadata)
+	}
+	spec.metadataPath = metadataPath
+
+	b, err := ioutil.ReadFile(spec.metadataPath)
+	if err != nil {
+		return err
+	}
+	return yaml.Unmarshal(b, &spec)
+}
+
+func (spec *ProblemSpecification) loadDescription() error {
+	descriptionPath := filepath.Join(spec.customPath(), filenameDescription)
+	if _, err := os.Stat(descriptionPath); os.IsNotExist(err) {
+		descriptionPath = filepath.Join(spec.sharedPath(), filenameDescription)
+	}
+	spec.descriptionPath = descriptionPath
 
 	b, err := ioutil.ReadFile(spec.descriptionPath)
 	if err != nil {
@@ -100,11 +117,7 @@ func (spec *ProblemSpecification) load(path string) error {
 	}
 	spec.Description = string(b)
 
-	b, err = ioutil.ReadFile(spec.metadataPath)
-	if err != nil {
-		return err
-	}
-	return yaml.Unmarshal(b, &spec)
+	return nil
 }
 
 func (spec *ProblemSpecification) sharedPath() string {
