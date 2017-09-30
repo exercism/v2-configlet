@@ -1,0 +1,123 @@
+{
+  "active": true,
+  "blurb": "",
+  "exercises": [
+    {
+      "core": true,
+      "difficulty": 1,
+      "slug": "one",
+      "topics": [
+        "booleans",
+        "control_flow_conditionals",
+        "integers",
+        "logic"
+      ],
+      "unlocked_by": null,
+      "uuid": "001"
+    },
+    {
+      "core": true,
+      "difficulty": 1,
+      "slug": "two",
+      "topics": [
+        "equality",
+        "mathematics",
+        "text_formatting",
+        "time"
+      ],
+      "unlocked_by": null,
+      "uuid": "002"
+    },
+    {
+      "core": false,
+      "difficulty": 2,
+      "slug": "five",
+      "topics": [
+        "control-flow",
+        "text_formatting"
+      ],
+      "unlocked_by": "one",
+      "uuid": "005"
+    },
+    {
+      "core": false,
+      "difficulty": 3,
+      "slug": "six",
+      "topics": [
+      ],
+      "unlocked_by": "two",
+      "uuid": "006"
+    },
+    {
+      "core": false,
+      "difficulty": 3,
+      "slug": "seven",
+      "topics": [
+	"spycraft",
+	"martinis"
+      ],
+      "unlocked_by": null,
+      "uuid": "007"
+    },
+    {
+      "core": false,
+      "difficulty": 5,
+      "slug": "eight",
+      "topics": [
+      ],
+      "unlocked_by": null,
+      "uuid": "008"
+    },
+    {
+      "core": true,
+      "difficulty": 4,
+      "slug": "nine",
+      "topics": [
+      ],
+      "unlocked_by": null,
+      "uuid": "009"
+    },
+    {
+      "core": false,
+      "difficulty": 6,
+      "slug": "ten",
+      "topics": [
+      ],
+      "unlocked_by": "six",
+      "uuid": "010"
+    },
+    {
+      "core": true,
+      "difficulty": 4,
+      "slug": "eleven",
+      "topics": [
+      ],
+      "unlocked_by": null,
+      "uuid": "011"
+    },
+    {
+      "core": false,
+      "difficulty": 8,
+      "slug": "twelve",
+      "topics": [
+      ],
+      "unlocked_by": "six",
+      "uuid": "012"
+    },
+    {
+      "core": false,
+      "difficulty": 5,
+      "slug": "thirteen",
+      "topics": [
+      ],
+      "unlocked_by": "two",
+      "uuid": "013"
+    }
+  ],
+  "foregone": [
+    "three",
+    "four"
+  ],
+  "ignore_pattern": "example(?!.*test)",
+  "language": "Numbers"
+}
