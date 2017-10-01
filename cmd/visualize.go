@@ -40,7 +40,7 @@ var treeBranching = strings.Repeat(branch, indent-1)
 // should display exercise difficulty after slug, by default we do not.
 var showDifficulty bool
 
-// visualizeCmd defines the visualize command
+// visualizeCmd defines the visualize command.
 var visualizeCmd = &cobra.Command{
 	Use:   "visualize " + configPathExample,
 	Short: "View the track structure as a tree",
@@ -74,7 +74,8 @@ var slugToExercise = map[string]*exerciseParent{}
 // the exercises it unlocks.
 type exerciseParent struct {
 	track.ExerciseMetadata
-	childSlugs []string // slugs of unlocked exercises
+	// childSlugs will be used to store the slugs of exercises unlocked by this parent.
+	childSlugs []string
 }
 
 // description is a utility that will return the description for
@@ -138,12 +139,11 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	// Create the pre-fixing for this exercise using depth to move
 	// this exercise further and further to the right.
 	for i := 0; i < depth; i++ {
-		buffer.WriteString(trunk) // continue trunk from the parent exercise(s)
+		buffer.WriteString(trunk) // We continue trunks from the parent exercise(s).
 		buffer.WriteString(treeSpacing)
 	}
 
-	// Normally show the fork indicating a peer below unless there
-	// is none.
+	// Normally show the fork indicating a peer below unless there is none.
 	if !hasChildren && isLast {
 		buffer.WriteString(terminator)
 	} else {
@@ -198,7 +198,7 @@ func visualizeTrack(path string) error {
 		if e.IsDeprecated {
 			continue
 		}
-		// Container for this exercise
+		// Create the container for this exercise.
 		ep := exerciseParent{
 			e,
 			make([]string, 0), // Our unlock slugs, filled in on second pass.
@@ -206,7 +206,7 @@ func visualizeTrack(path string) error {
 
 		exercises = append(exercises, ep)
 
-		// Add to slug based global lookup table
+		// Add to slug based global lookup table.
 		slugToExercise[e.Slug] = &ep
 
 		if ep.IsCore {
@@ -230,7 +230,6 @@ func visualizeTrack(path string) error {
 		parent.childSlugs = append(parent.childSlugs, e.Slug)
 	}
 
-	// This is more of a warning than an error. No stdwarn :(
 	if !unlocksPresent {
 		printConfigurationWarning("Cannot find any unlockable exercises")
 	}
