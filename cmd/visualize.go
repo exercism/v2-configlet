@@ -77,10 +77,10 @@ type exerciseParent struct {
 	childSlugs []string // slugs of unlocked exercises
 }
 
-// getDescription is a utility that will return the description for
+// description is a utility that will return the description for
 // an exerciseUnlock with the difficulty appended if the --difficulty
 // flag was set.
-func (e exerciseParent) getDescription() string {
+func (e exerciseParent) description() string {
 
 	if showDifficulty {
 		return fmt.Sprintf("%s [%d]", e.Slug, e.Difficulty)
@@ -153,7 +153,7 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	// Show the exercise name, it will have the standard branch prefix.
 	buffer.WriteString(treeBranching)
 	buffer.WriteString(" ")
-	buffer.WriteString(e.getDescription())
+	buffer.WriteString(e.description())
 	writeln(buffer.String())
 
 	// Now go into the children unlocks and do this all over again.
@@ -260,7 +260,7 @@ func visualizeTrack(path string) error {
 
 		for _, slug := range bonusExercises {
 			e := slugToExercise[slug]
-			writeln(e.getDescription())
+			writeln(e.description())
 		}
 	} else {
 		printConfigurationWarning("Cannot find any bonus exercises")
