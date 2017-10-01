@@ -172,7 +172,6 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 }
 
 func visualizeTrack(path string) error {
-
 	// exercises is a list of all non-deprecated exercises, in config order.
 	exercises := make([]exerciseParent, 0)
 
