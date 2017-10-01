@@ -74,7 +74,7 @@ var slugToExercise = map[string]*exerciseParent{}
 // the exercises it unlocks.
 type exerciseParent struct {
 	track.ExerciseMetadata
-	Unlocks []string // slugs of unlocked exercises
+	childSlugs []string // slugs of unlocked exercises
 }
 
 // getDescription is a utility that will return the description for
@@ -132,7 +132,7 @@ func printConfigurationWarning(s string) {
 func tree(e *exerciseParent, depth int, isLast bool) {
 	var buffer bytes.Buffer // Holds for the generated output of this exercise.
 
-	numChildren := len(e.Unlocks) // Unlocks are children in the tree context.
+	numChildren := len(e.childSlugs) // Unlocks are children in the tree context.
 	hasChildren := numChildren > 0
 
 	// Create the pre-fixing for this exercise using depth to move
@@ -157,7 +157,7 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	writeln(buffer.String())
 
 	// Now go into the children unlocks and do this all over again.
-	for i, slug := range e.Unlocks {
+	for i, slug := range e.childSlugs {
 		child := slugToExercise[slug]
 		tree(child, depth+1, i == (numChildren-1))
 	}
@@ -228,7 +228,7 @@ func visualizeTrack(path string) error {
 
 		unlocksPresent = true
 		parent := slugToExercise[e.UnlockedBy]
-		parent.Unlocks = append(parent.Unlocks, e.Slug)
+		parent.childSlugs = append(parent.childSlugs, e.Slug)
 	}
 
 	// This is more of a warning than an error. No stdwarn :(
