@@ -82,7 +82,6 @@ type exerciseParent struct {
 // an exerciseUnlock with the difficulty appended if the --difficulty
 // flag was set.
 func (e exerciseParent) description() string {
-
 	if showDifficulty {
 		return fmt.Sprintf("%s [%d]", e.Slug, e.Difficulty)
 	}
