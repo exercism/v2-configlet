@@ -68,11 +68,11 @@ Go
 }
 
 // slugToExercise is a global lookup table of slugs to exercises.
-var slugToExercise = map[string]*exerciseUnlocks{}
+var slugToExercise = map[string]*exerciseParent{}
 
-// exerciseUnlocks is an extension of the exercise metatata type with with
+// exerciseParent is an extension of the exercise metatata type with with
 // the exercises it unlocks.
-type exerciseUnlocks struct {
+type exerciseParent struct {
 	track.ExerciseMetadata
 	Unlocks []string // slugs of unlocked exercises
 }
@@ -80,7 +80,7 @@ type exerciseUnlocks struct {
 // getDescription is a utility that will return the description for
 // an exerciseUnlock with the difficulty appended if the --difficulty
 // flag was set.
-func (e exerciseUnlocks) getDescription() string {
+func (e exerciseParent) getDescription() string {
 
 	if showDifficulty {
 		return fmt.Sprintf("%s [%d]", e.Slug, e.Difficulty)
@@ -129,7 +129,7 @@ func printConfigurationWarning(s string) {
 // the exercise being processed is the last in a sequence, this will
 // make some special tweaks to the output format to look a little
 // more pleasant.
-func tree(e *exerciseUnlocks, depth int, isLast bool) {
+func tree(e *exerciseParent, depth int, isLast bool) {
 	var buffer bytes.Buffer // Holds for the generated output of this exercise.
 
 	numChildren := len(e.Unlocks) // Unlocks are children in the tree context.
@@ -174,7 +174,7 @@ func tree(e *exerciseUnlocks, depth int, isLast bool) {
 func visualizeTrack(path string) error {
 
 	// exercises is a list of all non-deprecated exercises, in config order.
-	exercises := make([]exerciseUnlocks, 0)
+	exercises := make([]exerciseParent, 0)
 
 	// coreExercises are slugs of exercises in core, in config order.
 	coreExercises := make([]string, 0)
@@ -200,20 +200,20 @@ func visualizeTrack(path string) error {
 			continue
 		}
 		// Container for this exercise
-		eu := exerciseUnlocks{
+		ep := exerciseParent{
 			e,
 			make([]string, 0), // Our unlock slugs, filled in on second pass.
 		}
 
-		exercises = append(exercises, eu)
+		exercises = append(exercises, ep)
 
 		// Add to slug based global lookup table
-		slugToExercise[e.Slug] = &eu
+		slugToExercise[e.Slug] = &ep
 
-		if eu.IsCore {
-			coreExercises = append(coreExercises, eu.Slug)
-		} else if eu.UnlockedBy == "" {
-			bonusExercises = append(bonusExercises, eu.Slug)
+		if ep.IsCore {
+			coreExercises = append(coreExercises, ep.Slug)
+		} else if ep.UnlockedBy == "" {
+			bonusExercises = append(bonusExercises, ep.Slug)
 		}
 	}
 
