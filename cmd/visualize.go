@@ -40,8 +40,8 @@ var treeBranching = strings.Repeat(branch, indent-1)
 // should display exercise difficulty after slug, by default we do not.
 var showDifficulty bool
 
-// visCmd defines the visualize command
-var visCmd = &cobra.Command{
+// visualizeCmd defines the visualize command
+var visualizeCmd = &cobra.Command{
 	Use:   "visualize " + configPathExample,
 	Short: "View the track structure as a tree",
 	Long: `The visualize command displays the track in a tree format, with core
@@ -270,6 +270,6 @@ func visualizeTrack(path string) error {
 }
 
 func init() {
-	RootCmd.AddCommand(visCmd)
-	visCmd.Flags().BoolVar(&showDifficulty, "difficulty", false, "display the difficulty of the exercises")
+	RootCmd.AddCommand(visualizeCmd)
+	visualizeCmd.Flags().BoolVar(&showDifficulty, "difficulty", false, "display the difficulty of the exercises")
 }
