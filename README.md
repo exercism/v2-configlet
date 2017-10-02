@@ -24,7 +24,7 @@ Inspired by Go's [`gofmt`](https://blog.golang.org/go-fmt-your-code) tool, confi
 1. The JSON files, `config.json` and `maintainers.json` will be indented by 2 spaces.
 1. In the `config.json` file:
     * Exercises will have their list of topics sorted alphabetically.
-    * Topics names will be normalised to be lowercase and contain hyphens in place of spaces.
+    * Topics names will be normalised to be lowercase and contain underscores in place of spaces.
 
 ### Usage
 
