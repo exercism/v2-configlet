@@ -89,17 +89,13 @@ func (e exerciseParent) description() string {
 	return e.Slug
 }
 
-// writeln is a convenience wrapper around printing the line directly
+// writeLines is a convenience wrapper around printing the line(s) directly
 // in case we (eventually) need to do something else with the string
-// or writer beforehand.
-func writeln(s string) {
-	fmt.Fprintln(os.Stdout, s)
-}
-
-// writelns will write an array of lines using writeln.
-func writelns(ss []string) {
+// or writer beforehand. Plus it is nice to be able to use this rather
+// than multiple write statements.
+func writeLines(ss ...string) {
 	for _, s := range ss {
-		writeln(s)
+		fmt.Fprintln(os.Stdout, s)
 	}
 }
 
@@ -153,7 +149,7 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	buffer.WriteString(treeBranching)
 	buffer.WriteString(" ")
 	buffer.WriteString(e.description())
-	writeln(buffer.String())
+	writeLines(buffer.String())
 
 	// Now go into the children unlocks and do this all over again.
 	for i, slug := range e.childSlugs {
@@ -166,7 +162,7 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	// ...except for the last element because there is nothing below it
 	// to space out.
 	if depth == 0 && !isLast {
-		writeln(trunk)
+		writeLines(trunk)
 	}
 }
 
@@ -187,8 +183,8 @@ func visualizeTrack(path string) error {
 	}
 
 	// Print a header: the language name with markdown style h1 underlining.
-	writeln(config.Language)
-	writeln(strings.Repeat("=", utf8.RuneCountInString(config.Language)))
+	writeLines(config.Language)
+	writeLines(strings.Repeat("=", utf8.RuneCountInString(config.Language)))
 
 	// Initial scan through the exercises for this track: filter out deprecated
 	// exercises and setup the data structures from above.
@@ -238,7 +234,7 @@ func visualizeTrack(path string) error {
 	// If we don't have any core exercises, warn about configuration.
 	numCore := len(coreExercises)
 	if numCore > 0 {
-		writelns([]string{"", "core", "----"})
+		writeLines("", "core", "----")
 
 		lastSlug := coreExercises[numCore-1] // Used to set the isLast hint.
 		for _, slug := range coreExercises {
@@ -253,11 +249,11 @@ func visualizeTrack(path string) error {
 	// tree output. Just a normal listing. Otherwise this is like the core loop.
 	numBonus := len(bonusExercises)
 	if numBonus > 0 {
-		writelns([]string{"", "bonus", "-----"})
+		writeLines("", "bonus", "-----")
 
 		for _, slug := range bonusExercises {
 			e := slugToExercise[slug]
-			writeln(e.description())
+			writeLines(e.description())
 		}
 	} else {
 		printConfigurationWarning("Cannot find any bonus exercises")
