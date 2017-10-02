@@ -30,13 +30,12 @@ const configurationWarning = ", this track may be missing a nextercism compatibl
 // would be.
 const configPathExample = "<path/to/config.json>"
 
-// treeSpacing and treeBranching will be user over and over again
+// treeSpacing and treeBranching will be used over and over again
 // in the tree creation, so create them once here.
 var treeSpacing = strings.Repeat(" ", indent)
-
 var treeBranching = strings.Repeat(branch, indent-1)
 
-// showDifficulty holds --difficulty flag value indicates that we
+// showDifficulty holds --difficulty flag value to indicate that we
 // should display exercise difficulty after slug, by default we do not.
 var showDifficulty bool
 
@@ -70,11 +69,12 @@ Go
 // slugToExercise is a global lookup table of slugs to exercises.
 var slugToExercise = map[string]*exerciseParent{}
 
-// exerciseParent is an extension of the exercise metatata type with with
-// the exercises it unlocks.
+// exerciseParent is an extension of the exercise metatata type with the
+// exercises it unlocks.
 type exerciseParent struct {
 	track.ExerciseMetadata
-	// childSlugs will be used to store the slugs of exercises unlocked by this parent.
+	// childSlugs will be used to store the slugs of exercises unlocked by
+	// this parent.
 	childSlugs []string
 }
 
