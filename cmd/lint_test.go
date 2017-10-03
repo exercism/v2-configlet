@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"path/filepath"
@@ -9,10 +10,19 @@ import (
 	"testing"
 
 	"github.com/exercism/configlet/track"
+	"github.com/exercism/configlet/ui"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestLintTrack(t *testing.T) {
+	originalOut := ui.Out
+	originalErrOut := ui.ErrOut
+	ui.Out = ioutil.Discard
+	ui.ErrOut = ioutil.Discard
+	defer func() {
+		ui.Out = originalOut
+		ui.ErrOut = originalErrOut
+	}()
 	lintTests := []struct {
 		desc     string
 		path     string
