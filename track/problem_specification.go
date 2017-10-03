@@ -64,6 +64,11 @@ func (spec *ProblemSpecification) MixedCaseName() string {
 	return strings.Replace(spec.Name(), " ", "", -1)
 }
 
+// SnakeCaseName converts the slug to snake case.
+func (spec *ProblemSpecification) SnakeCaseName() string {
+	return strings.Replace(spec.Slug, "-", "_", -1)
+}
+
 // Credits are a markdown-formatted version of the source of the exercise.
 func (spec *ProblemSpecification) Credits() string {
 	if spec.SourceURL == "" {

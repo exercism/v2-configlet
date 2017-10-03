@@ -67,21 +67,25 @@ func TestProblemSpecificationName(t *testing.T) {
 		slug  string
 		name  string
 		mixed string
+		snake string
 	}{
 		{
 			slug:  "apple",
 			name:  "Apple",
 			mixed: "Apple",
+			snake: "apple",
 		},
 		{
 			slug:  "apple-pie",
 			name:  "Apple Pie",
 			mixed: "ApplePie",
+			snake: "apple_pie",
 		},
 		{
 			slug:  "1-apple-per-day",
 			name:  "1 Apple Per Day",
 			mixed: "1ApplePerDay",
+			snake: "1_apple_per_day",
 		},
 	}
 
@@ -89,6 +93,7 @@ func TestProblemSpecificationName(t *testing.T) {
 		spec := ProblemSpecification{Slug: test.slug}
 		assert.Equal(t, test.name, spec.Name())
 		assert.Equal(t, test.mixed, spec.MixedCaseName())
+		assert.Equal(t, test.snake, spec.SnakeCaseName())
 	}
 }
 
