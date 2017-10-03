@@ -7,8 +7,8 @@ import (
 	"github.com/exercism/configlet/ui"
 )
 
-func ExampleVisualize() {
-	visualizeTrack(filepath.FromSlash("../fixtures/visualize/config.json"))
+func ExampleTree() {
+	treeTrack(filepath.FromSlash("../fixtures/tree/config.json"))
 	// Output:
 	// Numbers
 	// =======
@@ -34,13 +34,13 @@ func ExampleVisualize() {
 	// eight
 }
 
-func ExampleVisualizeDifficulty() {
+func ExampleTreeDifficulty() {
 
 	orig := showDifficulty
 	showDifficulty = true
 	defer func() { showDifficulty = orig }()
 
-	visualizeTrack(filepath.FromSlash("../fixtures/visualize/config.json"))
+	treeTrack(filepath.FromSlash("../fixtures/tree/config.json"))
 	// Output:
 	// Numbers
 	// =======
@@ -66,13 +66,13 @@ func ExampleVisualizeDifficulty() {
 	// eight [5]
 }
 
-func ExampleVisualizeWarnings() {
+func ExampleTreeWarnings() {
 	orig := ui.ErrOut
 	ui.ErrOut = os.Stdout
 
 	defer func() { ui.ErrOut = orig }()
 
-	visualizeTrack(filepath.FromSlash("../fixtures/visualize/config-outdated.json"))
+	treeTrack(filepath.FromSlash("../fixtures/tree/config-outdated.json"))
 	// Output:
 	// Numbers
 	// =======

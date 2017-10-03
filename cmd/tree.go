@@ -39,11 +39,11 @@ var treeBranching = strings.Repeat(branch, indent-1)
 // should display exercise difficulty after slug, by default we do not.
 var showDifficulty bool
 
-// visualizeCmd defines the visualize command.
-var visualizeCmd = &cobra.Command{
-	Use:   "visualize " + configPathExample,
+// treeCmd defines the tree command.
+var treeCmd = &cobra.Command{
+	Use:   "tree " + configPathExample,
 	Short: "View the track structure as a tree",
-	Long: `The visualize command displays the track in a tree format, with core
+	Long: `The tree command displays the track in a tree format, with core
 exercises at root and unlocks located under their locking exercises. 
 
 Bonus exercises are left in a list at the bottom after the tree display.
@@ -61,8 +61,8 @@ Go
 ...
 
 `,
-	Example: fmt.Sprintf("  %s visualize %s --difficulty", binaryName, configPathExample),
-	Run:     runVisualizer,
+	Example: fmt.Sprintf("  %s tree %s --difficulty", binaryName, configPathExample),
+	Run:     runTree,
 	Args:    cobra.ExactArgs(1),
 }
 
@@ -99,11 +99,11 @@ func writeLines(ss ...string) {
 	}
 }
 
-// runVisualizer kicks off the visualization and will print any
+// runTree kicks off the visualization and will print any
 // errors from the process.
-func runVisualizer(cmd *cobra.Command, args []string) {
+func runTree(cmd *cobra.Command, args []string) {
 	for _, arg := range args {
-		if err := visualizeTrack(arg); err != nil {
+		if err := treeTrack(arg); err != nil {
 			ui.PrintError(err)
 		}
 	}
@@ -166,7 +166,7 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	}
 }
 
-func visualizeTrack(path string) error {
+func treeTrack(path string) error {
 	// exercises is a list of all non-deprecated exercises, in config order.
 	exercises := make([]exerciseParent, 0)
 
@@ -263,6 +263,6 @@ func visualizeTrack(path string) error {
 }
 
 func init() {
-	RootCmd.AddCommand(visualizeCmd)
-	visualizeCmd.Flags().BoolVar(&showDifficulty, "difficulty", false, "display the difficulty of the exercises")
+	RootCmd.AddCommand(treeCmd)
+	treeCmd.Flags().BoolVar(&showDifficulty, "difficulty", false, "display the difficulty of the exercises")
 }
