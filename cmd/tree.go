@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 	"unicode/utf8"
 
@@ -28,7 +29,7 @@ const configurationWarning = ", this track may be missing a nextercism compatibl
 
 // configPathExample is used in the Cobra usage output where the configfile path
 // would be.
-const configPathExample = "<path/to/config.json>"
+const configPathExample = "<path/to/track-root-or-config.json>"
 
 // treeSpacing and treeBranching will be used over and over again
 // in the tree creation, so create them once here.
@@ -44,7 +45,10 @@ var treeCmd = &cobra.Command{
 	Use:   "tree " + configPathExample,
 	Short: "View the track structure as a tree",
 	Long: `The tree command displays the track in a tree format, with core
-exercises at root and unlocks located under their locking exercises. 
+exercises at root and unlocks located under their locking exercises. You
+may choose to use the track root as the argument and tree will find that
+track's config.json file, alternatively you may use a full path to a track
+configuration file. 
 
 Bonus exercises are left in a list at the bottom after the tree display.
 
@@ -166,7 +170,7 @@ func tree(e *exerciseParent, depth int, isLast bool) {
 	}
 }
 
-func treeTrack(path string) error {
+func treeTrack(configFilepath string) error {
 	// exercises is a list of all non-deprecated exercises, in config order.
 	exercises := make([]exerciseParent, 0)
 
@@ -177,7 +181,13 @@ func treeTrack(path string) error {
 	// non-core, no unlocks, in config order.
 	bonusExercises := make([]string, 0)
 
-	config, err := track.NewConfig(path)
+	// Check to see if the path ends with .json this is a good indicator
+	// it is not the path-to-track but an arbitrary config file
+	// otherwise assume it is a path-to-track and add config.json to it.
+	if !strings.HasSuffix(configFilepath, ".json") {
+		configFilepath = path.Join(configFilepath, "config.json")
+	}
+	config, err := track.NewConfig(configFilepath)
 	if err != nil {
 		return err
 	}

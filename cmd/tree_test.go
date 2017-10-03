@@ -8,10 +8,26 @@ import (
 	"testing"
 )
 
-func TestNoFileError(t *testing.T) {
+func TestGivenTrackPath(t *testing.T) {
+	err := treeTrack(filepath.FromSlash("../fixtures/tree"))
+
+	if err != nil {
+		t.Error("should discover config.json given path to directory.")
+	}
+}
+
+func TestGivenFilename(t *testing.T) {
+	err := treeTrack(filepath.FromSlash("../fixtures/tree/config.json"))
+
+	if err != nil {
+		t.Error("should open config.json given path to file.")
+	}
+}
+
+func TestMissingFileError(t *testing.T) {
 	err := treeTrack(filepath.FromSlash("../fixtures/tree/non-existing-config.json"))
 
 	if err == nil {
-		t.Error("expected error for non-existing configuration file")
+		t.Error("should error for non-existing configuration file.")
 	}
 }
