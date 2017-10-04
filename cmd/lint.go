@@ -6,17 +6,22 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/exercism/configlet/track"
 	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
 )
 
-// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
-var UUIDValidationURL = "http://exercism.io/api/v1/uuids"
-
-// noHTTP flag indicates if HTTP-based lint checks have been disabled at runtime.
-var noHTTP bool
+var (
+	// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
+	UUIDValidationURL = "http://exercism.io/api/v1/uuids"
+	// noHTTP flag indicates if HTTP-based lint checks have been disabled at runtime.
+	noHTTP bool
+	// trackID flag allows the user to specify the ID of the track,
+	// for example if it is different to the local directory name
+	trackID string
+)
 
 // lintCmd defines the lint command.
 var lintCmd = &cobra.Command{
@@ -29,9 +34,19 @@ It ensures the following files are valid JSON:
 
 It also checks that the exercises defined in the config.json file are complete.
 `,
-	Example: fmt.Sprintf("  %s lint %s", binaryName, pathExample),
+	Example: lintExampleText(),
 	Run:     runLint,
 	Args:    cobra.ExactArgs(1),
+}
+
+func lintExampleText() string {
+	cmds := []string{
+		"%[1]s lint %[2]s",
+		"%[1]s lint %[2]s --no-http",
+		"%[1]s lint %[2]s --track-id=<track id>",
+	}
+	s := "  " + strings.Join(cmds, "\n\n  ")
+	return fmt.Sprintf(s, binaryName, pathExample)
 }
 
 func runLint(cmd *cobra.Command, args []string) {
@@ -56,6 +71,10 @@ func lintTrack(path string) bool {
 	if err != nil {
 		ui.PrintError(err.Error())
 		return true
+	}
+
+	if trackID != "" {
+		t.ID = trackID
 	}
 
 	configErrors := []struct {
@@ -318,4 +337,5 @@ func duplicateTrackUUID(t track.Track) []string {
 func init() {
 	RootCmd.AddCommand(lintCmd)
 	lintCmd.Flags().BoolVar(&noHTTP, "no-http", false, "Disable remote HTTP-based linting.")
+	lintCmd.Flags().StringVar(&trackID, "track-id", "", "Specify the track ID (defaults to local directory name).")
 }
