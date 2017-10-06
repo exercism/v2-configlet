@@ -36,9 +36,9 @@ func ExampleTree() {
 
 func ExampleTreeDifficulty() {
 
-	orig := showDifficulty
-	showDifficulty = true
-	defer func() { showDifficulty = orig }()
+	orig := withDifficulty
+	withDifficulty = true
+	defer func() { withDifficulty = orig }()
 
 	treeTrack(filepath.FromSlash("../fixtures/tree/config.json"))
 	// Output:

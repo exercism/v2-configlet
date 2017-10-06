@@ -36,9 +36,9 @@ const configPathExample = "<path/to/track-root-or-config.json>"
 var treeSpacing = strings.Repeat(" ", indent)
 var treeBranching = strings.Repeat(branch, indent-1)
 
-// showDifficulty holds --difficulty flag value to indicate that we
+// withDifficulty holds --with-difficulty flag value to indicate that we
 // should display exercise difficulty after slug, by default we do not.
-var showDifficulty bool
+var withDifficulty bool
 
 // treeCmd defines the tree command.
 var treeCmd = &cobra.Command{
@@ -65,7 +65,7 @@ Go
 ...
 
 `,
-	Example: fmt.Sprintf("  %s tree %s --difficulty", binaryName, configPathExample),
+	Example: fmt.Sprintf("  %s tree %s --with-difficulty", binaryName, configPathExample),
 	Run:     runTree,
 	Args:    cobra.ExactArgs(1),
 }
@@ -86,7 +86,7 @@ type exerciseParent struct {
 // an exerciseUnlock with the difficulty appended if the --difficulty
 // flag was set.
 func (e exerciseParent) description() string {
-	if showDifficulty {
+	if withDifficulty {
 		return fmt.Sprintf("%s [%d]", e.Slug, e.Difficulty)
 	}
 
@@ -274,5 +274,5 @@ func treeTrack(configFilepath string) error {
 
 func init() {
 	RootCmd.AddCommand(treeCmd)
-	treeCmd.Flags().BoolVar(&showDifficulty, "difficulty", false, "display the difficulty of the exercises")
+	treeCmd.Flags().BoolVar(&withDifficulty, "with-difficulty", false, "display the difficulty of the exercises")
 }
