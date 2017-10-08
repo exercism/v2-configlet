@@ -10,6 +10,7 @@ import (
 type PatternGroup struct {
 	SolutionPattern string `json:"solution_pattern"`
 	TestPattern     string `json:"test_pattern"`
+	IgnorePattern   string `json:"ignore_pattern"`
 }
 
 // Config is an Exercism track configuration.
@@ -29,6 +30,7 @@ type Config struct {
 func NewConfig(path string) (Config, error) {
 	c := Config{
 		PatternGroup: PatternGroup{
+			IgnorePattern:   "[Ee]xample",
 			SolutionPattern: "[Ee]xample",
 			TestPattern:     "(?i)test",
 		},

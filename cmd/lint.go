@@ -6,14 +6,20 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 
 	"github.com/exercism/configlet/track"
 	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
 )
 
-// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
-var UUIDValidationURL = "http://exercism.io/api/v1/uuids"
+var (
+	// UUIDValidationURL is the endpoint to Exercism's UUID validation service.
+	UUIDValidationURL = "http://exercism.io/api/v1/uuids"
+
+	// RegexValidationURL is the endpoint to Exercism's regex pattern validation service.
+	RegexValidationURL = "http://httpbin.org/post"
+)
 
 // noHTTP flag indicates if HTTP-based lint checks have been disabled at runtime.
 var noHTTP bool
@@ -97,6 +103,10 @@ func lintTrack(path string) bool {
 		{
 			check: duplicateTrackUUID,
 			msg:   "The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v",
+		},
+		{
+			check: unsupportedRegexPatterns,
+			msg:   "-> The pattern '%v' contains an unsupported regular expression.\n",
 		},
 	}
 
@@ -313,6 +323,53 @@ func duplicateTrackUUID(t track.Track) []string {
 	}
 
 	return []string{}
+}
+
+func unsupportedRegexPatterns(t track.Track) []string {
+	// TODO find a better way to convert struct to map, with json tags as keys
+	data, err := json.Marshal(t.Config.PatternGroup)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	var patterns map[string]string
+	err = json.Unmarshal(data, &patterns)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+
+	failedPatterns := []string{}
+	for name, pattern := range patterns {
+		if _, err := regexp.Compile(pattern); err != nil {
+			failedPatterns = append(failedPatterns, name)
+		}
+	}
+
+	if len(failedPatterns) > 0 || disableHTTPChecks {
+		return failedPatterns
+	}
+
+	// TODO breakout extended regex check.
+	resp, err := http.Post(RegexValidationURL, "application/json", bytes.NewBuffer(data))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusUnprocessableEntity {
+		result := struct{ Patterns []string }{}
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			fmt.Fprintf(os.Stderr, "-> %s\n", err.Error())
+			os.Exit(1)
+		}
+
+		return result.Patterns
+	}
+
+	return failedPatterns
 }
 
 func init() {
