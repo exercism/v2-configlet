@@ -26,9 +26,9 @@ var printTests = []struct {
 
 func TestPrint(t *testing.T) {
 	var buf bytes.Buffer
-	saved := Out
+	originalOut := Out
 	Out = &buf
-	defer func() { Out = saved }()
+	defer func() { Out = originalOut }()
 	for _, tt := range printTests {
 		Print(tt.in...)
 		assert.Equal(t, tt.out, buf.String())
@@ -55,9 +55,9 @@ var printErrorTests = []struct {
 
 func TestPrintError(t *testing.T) {
 	var buf bytes.Buffer
-	saved := Out
+	originalOut := Out
 	Out = &buf
-	defer func() { Out = saved }()
+	defer func() { Out = originalOut }()
 	for _, tt := range printErrorTests {
 		Print(tt.in...)
 		assert.Equal(t, tt.out, buf.String())

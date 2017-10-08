@@ -15,8 +15,8 @@ import (
 // UUIDValidationURL is the endpoint to Exercism's UUID validation service.
 var UUIDValidationURL = "http://exercism.io/api/v1/uuids"
 
-// disableHTTPChecks flag skips HTTP based checks when passed.
-var disableHTTPChecks bool
+// noHTTP flag indicates if HTTP-based lint checks have been disabled at runtime.
+var noHTTP bool
 
 // lintCmd defines the lint command.
 var lintCmd = &cobra.Command{
@@ -268,7 +268,7 @@ func duplicateUUID(t track.Track) []string {
 }
 
 func duplicateTrackUUID(t track.Track) []string {
-	if disableHTTPChecks {
+	if noHTTP {
 		return []string{}
 	}
 
@@ -317,5 +317,5 @@ func duplicateTrackUUID(t track.Track) []string {
 
 func init() {
 	RootCmd.AddCommand(lintCmd)
-	lintCmd.Flags().BoolVar(&disableHTTPChecks, "no-http", false, "Disable remote HTTP-based linting.")
+	lintCmd.Flags().BoolVar(&noHTTP, "no-http", false, "Disable remote HTTP-based linting.")
 }

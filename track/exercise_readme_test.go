@@ -26,18 +26,39 @@ func TestNewExerciseReadme(t *testing.T) {
 }
 
 func TestGenerateExerciseReadme(t *testing.T) {
-	readme := ExerciseReadme{
-		Spec: &ProblemSpecification{
-			Slug:        "hello-kitty",
-			Description: "The description.\n",
+	tests := []struct {
+		desc     string
+		Spec     *ProblemSpecification
+		expected string
+	}{
+		{
+			desc: "readme with title inferred from slug",
+			Spec: &ProblemSpecification{
+				Slug:        "hello-kitty",
+				Description: "The description.\n",
+			},
+			expected: "# Hello Kitty\n\nThe description.\n",
 		},
-		template: "# {{ .Spec.Name }}\n\n{{ .Spec.Description -}}",
+		{
+			desc: "readme with a specified title",
+			Spec: &ProblemSpecification{
+				Slug:        "rna-transcription",
+				Title:       "RNA Transcription",
+				Description: "The description.\n",
+			},
+			expected: "# RNA Transcription\n\nThe description.\n",
+		},
 	}
-	expected := "# Hello Kitty\n\nThe description.\n"
+	for _, test := range tests {
+		readme := ExerciseReadme{
+			Spec:     test.Spec,
+			template: "# {{ .Spec.Name }}\n\n{{ .Spec.Description -}}",
+		}
 
-	s, err := readme.Generate()
-	assert.NoError(t, err)
-	assert.Equal(t, expected, s)
+		s, err := readme.Generate()
+		assert.NoError(t, err)
+		assert.Equal(t, test.expected, s, test.desc)
+	}
 }
 
 func TestExerciseReadmeTrackInsertDeprecation(t *testing.T) {

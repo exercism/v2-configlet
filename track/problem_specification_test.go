@@ -9,14 +9,14 @@ import (
 
 func TestNewProblemSpecification(t *testing.T) {
 	tests := []struct {
-		description string
-		slug        string
-		specPath    string
-		expected    ProblemSpecification
+		desc     string
+		slug     string
+		specPath string
+		expected ProblemSpecification
 	}{
 		{
-			description: "shared spec if custom is missing",
-			slug:        "one",
+			desc: "shared spec if custom is missing",
+			slug: "one",
 			expected: ProblemSpecification{
 				Description: "This is one.\n",
 				Source:      "The internet.",
@@ -24,8 +24,8 @@ func TestNewProblemSpecification(t *testing.T) {
 			},
 		},
 		{
-			description: "custom spec overrides shared",
-			slug:        "two",
+			desc: "custom spec overrides shared",
+			slug: "two",
 			expected: ProblemSpecification{
 				Description: "This is two, customized.\n",
 				Source:      "The web.",
@@ -33,9 +33,9 @@ func TestNewProblemSpecification(t *testing.T) {
 			},
 		},
 		{
-			description: "shared spec from alternate problem-specifications location",
-			slug:        "one",
-			specPath:    filepath.FromSlash("../fixtures/alternate/problem-specifications"),
+			desc:     "shared spec from alternate problem-specifications location",
+			slug:     "one",
+			specPath: filepath.FromSlash("../fixtures/alternate/problem-specifications"),
 			expected: ProblemSpecification{
 				Description: "This is the alternate one.\n",
 				Source:      "The internet.",
@@ -43,6 +43,9 @@ func TestNewProblemSpecification(t *testing.T) {
 			},
 		},
 	}
+
+	originalSpecPath := ProblemSpecificationsPath
+	defer func() { ProblemSpecificationsPath = originalSpecPath }()
 
 	for _, test := range tests {
 		ProblemSpecificationsPath = test.specPath
@@ -64,36 +67,112 @@ func TestMissingProblemSpecification(t *testing.T) {
 
 func TestProblemSpecificationName(t *testing.T) {
 	tests := []struct {
-		slug  string
-		name  string
-		mixed string
-		snake string
+		desc     string
+		slug     string
+		title    string
+		expected string
 	}{
 		{
-			slug:  "apple",
-			name:  "Apple",
-			mixed: "Apple",
-			snake: "apple",
+			desc:     "simple slug as name",
+			slug:     "apple",
+			expected: "Apple",
 		},
 		{
-			slug:  "apple-pie",
-			name:  "Apple Pie",
-			mixed: "ApplePie",
-			snake: "apple_pie",
+			desc:     "multi-word slug as name",
+			slug:     "1-apple-per-day",
+			expected: "1 Apple Per Day",
 		},
 		{
-			slug:  "1-apple-per-day",
-			name:  "1 Apple Per Day",
-			mixed: "1ApplePerDay",
-			snake: "1_apple_per_day",
+			desc:     "title overrides slug as name",
+			slug:     "rna-transcription",
+			title:    "RNA Transcription",
+			expected: "RNA Transcription",
+		},
+	}
+
+	for _, test := range tests {
+		spec := ProblemSpecification{Slug: test.slug, Title: test.title}
+		assert.Equal(t, test.expected, spec.Name(), test.desc)
+	}
+}
+
+func TestProblemSpecificationMixedCaseName(t *testing.T) {
+	tests := []struct {
+		slug     string
+		expected string
+	}{
+		{
+			slug:     "apple",
+			expected: "Apple",
+		},
+		{
+			slug:     "1-apple-per-day",
+			expected: "1ApplePerDay",
+		},
+		{
+			slug:     "rna-transcription",
+			expected: "RnaTranscription",
 		},
 	}
 
 	for _, test := range tests {
 		spec := ProblemSpecification{Slug: test.slug}
-		assert.Equal(t, test.name, spec.Name())
-		assert.Equal(t, test.mixed, spec.MixedCaseName())
-		assert.Equal(t, test.snake, spec.SnakeCaseName())
+		assert.Equal(t, test.expected, spec.MixedCaseName())
+	}
+}
+
+func TestProblemSpecificationSnakeCaseName(t *testing.T) {
+	tests := []struct {
+		slug     string
+		expected string
+	}{
+		{
+			slug:     "apple",
+			expected: "apple",
+		},
+		{
+			slug:     "1-apple-per-day",
+			expected: "1_apple_per_day",
+		},
+		{
+			slug:     "rna-transcription",
+			expected: "rna_transcription",
+		},
+	}
+
+	for _, test := range tests {
+		spec := ProblemSpecification{Slug: test.slug}
+		assert.Equal(t, test.expected, spec.SnakeCaseName())
+	}
+}
+
+func TestProblemSpecificationTitle(t *testing.T) {
+	originalSpecPath := ProblemSpecificationsPath
+	ProblemSpecificationsPath = ""
+	defer func() { ProblemSpecificationsPath = originalSpecPath }()
+
+	tests := []struct {
+		desc     string
+		slug     string
+		expected string
+	}{
+		{
+			desc:     "title is inferred from slug if not explicitly provided",
+			slug:     "slug-as-title",
+			expected: "Slug As Title",
+		},
+		{
+			desc:     "explicit title takes precedence over slug",
+			slug:     "explicit-title",
+			expected: "(Explicit) Title",
+		},
+	}
+
+	root := filepath.FromSlash("../fixtures")
+	for _, test := range tests {
+		spec, err := NewProblemSpecification(root, "titled-exercises", test.slug)
+		assert.NoError(t, err)
+		assert.Equal(t, test.expected, spec.Title)
 	}
 }
 

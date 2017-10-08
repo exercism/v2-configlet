@@ -25,6 +25,7 @@ var (
 type ProblemSpecification struct {
 	Slug            string
 	Description     string
+	Title           string `yaml:"title"`
 	Source          string `yaml:"source"`
 	SourceURL       string `yaml:"source_url"`
 	root            string
@@ -43,6 +44,8 @@ func NewProblemSpecification(root, trackID, slug string) (*ProblemSpecification,
 		trackID: trackID,
 		Slug:    slug,
 	}
+	spec.Title = spec.titleCasedSlug()
+
 	err := spec.load(spec.customPath())
 	if err == nil {
 		return spec, nil
@@ -56,12 +59,15 @@ func NewProblemSpecification(root, trackID, slug string) (*ProblemSpecification,
 
 // Name is a readable version of the slug.
 func (spec *ProblemSpecification) Name() string {
-	return strings.Title(strings.Join(strings.Split(spec.Slug, "-"), " "))
+	if spec.Title == "" {
+		spec.Title = spec.titleCasedSlug()
+	}
+	return spec.Title
 }
 
 // MixedCaseName returns the name with all spaces removed.
 func (spec *ProblemSpecification) MixedCaseName() string {
-	return strings.Replace(spec.Name(), " ", "", -1)
+	return strings.Replace(spec.titleCasedSlug(), " ", "", -1)
 }
 
 // SnakeCaseName converts the slug to snake case.
@@ -78,6 +84,10 @@ func (spec *ProblemSpecification) Credits() string {
 		return fmt.Sprintf("[%s](%s)", spec.SourceURL, spec.SourceURL)
 	}
 	return fmt.Sprintf("%s [%s](%s)", spec.Source, spec.SourceURL, spec.SourceURL)
+}
+
+func (spec *ProblemSpecification) titleCasedSlug() string {
+	return strings.Title(strings.Join(strings.Split(spec.Slug, "-"), " "))
 }
 
 func (spec *ProblemSpecification) load(path string) error {

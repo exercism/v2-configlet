@@ -9,9 +9,9 @@ import (
 
 func ExampleLint() {
 	ui.Out = os.Stdout
-	saved := disableHTTPChecks
-	disableHTTPChecks = true
-	defer func() { disableHTTPChecks = saved }()
+	originalNoHTTP := noHTTP
+	noHTTP = true
+	defer func() { noHTTP = originalNoHTTP }()
 
 	lintTrack(filepath.FromSlash("../fixtures/numbers"))
 	// Output:
@@ -24,9 +24,9 @@ func ExampleLint() {
 
 func ExampleLintMaintainers() {
 	ui.ErrOut = os.Stdout
-	saved := disableHTTPChecks
-	disableHTTPChecks = true
-	defer func() { disableHTTPChecks = saved }()
+	originalNoHTTP := noHTTP
+	noHTTP = true
+	defer func() { noHTTP = originalNoHTTP }()
 
 	lintTrack(filepath.FromSlash("../fixtures/broken-maintainers"))
 	// Output:
