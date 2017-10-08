@@ -26,6 +26,15 @@ Inspired by Go's [`gofmt`](https://blog.golang.org/go-fmt-your-code) tool, confi
     * Exercises will have their list of topics sorted alphabetically.
     * Topics names will be normalised to be lowercase and contain underscores in place of spaces.
 
+## Tree
+
+The track configuration file can be hard to review, especially the new structure being used for [nextercism](https://github.com/exercism/prototype). The `tree` command can help with the process of setting up your configuration file for nextercism. It will:
+
+1. Display the core track exercises and unlocked exercises as a tree.
+1. List out the bonus exercises separately.
+1. Issue warnings if expected elements from the nextercism-style configuration are missing.
+1. Optionally show the difficulty of the exercises via the `--with-difficulty` option.
+
 ### Usage
 
 ```bash

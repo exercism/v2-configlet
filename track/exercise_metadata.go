@@ -8,5 +8,7 @@ type ExerciseMetadata struct {
 	Slug         string
 	Difficulty   int
 	Topics       []string
-	IsDeprecated bool `json:"deprecated"`
+	UnlockedBy   string `json:"unlocked_by"`
+	IsCore       bool   `json:"core"`
+	IsDeprecated bool   `json:"deprecated"`
 }
