@@ -147,8 +147,9 @@ func TestProblemSpecificationSnakeCaseName(t *testing.T) {
 }
 
 func TestProblemSpecificationTitle(t *testing.T) {
+	root := filepath.FromSlash("../fixtures")
 	originalSpecPath := ProblemSpecificationsPath
-	ProblemSpecificationsPath = ""
+	ProblemSpecificationsPath = filepath.Join(root, "titled-problem-specifications")
 	defer func() { ProblemSpecificationsPath = originalSpecPath }()
 
 	tests := []struct {
@@ -168,9 +169,8 @@ func TestProblemSpecificationTitle(t *testing.T) {
 		},
 	}
 
-	root := filepath.FromSlash("../fixtures")
 	for _, test := range tests {
-		spec, err := NewProblemSpecification(root, "titled-exercises", test.slug)
+		spec, err := NewProblemSpecification(root, "titled-problem-specifications", test.slug)
 		assert.NoError(t, err)
 		assert.Equal(t, test.expected, spec.Title)
 	}

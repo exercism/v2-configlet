@@ -47,7 +47,7 @@ func TestLintTrack(t *testing.T) {
 		},
 		{
 			desc:     "should not fail when given a track with all of its bits in place.",
-			path:     "../fixtures/elements",
+			path:     "../fixtures/lint/valid-track",
 			expected: false,
 		},
 	}
