@@ -1,7 +1,7 @@
 {
-  "slug": "elements",
-  "language": "Elements",
-  "repository": "https://github.com/exercism/elements",
+  "slug": "valid-track",
+  "language": "Valid Track",
+  "repository": "https://github.com/exercism/valid-track",
   "active": true,
   "solution_pattern": "[Ee]xample",
   "test_pattern": "(?i)test",
