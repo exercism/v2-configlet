@@ -42,6 +42,8 @@ Using this command for README generation allows for some conveniences:
 
 Much of the utility of this command comes from the ability to *locally override* README templates and exercise information.
 
+(When working with READMEs you may find [a local renderer for GitHub Markdown](https://github.com/joeyespo/grip) helpful to preview your work before committing.)
+
 ### The README Template
 
 The template file used as the basis for README generation lives in a track root's `config/` directory as [`config/exercise_readme.go.tmpl`](https://github.com/exercism/lua/blob/master/config/exercise_readme.go.tmpl). This template file may be overridden for an exercise by placing the overriding template in the exercises `.meta/readme.go.tmpl`. 
