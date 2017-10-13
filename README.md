@@ -60,7 +60,14 @@ The credits are a description of the source of an exercise with an optional hype
 
 #### .Spec.Name
 
-This is a readable version of the exercise's slug.
+This variable is a readable version of the exercise's slug in [title case](https://golang.org/pkg/strings/#Title). There are alternative formats of the name available. These formats may be useful if you need to [reference the exercise name](https://github.com/exercism/groovy/blob/1ffee8ea0df4492b349e367ac9ba88f1124bc038/config/exercise_readme.go.tmpl#L13) in regards to tooling.
+
+| Variable            | Contents
+| --------            | --------
+| .Spec.Slug          | difference-of-squares
+| .Spec.Name          | Difference Of Squares
+| .Spec.MixedCaseName | DifferenceOfSquares
+| .Spec.SnakeCaseName | difference\_of\_squares
 
 #### .TrackInsert
 
