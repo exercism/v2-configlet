@@ -15,7 +15,7 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 * [#73](https://github.com/exercism/configlet/pull/73) Update CONTRIBUTING.md - [@rpottsoh]
 * [#71](https://github.com/exercism/configlet/pull/71) Update the list of supported Go versions - [@nywilken]
 * [#68](https://github.com/exercism/configlet/pull/68) Document the basic release process - [@kytrinyx]
-* [#64](https://github.com/exercism/configlet/pull/64) Ammendments to commands - [@robphoenix]
+* [#64](https://github.com/exercism/configlet/pull/64) Amendments to commands - [@robphoenix]
 
 ## v3.5.0 (5th September 2017)
 
