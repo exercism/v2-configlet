@@ -11,6 +11,7 @@ import (
 // Exercise is an implementation of an Exercism exercise.
 type Exercise struct {
 	Slug          string
+	ReadmePath    string
 	SolutionPath  string
 	TestSuitePath string
 }
@@ -27,6 +28,11 @@ func NewExercise(root string, pg PatternGroup) (Exercise, error) {
 	}
 
 	err = setPath(root, pg.TestPattern, &ex.TestSuitePath)
+	if err != nil {
+		return ex, err
+	}
+
+	err = setPath(root, "README\\.md", &ex.ReadmePath)
 	if err != nil {
 		return ex, err
 	}
@@ -60,6 +66,11 @@ func setPath(root, pattern string, field *string) error {
 	}
 
 	return filepath.Walk(root, walkFn)
+}
+
+// HasReadme checks that an exercise has a README.
+func (ex Exercise) HasReadme() bool {
+	return ex.ReadmePath != ""
 }
 
 // HasTestSuite checks that an exercise has a test suite.
