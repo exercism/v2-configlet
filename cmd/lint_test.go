@@ -46,6 +46,11 @@ func TestLintTrack(t *testing.T) {
 			expected: true,
 		},
 		{
+			desc:     "should fail when given a track missing READMEs.",
+			path:     "../fixtures/missing-readme",
+			expected: true,
+		},
+		{
 			desc:     "should not fail when given a track with all of its bits in place.",
 			path:     "../fixtures/lint/valid-track",
 			expected: false,
@@ -107,6 +112,27 @@ func TestMissingMetadata(t *testing.T) {
 	sort.Strings(slugs)
 
 	assert.Equal(t, "banana", slugs[0])
+	assert.Equal(t, "cherry", slugs[1])
+}
+
+func TestMissingReadme(t *testing.T) {
+	track := track.Track{
+		Exercises: []track.Exercise{
+			{Slug: "apple"},
+			{Slug: "banana", ReadmePath: "README.md"},
+			{Slug: "cherry"},
+		},
+	}
+
+	slugs := missingReadme(track)
+
+	if len(slugs) != 2 {
+		t.Fatalf("Expected missing READMEs in 2 exercises, missing in %d", len(slugs))
+	}
+
+	sort.Strings(slugs)
+
+	assert.Equal(t, "apple", slugs[0])
 	assert.Equal(t, "cherry", slugs[1])
 }
 
