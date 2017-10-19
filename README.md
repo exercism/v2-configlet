@@ -88,7 +88,14 @@ The track configuration file can be hard to review, especially the new structure
 1. Issue warnings if expected elements from the nextercism-style configuration are missing.
 1. Optionally show the difficulty of the exercises via the `--with-difficulty` option.
 
+## UUID
 
+Exercises in each track config.json file must have a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier). You may request a randomly generated exercise UUID from configlet using:
+
+```bash
+$ configlet uuid
+2209721b-086e-a680-db1e-c6272e996b3fa29ce77
+```
 
 ### Usage
 
