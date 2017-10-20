@@ -8,10 +8,26 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.6.0 (20th October 2017)
+
+* [#101](https://github.com/exercism/configlet/pull/101) Add UUID section to README - [@tleen]
+* [#84](https://github.com/exercism/configlet/pull/84) Remove coupling between description and metadata - [@nywilken]
+* [#97](https://github.com/exercism/configlet/pull/97) changelog: small typo - [@ferhatelmas]
+* [#95](https://github.com/exercism/configlet/pull/95) Add generate command info to README - [@tleen]
+* [#93](https://github.com/exercism/configlet/pull/93) Rename fixtures to match testing context - [@nywilken]
+* [#90](https://github.com/exercism/configlet/pull/90) Add --track-id flag to lint command - [@robphoenix]
+* [#83](https://github.com/exercism/configlet/pull/83) Add tree command - [@tleen]
+* [#85](https://github.com/exercism/configlet/pull/85) Add support for custom readme titles - [@nywilken]
+* [#88](https://github.com/exercism/configlet/pull/88) redirect output from ui package in lint test file - [@robphoenix]
+* [#89](https://github.com/exercism/configlet/pull/89) Add a snake case version of the slug - [@kytrinyx]
+* [#87](https://github.com/exercism/configlet/pull/87) Update topic format description - [@stkent]
+* [#81](https://github.com/exercism/configlet/pull/81) Add links to authors in changelog - [@kytrinyx]
+
 ## v3.5.1 (23rd September 2017)
 
 * [#78](https://github.com/exercism/configlet/pull/78) Fix error handling for malformed config files - [@nywilken]
 * [#72](https://github.com/exercism/configlet/pull/72) Implement UI printer - [@robphoenix]
+* [#74](https://github.com/exercism/configlet/pull/74) Add CHANGELOG.md - [@robphoenix]
 * [#73](https://github.com/exercism/configlet/pull/73) Update CONTRIBUTING.md - [@rpottsoh]
 * [#71](https://github.com/exercism/configlet/pull/71) Update the list of supported Go versions - [@nywilken]
 * [#68](https://github.com/exercism/configlet/pull/68) Document the basic release process - [@kytrinyx]
@@ -86,3 +102,4 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 [@rpottsoh]: https://github.com/rpottsoh
 [@ryanplusplus]: https://github.com/ryanplusplus
 [@stkent]: https://github.com/stkent
+[@tleen]: https://github.com/tleen
