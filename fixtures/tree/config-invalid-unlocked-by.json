@@ -1,0 +1,69 @@
+{
+  "active": true,
+  "blurb": "",
+  "exercises": [
+    {
+      "core": true,
+      "difficulty": 1,
+      "slug": "one",
+      "topics": [
+        "booleans",
+        "control_flow_conditionals",
+        "integers",
+        "logic"
+      ],
+      "unlocked_by": null,
+      "uuid": "001"
+    },
+    {
+      "core": true,
+      "difficulty": 1,
+      "slug": "two",
+      "topics": [
+        "equality",
+        "mathematics",
+        "text_formatting",
+        "time"
+      ],
+      "unlocked_by": null,
+      "uuid": "002"
+    },
+    {
+      "core": false,
+      "difficulty": 2,
+      "slug": "five",
+      "topics": [
+        "control-flow",
+        "text_formatting"
+      ],
+      "unlocked_by": "one",
+      "uuid": "005"
+    },
+    {
+      "core": false,
+      "difficulty": 3,
+      "slug": "six",
+      "topics": [
+      ],
+      "unlocked_by": "a non-existing exercise",
+      "uuid": "006"
+    },
+    {
+      "core": false,
+      "difficulty": 3,
+      "slug": "seven",
+      "topics": [
+        "spycraft",
+        "martinis"
+      ],
+      "unlocked_by": null,
+      "uuid": "007"
+    }
+  ],
+  "foregone": [
+    "three",
+    "four"
+  ],
+  "ignore_pattern": "example(?!.*test)",
+  "language": "Numbers"
+}

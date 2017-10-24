@@ -84,3 +84,27 @@ func ExampleTreeWarnings() {
 	// one
 	// two
 }
+
+func ExampleInvalidUnlockedBy(){
+	orig := ui.ErrOut
+	ui.ErrOut = os.Stdout
+
+	defer func() { ui.ErrOut = orig }()
+
+	treeTrack(filepath.FromSlash("../fixtures/tree/config-invalid-unlocked-by.json"))
+	// Output:
+	// Numbers
+	// =======
+	// -> Exercise "six" has an invalid unlocked_by slug: "a non-existing exercise", this track may be missing a nextercism compatible configuration.
+	//
+	// core
+	// ----
+	// ├─ one
+	// │  └─ five
+	// │
+	// └─ two
+	//
+	// bonus
+	// -----
+	// seven
+}
