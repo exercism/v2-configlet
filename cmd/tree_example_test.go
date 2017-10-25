@@ -85,7 +85,7 @@ func ExampleTreeWarnings() {
 	// two
 }
 
-func ExampleInvalidUnlockedBy(){
+func ExampleInvalidUnlockedBy() {
 	orig := ui.ErrOut
 	ui.ErrOut = os.Stdout
 
