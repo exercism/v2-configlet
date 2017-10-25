@@ -232,7 +232,7 @@ func treeTrack(configFilepath string) error {
 
 		parent, unlockExists := slugToExercise[e.UnlockedBy]
 		// An unlocked_by slug that does not exist and is referenced can crash
-		// the program, see #102. If an non-existant slug exists issue warning.
+		// the program, see #102. If an non-existent slug exists issue warning.
 		if !unlockExists {
 			printConfigurationWarning(
 				fmt.Sprintf("Exercise %q has an invalid unlocked_by slug: %q", e.Slug, e.UnlockedBy))
