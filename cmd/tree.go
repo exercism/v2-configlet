@@ -48,7 +48,7 @@ var treeCmd = &cobra.Command{
 exercises at root and unlocks located under their locking exercises. You
 may choose to use the track root as the argument and tree will find that
 track's config.json file, alternatively you may use a full path to a track
-configuration file. 
+configuration file.
 
 Bonus exercises are left in a list at the bottom after the tree display.
 
@@ -230,8 +230,17 @@ func treeTrack(configFilepath string) error {
 			continue
 		}
 
+		parent, unlockExists := slugToExercise[e.UnlockedBy]
+		// An unlocked_by slug that does not exist and is referenced can crash
+		// the program, see #102. If an non-existent slug exists issue warning.
+		if !unlockExists {
+			printConfigurationWarning(
+				fmt.Sprintf("Exercise %q has an invalid unlocked_by slug: %q", e.Slug, e.UnlockedBy))
+			continue
+		}
+
 		unlocksPresent = true
-		parent := slugToExercise[e.UnlockedBy]
+
 		parent.childSlugs = append(parent.childSlugs, e.Slug)
 	}
 
