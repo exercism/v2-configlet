@@ -3,3 +3,7 @@ build/*tgz
 
 # dep
 vendor/
+
+# editorconfig
+# see: http://editorconfig.org/
+.editorconfig
