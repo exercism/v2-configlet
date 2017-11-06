@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/mattetti/uuid"
+	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ UUIDs, even though they are based on the same problem specification.
 // runUUID prints out a unique exercise UUID
 func runUUID(cmd *cobra.Command, args []string) {
 	// we don't want any UI formatting prepended to this
-	fmt.Println(uuid.GenUUID())
+	fmt.Println(uuid.New())
 	return
 }
 

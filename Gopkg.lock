@@ -8,6 +8,12 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/google/uuid"
+  packages = ["."]
+  revision = "064e2069ce9c359c118179501254f67d7d37ba24"
+  version = "0.2"
+
+[[projects]]
   branch = "master"
   name = "github.com/hashicorp/errwrap"
   packages = ["."]
@@ -24,12 +30,6 @@
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
   version = "v1.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/mattetti/uuid"
-  packages = ["."]
-  revision = "605b01d24758b995d5287dcc46ea5788200b8182"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -64,6 +64,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "86718b7614f4254ac2e62b1cd50e8886d1b062122f49da8fca8a0a76aef80884"
+  inputs-digest = "b797f3e2021c775cd9152989c02b8073ce2d23deadc158e9b4985adbcc4369d9"
   solver-name = "gps-cdcl"
   solver-version = 1
