@@ -15,6 +15,21 @@ type Exercise struct {
 	TestSuitePath string
 }
 
+// Exercises is a slice of Exercise to define functions
+type Exercises []Exercise
+
+// Fold iterates over slice, runs given function and collects slugs
+func (es Exercises) Fold(isValid func(Exercise) bool) (valid []string, invalid []string) {
+	for _, e := range es {
+		if isValid(e) {
+			valid = append(valid, e.Slug)
+		} else {
+			invalid = append(invalid, e.Slug)
+		}
+	}
+	return
+}
+
 // NewExercise loads an exercise.
 func NewExercise(root string, pg PatternGroup) (Exercise, error) {
 	ex := Exercise{

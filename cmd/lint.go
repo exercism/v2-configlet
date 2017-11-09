@@ -52,9 +52,7 @@ func lintExampleText() string {
 func runLint(cmd *cobra.Command, args []string) {
 	var hasErrors bool
 	for _, arg := range args {
-		if failed := lintTrack(arg); failed {
-			hasErrors = true
-		}
+		hasErrors = lintTrack(arg) || hasErrors
 	}
 	if hasErrors {
 		os.Exit(1)
@@ -127,163 +125,98 @@ func lintTrack(path string) bool {
 			hasErrors = true
 			for _, item := range failedItems {
 				ui.Print(fmt.Sprintf(configError.msg, item))
-
 			}
 		}
 	}
 	return hasErrors
 }
 
-func missingImplementations(t track.Track) []string {
-	metadata := map[string]bool{}
-	for _, exercise := range t.Config.Exercises {
-		metadata[exercise.Slug] = false
-	}
-	// Don't report missing implementations on foregone exercises.
-	for _, slug := range t.Config.ForegoneSlugs {
-		metadata[slug] = true
-	}
-	for _, exercise := range t.Exercises {
-		metadata[exercise.Slug] = true
-	}
+type folder struct{ add, remove []string }
 
-	slugs := []string{}
-	for slug, ok := range metadata {
-		if !ok {
+func (f folder) fold(m map[string]int) map[string]int {
+	for _, slug := range f.add {
+		m[slug]++
+	}
+	for _, slug := range f.remove {
+		delete(m, slug)
+	}
+	return m
+}
+
+func asFolder(add, remove []string) folder { return folder{add: add, remove: remove} }
+func reversed(f folder) folder             { f.add, f.remove = f.remove, f.add; return f }
+
+func applyFolders(fs ...folder) map[string]int {
+	m := map[string]int{}
+	for _, f := range fs {
+		m = f.fold(m)
+	}
+	return m
+}
+
+func foldSlugsByExistence(fs ...folder) []string {
+	return foldSlugsByCount(0, fs...)
+}
+
+func foldSlugsByCount(threshold int, fs ...folder) []string {
+	var slugs []string
+	for slug, count := range applyFolders(fs...) {
+		if count > threshold {
 			slugs = append(slugs, slug)
 		}
 	}
 	return slugs
+}
+
+func missingImplementations(t track.Track) []string {
+	return foldSlugsByExistence(
+		folder{add: t.Config.ExerciseSlugs()},
+		folder{remove: t.Config.ForegoneSlugs},
+		folder{remove: t.ExerciseSlugs()})
 }
 
 func missingMetadata(t track.Track) []string {
-	implementations := map[string]bool{}
-	for _, exercise := range t.Exercises {
-		implementations[exercise.Slug] = false
-	}
-
-	// Don't report missing metadata if the exercise is deprecated or foregone.
-	ignoredSlugs := append(t.Config.DeprecatedSlugs, t.Config.ForegoneSlugs...)
-	for _, slug := range ignoredSlugs {
-		implementations[slug] = true
-	}
-
-	for _, exercise := range t.Config.Exercises {
-		implementations[exercise.Slug] = true
-	}
-
-	slugs := []string{}
-	for slug, ok := range implementations {
-		if !ok {
-			slugs = append(slugs, slug)
-		}
-	}
-
-	return slugs
+	return foldSlugsByExistence(
+		folder{add: t.ExerciseSlugs()},
+		folder{remove: t.Config.DeprecatedSlugs},
+		folder{remove: t.Config.ForegoneSlugs},
+		folder{remove: t.Config.ExerciseSlugs()})
 }
 
 func missingSolution(t track.Track) []string {
-	solutions := map[string]bool{}
-	for _, exercise := range t.Exercises {
-		solutions[exercise.Slug] = exercise.IsValid()
-	}
-	// Don't complain about missing solutions in foregone exercises.
-	for _, slug := range t.Config.ForegoneSlugs {
-		solutions[slug] = true
-	}
-
-	slugs := []string{}
-	for slug, ok := range solutions {
-		if !ok {
-			slugs = append(slugs, slug)
-		}
-	}
-	return slugs
+	return foldSlugsByExistence(
+		reversed(asFolder(track.Exercises(t.Exercises).Fold(track.Exercise.IsValid))),
+		folder{remove: t.Config.ForegoneSlugs})
 }
 
 func missingTestSuite(t track.Track) []string {
-	tests := map[string]bool{}
-	for _, exercise := range t.Exercises {
-		tests[exercise.Slug] = exercise.HasTestSuite()
-	}
-	// Don't complain about missing test suite in foregone exercises.
-	for _, slug := range t.Config.ForegoneSlugs {
-		tests[slug] = true
-	}
-
-	slugs := []string{}
-	for slug, ok := range tests {
-		if !ok {
-			slugs = append(slugs, slug)
-		}
-	}
-	return slugs
+	return foldSlugsByExistence(
+		reversed(asFolder(track.Exercises(t.Exercises).Fold(track.Exercise.HasTestSuite))),
+		folder{remove: t.Config.ForegoneSlugs})
 }
 
 func missingUUID(t track.Track) []string {
-	slugs := []string{}
-	for _, exercise := range t.Config.Exercises {
-		if exercise.UUID == "" {
-			slugs = append(slugs, exercise.Slug)
-		}
-	}
-
-	return slugs
+	return foldSlugsByExistence(
+		reversed(asFolder(track.ExerciseMetadataList(t.Config.Exercises).
+			Fold(track.ExerciseMetadata.HasUUID))))
 }
 
 func foregoneViolations(t track.Track) []string {
-	violations := map[string]bool{}
-	for _, slug := range t.Config.ForegoneSlugs {
-		violations[slug] = true
-	}
-
-	slugs := []string{}
-	for _, exercise := range t.Exercises {
-		if violations[exercise.Slug] {
-			slugs = append(slugs, exercise.Slug)
-		}
-	}
-
-	return slugs
+	return foldSlugsByCount(1,
+		folder{add: t.Config.ForegoneSlugs},
+		folder{add: t.ExerciseSlugs()})
 }
 
 func duplicateSlugs(t track.Track) []string {
-	counts := map[string]int{}
-	for _, slug := range t.Config.ForegoneSlugs {
-		counts[slug]++
-	}
-	for _, slug := range t.Config.DeprecatedSlugs {
-		counts[slug]++
-	}
-	for _, exercise := range t.Config.Exercises {
-		counts[exercise.Slug]++
-	}
-
-	slugs := []string{}
-	for slug, count := range counts {
-		if count > 1 {
-			slugs = append(slugs, slug)
-		}
-	}
-	return slugs
+	return foldSlugsByCount(1,
+		folder{add: t.Config.ForegoneSlugs},
+		folder{add: t.Config.DeprecatedSlugs},
+		folder{add: t.Config.ExerciseSlugs()})
 }
 
 func duplicateUUID(t track.Track) []string {
-	uuids := []string{}
-	seen := map[string]bool{}
-	for _, exercise := range t.Config.Exercises {
-		if exercise.UUID == "" {
-			continue
-		}
-
-		if seen[exercise.UUID] {
-			uuids = append(uuids, exercise.UUID)
-		}
-
-		seen[exercise.UUID] = true
-	}
-
-	return uuids
+	return foldSlugsByCount(1,
+		folder{add: t.Config.ExerciseUUIDs(false)})
 }
 
 func duplicateTrackUUID(t track.Track) []string {
@@ -291,21 +224,12 @@ func duplicateTrackUUID(t track.Track) []string {
 		return []string{}
 	}
 
-	// Build up set of uuids to validate.
-	uuids := []string{}
-	for _, exercise := range t.Config.Exercises {
-		if exercise.UUID == "" {
-			continue
-		}
-		uuids = append(uuids, exercise.UUID)
-	}
-
 	payload := struct {
 		TrackID string   `json:"track_id"`
 		UUIDs   []string `json:"uuids"`
 	}{
 		TrackID: t.ID,
-		UUIDs:   uuids,
+		UUIDs:   t.Config.ExerciseUUIDs(false),
 	}
 
 	body, err := json.Marshal(payload)
@@ -331,7 +255,7 @@ func duplicateTrackUUID(t track.Track) []string {
 		return result.UUIDs
 	}
 
-	return []string{}
+	return nil
 }
 
 func init() {

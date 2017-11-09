@@ -12,3 +12,21 @@ type ExerciseMetadata struct {
 	IsCore       bool   `json:"core"`
 	IsDeprecated bool   `json:"deprecated"`
 }
+
+// HasUUID checks if UUID is defined
+func (e ExerciseMetadata) HasUUID() bool { return e.UUID != "" }
+
+// ExerciseMetadataList is a slice of ExerciseMetadata to define functions
+type ExerciseMetadataList []ExerciseMetadata
+
+// Fold iterates over slice, runs given function and collects slugs
+func (els ExerciseMetadataList) Fold(isValid func(ExerciseMetadata) bool) (valid []string, invalid []string) {
+	for _, e := range els {
+		if isValid(e) {
+			valid = append(valid, e.Slug)
+		} else {
+			invalid = append(invalid, e.Slug)
+		}
+	}
+	return
+}
