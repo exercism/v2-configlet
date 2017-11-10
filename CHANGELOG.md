@@ -8,6 +8,13 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.6.1 (11th November 2017)
+
+* [#106](https://github.com/exercism/configlet/pull/106) Replace broken UUID pkg - [@nywilken]
+* [#105](https://github.com/exercism/configlet/pull/105) Git ignore .editorconfig - [@tleen]
+* [#103](https://github.com/exercism/configlet/pull/103) tree: Fix invalid unlocked_by reference panic - [@tleen]
+* [#104](https://github.com/exercism/configlet/pull/104) tree: fix bad indenting in fixture - [@tleen]
+
 ## v3.6.0 (20th October 2017)
 
 * [#101](https://github.com/exercism/configlet/pull/101) Add UUID section to README - [@tleen]
