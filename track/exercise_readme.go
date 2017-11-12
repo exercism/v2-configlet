@@ -69,8 +69,8 @@ func (readme ExerciseReadme) Generate() (string, error) {
 	}
 
 	var bb bytes.Buffer
-	t.Execute(&bb, readme)
-	return bb.String(), nil
+	err = t.Execute(&bb, readme)
+	return bb.String(), err
 }
 
 // Write generates and writes the README to a file.
