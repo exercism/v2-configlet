@@ -94,7 +94,7 @@ Exercises in each track config.json file must have a [UUID](https://en.wikipedia
 
 ```bash
 $ configlet uuid
-2209721b-086e-a680-db1e-c6272e996b3fa29ce77
+78aa565f-632d-47c0-a190-5144c91d0e33
 ```
 
 ### Usage
