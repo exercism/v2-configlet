@@ -14,6 +14,15 @@ type Track struct {
 	path             string
 }
 
+// ExerciseSlugs returns all implemented exercise slugs of track
+func (t Track) ExerciseSlugs() []string {
+	var slugs []string
+	for _, e := range t.Exercises {
+		slugs = append(slugs, e.Slug)
+	}
+	return slugs
+}
+
 // New loads a track.
 func New(path string) (Track, error) {
 	track := Track{
