@@ -32,3 +32,7 @@
 [[constraint]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
+
+[[constraint]]
+  branch = "nextercism"
+  name = "github.com/exercism/cli"
