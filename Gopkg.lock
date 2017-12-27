@@ -16,7 +16,7 @@
 [[projects]]
   branch = "nextercism"
   name = "github.com/exercism/cli"
-  packages = ["cli","config","debug"]
+  packages = ["config","debug"]
   revision = "9c2c5857da4af84af2973a04f68402116e1b5f43"
 
 [[projects]]
@@ -72,6 +72,12 @@
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
+
+[[projects]]
+  branch = "generalize-cli-updater"
+  name = "github.com/nywilken/cli"
+  packages = ["cli","debug"]
+  revision = "60a3b6dff2d61e4fb26b56d46a32cbe405fe77ea"
 
 [[projects]]
   name = "github.com/pelletier/go-toml"
@@ -148,6 +154,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "001464ccf618d202feabff112b3ee3551e23f1d507eb0de116e88f04df8801a6"
+  inputs-digest = "c653694e778fb52b3e67de6b269f1ba277e05ef3700b62e32a3fd58fafdb900f"
   solver-name = "gps-cdcl"
   solver-version = 1

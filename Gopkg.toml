@@ -34,5 +34,5 @@
   name = "gopkg.in/yaml.v2"
 
 [[constraint]]
-  branch = "nextercism"
-  name = "github.com/exercism/cli"
+  branch = "generalize-cli-updater"
+  name = "github.com/nywilken/cli"

@@ -3,6 +3,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/exercism/configlet/ui"
+	"github.com/nywilken/cli/cli"
 	"github.com/spf13/cobra"
 )
 
@@ -20,8 +22,20 @@ var versionCmd = &cobra.Command{
 }
 
 func runVersion(cmd *cobra.Command, args []string) {
+	cli.ReleaseURL = "https://api.github.com/repos/exercism/configlet/releases"
 	// we don't want any UI formatting prepended to this
 	fmt.Printf("%s version %s\n", binaryName, Version)
+
+	c := cli.New(Version)
+	ok, err := c.IsUpToDate()
+	if err != nil {
+		ui.PrintError(err)
+	}
+
+	if !ok {
+		msg := fmt.Sprintf("There is a newer version of Configlet available (%s)", c.LatestRelease.Version())
+		ui.Print(msg)
+	}
 }
 
 func init() {

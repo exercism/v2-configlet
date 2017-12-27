@@ -1,9 +1,8 @@
 package cmd
 
 import (
-	"github.com/exercism/cli/cli"
-	"github.com/exercism/cli/debug"
 	"github.com/exercism/configlet/ui"
+	"github.com/nywilken/cli/cli"
 	"github.com/spf13/cobra"
 )
 
@@ -23,11 +22,7 @@ You can always delete this file.
 	`,
 
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if verbose, _ := cmd.Flags().GetBool("verbose"); verbose {
-			debug.Verbose = verbose
-		}
-
-		cli.LatestReleaseURL = "https://api.github.com/repos/exercism/configlet/releases/latest"
+		cli.ReleaseURL = "https://api.github.com/repos/exercism/configlet/releases"
 		c := cli.New(Version)
 		return runUpdate(c)
 	},
@@ -49,5 +44,4 @@ func runUpdate(c cli.Updater) error {
 
 func init() {
 	RootCmd.AddCommand(upgradeCmd)
-	upgradeCmd.Flags().BoolP("verbose", "v", false, "verbose output")
 }
