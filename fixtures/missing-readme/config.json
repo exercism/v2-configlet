@@ -1,0 +1,14 @@
+{
+  "slug": "missing-readme",
+  "language": "Missing Readme",
+  "repository": "https://github.com/exercism/missing-readme",
+  "active": true,
+  "exercises": [
+    {
+      "uuid": "missingmissing",
+      "slug": "missing-readme",
+      "topics": [],
+      "difficulty": 1
+    }
+  ]
+}

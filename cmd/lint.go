@@ -90,6 +90,10 @@ func lintTrack(path string) bool {
 			msg:   "An implementation for '%v' was found, but config.json does not reference this exercise.",
 		},
 		{
+			check: missingReadme,
+			msg:   "The implementation for '%v' is missing a README.",
+		},
+		{
 			check: missingSolution,
 			msg:   "The implementation for '%v' is missing an example solution.",
 		},
@@ -194,6 +198,25 @@ func missingSolution(t track.Track) []string {
 
 	slugs := []string{}
 	for slug, ok := range solutions {
+		if !ok {
+			slugs = append(slugs, slug)
+		}
+	}
+	return slugs
+}
+
+func missingReadme(t track.Track) []string {
+	readmes := map[string]bool{}
+	for _, exercise := range t.Exercises {
+		readmes[exercise.Slug] = exercise.HasReadme()
+	}
+	// Don't complain about missing readmes in foregone exercises.
+	for _, slug := range t.Config.ForegoneSlugs {
+		readmes[slug] = true
+	}
+
+	slugs := []string{}
+	for slug, ok := range readmes {
 		if !ok {
 			slugs = append(slugs, slug)
 		}
