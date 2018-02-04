@@ -1,0 +1,13 @@
+{
+  "slug": "unsupported-exercise-names",
+  "repository": "https://github.com/exercism/unsupported-exercise-names",
+  "active": true,
+  "solution_pattern": "[Ee]xample|\\.meta/solutions/[^/]*\\.ext",
+  "exercises": [
+    {
+      "slug": "some-valid-exercise",
+      "topics": [],
+      "difficulty": 1
+    }
+  ]
+}
