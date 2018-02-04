@@ -7,7 +7,7 @@ import (
 )
 
 // Version is the current version of the tool.
-const Version = "3.6.1"
+const Version = "3.7.0"
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{

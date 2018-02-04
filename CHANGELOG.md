@@ -8,6 +8,12 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.7.0 (4th February 2018)
+
+* [#98](https://github.com/exercism/configlet/pull/98) lint: Check for README presence - [@petertseng]
+* [#111](https://github.com/exercism/configlet/pull/111) readme: Update UUID command example to new format - [@N-Parsons]
+* [#110](https://github.com/exercism/configlet/pull/110) track: Check error on README generation - [@ferhatelmas]
+
 ## v3.6.1 (11th November 2017)
 
 * [#106](https://github.com/exercism/configlet/pull/106) Replace broken UUID pkg - [@nywilken]
@@ -104,9 +110,11 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 [@Insti]: https://github.com/Insti
 [@ferhatelmas]: https://github.com/ferhatelmas
 [@kytrinyx]: https://github.com/kytrinyx
+[@N-Parsons]: https://github.com/N-Parsons
 [@nywilken]: https://github.com/nywilken
 [@robphoenix]: https://github.com/robphoenix
 [@rpottsoh]: https://github.com/rpottsoh
 [@ryanplusplus]: https://github.com/ryanplusplus
+[@petertseng]: https://github.com/petertseng
 [@stkent]: https://github.com/stkent
 [@tleen]: https://github.com/tleen
