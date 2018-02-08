@@ -3,6 +3,7 @@ package track
 import (
 	"io/ioutil"
 	"path/filepath"
+	"regexp"
 )
 
 // Track is a collection of Exercism exercises for a programming language.
@@ -44,9 +45,15 @@ func New(path string) (Track, error) {
 		return track, err
 	}
 
+	// Valid exercise directory names do not begin with `.` or `_`.
+	re := regexp.MustCompile("^[._]")
 	for _, file := range files {
 		if file.IsDir() {
-			fp := filepath.Join(dir, file.Name())
+			fn := file.Name()
+			if re.MatchString(fn) {
+				continue
+			}
+			fp := filepath.Join(dir, fn)
 
 			ex, err := NewExercise(fp, track.Config.PatternGroup)
 			if err != nil {

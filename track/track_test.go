@@ -60,3 +60,12 @@ func TestTrackID(t *testing.T) {
 		os.Chdir(cwd)
 	}
 }
+
+func TestInvalidExerciseName(t *testing.T) {
+	track, err := New("../fixtures/unsupported-exercise-names")
+	assert.NoError(t, err)
+
+	assert.Equal(t, "unsupported-exercise-names", track.ID)
+
+	assert.Equal(t, 0, len(track.Exercises), "Expected to find no exercises.")
+}
