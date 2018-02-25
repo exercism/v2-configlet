@@ -1,16 +1,15 @@
 package cmd
 
 import (
+	"github.com/exercism/cli/cli"
 	"github.com/exercism/configlet/ui"
-	"github.com/nywilken/cli/cli"
 	"github.com/spf13/cobra"
 )
 
 // upgradeCmd downloads and installs the most recent version of Configlet.
 var upgradeCmd = &cobra.Command{
-	Use:     "upgrade",
-	Aliases: []string{"u"},
-	Short:   "Upgrade to the latest version of Configlet.",
+	Use:   "upgrade",
+	Short: "Upgrade to the latest version of Configlet.",
 	Long: `Upgrade to the latest version of Configlet.
 
 This finds and downloads the latest release, if you don't
