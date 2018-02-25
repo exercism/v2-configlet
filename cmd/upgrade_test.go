@@ -47,8 +47,7 @@ func TestUpgrade(t *testing.T) {
 	for _, test := range tests {
 		fc := &fakeCLI{UpToDate: test.upToDate}
 
-		err := runUpdate(fc)
-		assert.NoError(t, err)
+		runUpdate(fc)
 		assert.Equal(t, test.expected, fc.UpgradeCalled, test.desc)
 	}
 }

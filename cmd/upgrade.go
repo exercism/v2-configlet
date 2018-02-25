@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/exercism/cli/cli"
 	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
@@ -20,25 +22,26 @@ The next time you upgrade, the hidden file will be overwritten.
 You can always delete this file.
 	`,
 
-	RunE: func(cmd *cobra.Command, args []string) error {
-		cli.ReleaseURL = "https://api.github.com/repos/exercism/configlet/releases"
-		c := cli.New(Version)
-		return runUpdate(c)
+	Run: func(cmd *cobra.Command, args []string) {
+		runUpdate(configletCLI)
 	},
 }
 
 // runUpdate updates Configlet to the latest available version, if it is out of date.
-func runUpdate(c cli.Updater) error {
+func runUpdate(c cli.Updater) {
 	ok, err := c.IsUpToDate()
 	if err != nil {
-		return err
+		ui.PrintError(err)
 	}
 
 	if ok {
-		ui.Print("Your Configlet version is up to date.")
-		return nil
+		fmt.Println("Your CLI version is up to date.")
+		return
 	}
-	return c.Upgrade()
+
+	if err := c.Upgrade(); err != nil {
+		ui.PrintError(err)
+	}
 }
 
 func init() {
