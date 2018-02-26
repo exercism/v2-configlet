@@ -125,6 +125,10 @@ func lintTrack(path string) bool {
 			check: lockedCoreViolation,
 			msg:   "The exercise '%v' is marked as core and unlocked by another exercise. A core exercise should not be unlocked by another.",
 		},
+		{
+			check: unlockedByValidExercise,
+			msg:   "The exercise '%v' is being unlocked by a non-existent test.",
+		},
 	}
 
 	var hasErrors bool
@@ -365,6 +369,29 @@ func lockedCoreViolation(t track.Track) []string {
 	slugs := []string{}
 	for _, exercise := range t.Config.Exercises {
 		if exercise.IsCore && len(strings.Trim(exercise.UnlockedBy, " ")) > 0 {
+			slugs = append(slugs, exercise.Slug)
+		}
+	}
+
+	return slugs
+}
+
+func unlockedByValidExercise(t track.Track) []string {
+	slugs := []string{}
+	valid := map[string]bool{}
+
+	for _, exercise := range t.Config.Exercises {
+		valid[exercise.Slug] = true
+	}
+
+	for _, exercise := range t.Config.Exercises {
+		unlockedBy := strings.Trim(exercise.UnlockedBy, " ")
+
+		if len(unlockedBy) == 0 {
+			continue
+		}
+
+		if !valid[unlockedBy] {
 			slugs = append(slugs, exercise.Slug)
 		}
 	}

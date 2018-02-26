@@ -345,3 +345,28 @@ func TestAcceptableUnlockBy(t *testing.T) {
 	assert.Equal(t, 0, len(slugs))
 }
 
+func TestValidUnlockedByExercises(t *testing.T) {
+	track := track.Track{
+		Config: track.Config{
+			Exercises: []track.ExerciseMetadata{
+				{
+					Slug:       "apple",
+					UnlockedBy: "",
+				},
+				{
+					Slug:       "banana",
+					UnlockedBy: "apple",
+				},
+				{
+					Slug:       "cherry",
+					UnlockedBy: "unknown",
+				},
+			},
+		},
+	}
+
+	slugs := unlockedByValidExercise(track)
+
+	assert.Equal(t, 1, len(slugs))
+	assert.Equal(t, "cherry", slugs[0])
+}
