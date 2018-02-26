@@ -5,15 +5,21 @@ import (
 	"os"
 	"strings"
 
+	"github.com/exercism/cli/cli"
 	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
 )
+
+// Version is the current version of the tool.
+const Version = "3.7.0"
 
 var (
 	// binaryName is this tool's given name. While we have named it configlet, others
 	// may choose to rename it. This var enables the use of it's name, whatever it is,
 	// in any help/usage text.
 	binaryName = os.Args[0]
+	//configletCLI is an updatable CLI binary.
+	configletCLI *cli.CLI
 	// pathExample is an illustration of the path argument necessary for some commands.
 	pathExample = "<path/to/track>"
 )
@@ -43,4 +49,9 @@ func Execute() {
 		ui.PrintError(err.Error())
 		os.Exit(-1)
 	}
+}
+
+func init() {
+	cli.ReleaseURL = "https://api.github.com/repos/exercism/configlet/releases"
+	configletCLI = cli.New(Version)
 }

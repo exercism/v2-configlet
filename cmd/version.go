@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
 )
 
-// Version is the current version of the tool.
-const Version = "3.7.0"
+var checkLatestVersion bool
 
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
@@ -21,9 +21,26 @@ var versionCmd = &cobra.Command{
 
 func runVersion(cmd *cobra.Command, args []string) {
 	// we don't want any UI formatting prepended to this
-	fmt.Printf("%s version %s\n", binaryName, Version)
+	fmt.Printf("configlet version %s\n", configletCLI.Version)
+
+	if !checkLatestVersion {
+		return
+	}
+
+	ok, err := configletCLI.IsUpToDate()
+	if err != nil {
+		ui.PrintError(err)
+		return
+	}
+	msg := "Your CLI version is up to date."
+
+	if !ok {
+		msg = fmt.Sprintf("A new CLI version is available. Run `%s upgrade` to update to %s", binaryName, configletCLI.LatestRelease.Version())
+	}
+	fmt.Println(msg)
 }
 
 func init() {
 	RootCmd.AddCommand(versionCmd)
+	versionCmd.Flags().BoolVarP(&checkLatestVersion, "latest", "l", false, "check latest available version.")
 }

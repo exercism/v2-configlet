@@ -21,6 +21,8 @@
 #  version = "2.4.0"
 
 
+ignored = ["github.com/exercism/cli/config","github.com/exercism/cli/debug" ]
+
 [[constraint]]
   branch = "master"
   name = "github.com/mattetti/uuid"
@@ -32,3 +34,8 @@
 [[constraint]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
+
+[[constraint]]
+  branch = "nextercism"
+  name = "github.com/exercism/cli"
+
