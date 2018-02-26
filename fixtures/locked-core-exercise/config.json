@@ -1,0 +1,27 @@
+{
+  "slug": "valid-track",
+  "language": "Valid Track",
+  "repository": "https://github.com/exercism/valid-track",
+  "active": true,
+  "solution_pattern": "[Ee]xample",
+  "test_pattern": "(?i)test",
+  "exercises": [
+    {
+      "uuid": "aaa",
+      "slug": "aluminum",
+      "topics": [],
+      "difficulty": 1,
+      "unlocked_by": "bauxite",
+      "core": true
+    },
+    {
+      "uuid": "bbb",
+      "slug": "bauxite",
+      "topics": [],
+      "difficulty": 1,
+      "unlocked_by": null,
+      "core": true
+    }
+  ],
+  "foregone": []
+}

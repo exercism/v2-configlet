@@ -292,3 +292,56 @@ func TestDuplicateTrackUUID(t *testing.T) {
 	assert.Equal(t, expected[0], uuids[0])
 
 }
+
+func TestLockedCoreViolation(t *testing.T) {
+	track := track.Track{
+		Config: track.Config{
+			Exercises: []track.ExerciseMetadata{
+				{
+					Slug:       "apple",
+					UnlockedBy: "banana",
+					IsCore:     true,
+				},
+				{
+					Slug:       "banana",
+					UnlockedBy: "",
+					IsCore:     false,
+				},
+			},
+		},
+	}
+
+	slugs := lockedCoreViolation(track)
+
+	assert.Equal(t, 1, len(slugs))
+	assert.Equal(t, "apple", slugs[0])
+}
+
+func TestAcceptableUnlockBy(t *testing.T) {
+	track := track.Track{
+		Config: track.Config{
+			Exercises: []track.ExerciseMetadata{
+				{
+					Slug:       "apple",
+					UnlockedBy: "",
+					IsCore:     true,
+				},
+				{
+					Slug:       "banana",
+					UnlockedBy: "apple",
+					IsCore:     false,
+				},
+				{
+					Slug:       "cherry",
+					UnlockedBy: "",
+					IsCore:     false,
+				},
+			},
+		},
+	}
+
+	slugs := lockedCoreViolation(track)
+
+	assert.Equal(t, 0, len(slugs))
+}
+
