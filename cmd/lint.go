@@ -121,6 +121,10 @@ func lintTrack(path string) bool {
 			check: duplicateTrackUUID,
 			msg:   "The following UUID was found in multiple Exercism tracks. Each exercise UUID must be unique across tracks.\n%v",
 		},
+		{
+			check: unlockedByNonCore,
+			msg:	"The exercise '%v' is unlocked by a non-core exercise. Exercises can only be unlocked by core exercises.",
+		},
 	}
 
 	var hasErrors bool
@@ -355,6 +359,23 @@ func duplicateTrackUUID(t track.Track) []string {
 	}
 
 	return []string{}
+}
+
+func unlockedByNonCore(t track.Track) []string {
+	isCore := map[string]bool{}
+	for _, exercise := range t.Config.Exercises {
+		isCore[exercise.Slug] = exercise.IsCore
+	}
+	
+	slugs := []string{}
+	for _, exercise := range t.Config.Exercises  {
+		unlockedBy := exercise.UnlockedBy
+		if unlockedBy != "" && !isCore[unlockedBy] {
+			slugs = append(slugs, exercise.Slug)
+		}
+	}
+	
+	return slugs
 }
 
 func init() {
