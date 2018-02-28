@@ -363,12 +363,12 @@ func duplicateTrackUUID(t track.Track) []string {
 
 func unlockedByNonCore(t track.Track) []string {
 	isCore := map[string]int{}
-	for _, exercise in t.Config.Exercises {
+	for _, exercise := range t.Config.Exercises {
 		core[exercise.Slug] = exercise.IsCore
 	}
 	
 	slugs := []string{}
-	for _, exercise in t.Config.Exercises  {
+	for _, exercise := range t.Config.Exercises  {
 		unlockedBy = exercise.UnlockedBy
 		if unlockedBy != nil && !core[unlockedBy] {
 			append(slugs, exercise.Slug)
