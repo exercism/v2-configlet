@@ -123,7 +123,7 @@ func lintTrack(path string) bool {
 		},
 		{
 			check: unlockedByNonCore,
-			msg:	"The exercise '%v' is unlocked by a non-core exercise. Exercises can only be unlocked by core exercises."
+			msg:	"The exercise '%v' is unlocked by a non-core exercise. Exercises can only be unlocked by core exercises.",
 		},
 	}
 
