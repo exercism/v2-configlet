@@ -362,7 +362,7 @@ func duplicateTrackUUID(t track.Track) []string {
 }
 
 func unlockedByNonCore(t track.Track) []string {
-	isCore := map[string]int{}
+	isCore := map[string]bool{}
 	for _, exercise := range t.Config.Exercises {
 		isCore[exercise.Slug] = exercise.IsCore
 	}
