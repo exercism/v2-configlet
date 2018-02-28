@@ -371,7 +371,7 @@ func unlockedByNonCore(t track.Track) []string {
 	for _, exercise := range t.Config.Exercises  {
 		unlockedBy := exercise.UnlockedBy
 		if unlockedBy != "" && !isCore[unlockedBy] {
-			append(slugs, exercise.Slug)
+			slugs = append(slugs, exercise.Slug)
 		}
 	}
 	
