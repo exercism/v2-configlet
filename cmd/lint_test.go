@@ -294,58 +294,70 @@ func TestDuplicateTrackUUID(t *testing.T) {
 }
 
 func TestLockedCoreViolation(t *testing.T) {
-	track := track.Track{
-		Config: track.Config{
-			Exercises: []track.ExerciseMetadata{
-				{
-					Slug:       "apple",
-					UnlockedBy: "banana",
-					IsCore:     true,
+	trackTests := []struct {
+		desc               string
+		expectedViolations int
+		expectedSlug       string
+		config             track.Config
+	}{
+		{
+			desc:               "should have one locked core violation",
+			expectedViolations: 1,
+			expectedSlug:       "apple",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "banana",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "",
+						IsCore:     false,
+					},
 				},
-				{
-					Slug:       "banana",
-					UnlockedBy: "",
-					IsCore:     false,
+			},
+		},
+		{
+			desc:               "should have no locked core violations",
+			expectedViolations: 0,
+			expectedSlug:       "",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
+					{
+						Slug:       "cherry",
+						UnlockedBy: "",
+						IsCore:     false,
+					},
 				},
 			},
 		},
 	}
 
-	slugs := lockedCoreViolation(track)
+	for _, tt := range trackTests {
+		track := track.Track{Config: tt.config}
+		slugs := lockedCoreViolation(track)
 
-	assert.Equal(t, 1, len(slugs))
-	assert.Equal(t, "apple", slugs[0])
-}
+		assert.Equal(t, tt.expectedViolations, len(slugs), tt.desc)
 
-func TestAcceptableUnlockBy(t *testing.T) {
-	track := track.Track{
-		Config: track.Config{
-			Exercises: []track.ExerciseMetadata{
-				{
-					Slug:       "apple",
-					UnlockedBy: "",
-					IsCore:     true,
-				},
-				{
-					Slug:       "banana",
-					UnlockedBy: "apple",
-					IsCore:     false,
-				},
-				{
-					Slug:       "cherry",
-					UnlockedBy: "",
-					IsCore:     false,
-				},
-			},
-		},
+		if len(slugs) > 0 {
+			assert.Equal(t, tt.expectedSlug, slugs[0], tt.desc)
+		}
 	}
-
-	slugs := lockedCoreViolation(track)
-
-	assert.Equal(t, 0, len(slugs))
 }
 
-func TestValidUnlockedByExercises(t *testing.T) {
+func TestUnlockedByViolations(t *testing.T) {
 	track := track.Track{
 		Config: track.Config{
 			Exercises: []track.ExerciseMetadata{
