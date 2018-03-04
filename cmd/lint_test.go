@@ -358,27 +358,84 @@ func TestLockedCoreViolation(t *testing.T) {
 }
 
 func TestUnlockedByViolations(t *testing.T) {
-	track := track.Track{
-		Config: track.Config{
-			Exercises: []track.ExerciseMetadata{
-				{
-					Slug:       "apple",
-					UnlockedBy: "",
+	trackTests := []struct {
+		desc               string
+		expectedViolations int
+		expectedSlug       string
+		config             track.Config
+	}{
+		{
+			desc:               "should have one unlocked by violation from non-core exercise",
+			expectedViolations: 1,
+			expectedSlug:       "banana",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     false,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
 				},
-				{
-					Slug:       "banana",
-					UnlockedBy: "apple",
+			},
+		},
+		{
+			desc:               "should have one unlocked by violation from non-existent exercise",
+			expectedViolations: 1,
+			expectedSlug:       "cherry",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
+					{
+						Slug:       "cherry",
+						UnlockedBy: "unknown",
+						IsCore:     false,
+					},
 				},
-				{
-					Slug:       "cherry",
-					UnlockedBy: "unknown",
+			},
+		},
+		{
+			desc:               "should have no unlocked by violations",
+			expectedViolations: 0,
+			expectedSlug:       "",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
 				},
 			},
 		},
 	}
 
-	slugs := unlockedByValidExercise(track)
+	for _, tt := range trackTests {
+		track := track.Track{Config: tt.config}
+		slugs := unlockedByValidExercise(track)
 
-	assert.Equal(t, 1, len(slugs))
-	assert.Equal(t, "cherry", slugs[0])
+		assert.Equal(t, tt.expectedViolations, len(slugs), tt.desc)
+
+		if len(slugs) > 0 {
+			assert.Equal(t, tt.expectedSlug, slugs[0], tt.desc)
+		}
+	}
 }

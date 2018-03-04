@@ -381,7 +381,9 @@ func unlockedByValidExercise(t track.Track) []string {
 	valid := map[string]bool{}
 
 	for _, exercise := range t.Config.Exercises {
-		valid[exercise.Slug] = true
+		if exercise.IsCore {
+			valid[exercise.Slug] = true
+		}
 	}
 
 	for _, exercise := range t.Config.Exercises {
