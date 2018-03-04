@@ -127,7 +127,7 @@ func lintTrack(path string) bool {
 		},
 		{
 			check: unlockedByValidExercise,
-			msg:   "The exercise '%v' is being unlocked by a non-existent test.",
+			msg:   "The exercise '%v' is being unlocked by a non-core exercise. Non-core exercises can only be unlocked by core exercises.",
 		},
 	}
 
