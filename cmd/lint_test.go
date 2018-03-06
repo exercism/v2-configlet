@@ -292,3 +292,150 @@ func TestDuplicateTrackUUID(t *testing.T) {
 	assert.Equal(t, expected[0], uuids[0])
 
 }
+
+func TestLockedCoreViolation(t *testing.T) {
+	trackTests := []struct {
+		desc               string
+		expectedViolations int
+		expectedSlug       string
+		config             track.Config
+	}{
+		{
+			desc:               "should have one locked core violation",
+			expectedViolations: 1,
+			expectedSlug:       "apple",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "banana",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "",
+						IsCore:     false,
+					},
+				},
+			},
+		},
+		{
+			desc:               "should have no locked core violations",
+			expectedViolations: 0,
+			expectedSlug:       "",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
+					{
+						Slug:       "cherry",
+						UnlockedBy: "",
+						IsCore:     false,
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range trackTests {
+		track := track.Track{Config: tt.config}
+		slugs := lockedCoreViolation(track)
+
+		assert.Equal(t, tt.expectedViolations, len(slugs), tt.desc)
+
+		if len(slugs) > 0 {
+			assert.Equal(t, tt.expectedSlug, slugs[0], tt.desc)
+		}
+	}
+}
+
+func TestUnlockedByViolations(t *testing.T) {
+	trackTests := []struct {
+		desc               string
+		expectedViolations int
+		expectedSlug       string
+		config             track.Config
+	}{
+		{
+			desc:               "should have one unlocked by violation from non-core exercise",
+			expectedViolations: 1,
+			expectedSlug:       "banana",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     false,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
+				},
+			},
+		},
+		{
+			desc:               "should have one unlocked by violation from non-existent exercise",
+			expectedViolations: 1,
+			expectedSlug:       "cherry",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
+					{
+						Slug:       "cherry",
+						UnlockedBy: "unknown",
+						IsCore:     false,
+					},
+				},
+			},
+		},
+		{
+			desc:               "should have no unlocked by violations",
+			expectedViolations: 0,
+			expectedSlug:       "",
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{
+						Slug:       "apple",
+						UnlockedBy: "",
+						IsCore:     true,
+					},
+					{
+						Slug:       "banana",
+						UnlockedBy: "apple",
+						IsCore:     false,
+					},
+				},
+			},
+		},
+	}
+
+	for _, tt := range trackTests {
+		track := track.Track{Config: tt.config}
+		slugs := unlockedByValidExercise(track)
+
+		assert.Equal(t, tt.expectedViolations, len(slugs), tt.desc)
+
+		if len(slugs) > 0 {
+			assert.Equal(t, tt.expectedSlug, slugs[0], tt.desc)
+		}
+	}
+}
