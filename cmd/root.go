@@ -11,7 +11,7 @@ import (
 )
 
 // Version is the current version of the tool.
-const Version = "3.7.0"
+const Version = "3.8.0"
 
 var (
 	// binaryName is this tool's given name. While we have named it configlet, others

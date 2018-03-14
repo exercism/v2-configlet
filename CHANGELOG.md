@@ -8,6 +8,13 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.8.0 (20th March 2018)
+
+* [#122](https://github.com/exercism/configlet/pull/122) readme: Add documentation for the upgrade command - [@nywilken]
+* [#119](https://github.com/exercism/configlet/pull/119) lint: Add checks for Invalid Unlocked By & Locked Core Exercises - [@tuxagon]
+* [#118](https://github.com/exercism/configlet/pull/118) Add upgrade command - [@nywilken]
+* [#115](https://github.com/exercism/configlet/pull/115) Add filter for unsupported exercise directories - [@nywilken]
+
 ## v3.7.0 (4th February 2018)
 
 * [#98](https://github.com/exercism/configlet/pull/98) lint: Check for README presence - [@petertseng]
@@ -118,3 +125,4 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 [@petertseng]: https://github.com/petertseng
 [@stkent]: https://github.com/stkent
 [@tleen]: https://github.com/tleen
+[@tuxagon]: https://github.com/tuxagon
