@@ -38,7 +38,7 @@ Using this command for README generation allows for some conveniences:
 1. The ability to insert language specific exercise information ("hints") to an exercise README.
 1. Full customization of a README template per exercise (if necessary).
 
-`generate` looks for specific files in the track root's `config/` directory and in each exercise's `.meta/` directory. It will then use these files, if present, and the `problem-specifications` data to generate an exercise's README. 
+`generate` looks for specific files in the track root's `config/` directory and in each exercise's `.meta/` directory. It will then use these files, if present, and the `problem-specifications` data to generate an exercise's README.
 
 Much of the utility of this command comes from the ability to *locally override* README templates and exercise information.
 
@@ -46,9 +46,9 @@ Much of the utility of this command comes from the ability to *locally override*
 
 ### The README Template
 
-The template file used as the basis for README generation lives in a track root's `config/` directory as [`config/exercise_readme.go.tmpl`](https://github.com/exercism/lua/blob/master/config/exercise_readme.go.tmpl). This template file may be overridden for an exercise by placing the overriding template in the exercises `.meta/readme.go.tmpl`. 
+The template file used as the basis for README generation lives in a track root's `config/` directory as [`config/exercise_readme.go.tmpl`](https://github.com/exercism/lua/blob/master/config/exercise_readme.go.tmpl). This template file may be overridden for an exercise by placing the overriding template in the exercises `.meta/readme.go.tmpl`.
 
-As configlet is written in the [Go language](https://golang.org/) this README template file is in the [Go template format](https://golang.org/pkg/text/template/). 
+As configlet is written in the [Go language](https://golang.org/) this README template file is in the [Go template format](https://golang.org/pkg/text/template/).
 
 There are a number of template variable substitutions you may place in the template file:
 
@@ -87,6 +87,11 @@ The track configuration file can be hard to review, especially the new structure
 1. List out the bonus exercises separately.
 1. Issue warnings if expected elements from the nextercism-style configuration are missing.
 1. Optionally show the difficulty of the exercises via the `--with-difficulty` option.
+
+## Upgrade
+
+The configlet `upgrade` command downloads and installs the latest released version of configlet. Running the upgrade command on an already up-to-date version of configlet will exit with no change to the system. The version command `configlet version -l` can be used to check for the latest available version.
+
 
 ## UUID
 
