@@ -26,7 +26,7 @@ var fmtCmd = &cobra.Command{
 
 It ensures the following files have consistent JSON syntax and indentation:
 	config.json, maintainers.json
-	
+
 It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
 	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
@@ -82,7 +82,6 @@ func runFmt(cmd *cobra.Command, args []string) {
 	if changes != "" {
 		ui.Print("changes made to:\n", changes)
 	}
-	return
 }
 
 func formatFile(path string, format formatter) (diff string, formatted []byte, err error) {
@@ -92,8 +91,9 @@ func formatFile(path string, format formatter) (diff string, formatted []byte, e
 	}
 
 	var m map[string]interface{}
-
-	json.NewDecoder(f).Decode(&m)
+	if err = json.NewDecoder(f).Decode(&m); err != nil {
+		return diff, formatted, err
+	}
 
 	if format != nil {
 		format(m)
@@ -152,11 +152,11 @@ func normaliseTopic(t string) string {
 	// for the final output.
 	// hyphens and whitespace are allowed through for now
 	// as word delimiters to be replaced with underscores.
-	reg := regexp.MustCompile("[^a-z\\s-_]+")
+	reg := regexp.MustCompile(`[^a-z\s-_]+`)
 	s = reg.ReplaceAllString(s, "")
 
 	// output to be snake_case
-	reg = regexp.MustCompile("[\\s-]+")
+	reg = regexp.MustCompile(`[\s-]+`)
 	s = reg.ReplaceAllString(s, "_")
 	return s
 }
