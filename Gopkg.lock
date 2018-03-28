@@ -40,7 +40,11 @@
 [[projects]]
   branch = "master"
   name = "github.com/inconshreveable/go-update"
-  packages = [".","internal/binarydist","internal/osext"]
+  packages = [
+    ".",
+    "internal/binarydist",
+    "internal/osext"
+  ]
   revision = "8152e7eb6ccf8679a64582a66b78519688d156ad"
 
 [[projects]]
@@ -74,14 +78,14 @@
   version = "v1.2.1"
 
 [[projects]]
+  branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "7f97868eec74b32b0982dd158a51a446d1da7eb5"
-  version = "v2.1.1"
+  revision = "4fc5987536ef307a24ca299aee7ae301cde3d221"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "eb0a5a01a48a08b009af2e7be43ff340ecc87a2034fa5ceadadaca26574e04be"
+  inputs-digest = "5011df425a47c8b46cbea97c546d330e77bf917f3111ac206da97b743f101de3"
   solver-name = "gps-cdcl"
   solver-version = 1
