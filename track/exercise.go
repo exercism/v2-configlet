@@ -33,10 +33,6 @@ func NewExercise(root string, pg PatternGroup) (Exercise, error) {
 	}
 
 	err = setPath(root, "README\\.md", &ex.ReadmePath)
-	if err != nil {
-		return ex, err
-	}
-
 	return ex, err
 }
 
