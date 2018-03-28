@@ -24,8 +24,8 @@
 ignored = ["github.com/exercism/cli/config","github.com/exercism/cli/debug" ]
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/mattetti/uuid"
+  name = "github.com/google/uuid"
+  version = "0.2"
 
 [[constraint]]
   branch = "master"
@@ -38,4 +38,3 @@ ignored = ["github.com/exercism/cli/config","github.com/exercism/cli/debug" ]
 [[constraint]]
   branch = "nextercism"
   name = "github.com/exercism/cli"
-
