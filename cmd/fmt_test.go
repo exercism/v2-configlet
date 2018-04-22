@@ -40,7 +40,7 @@ var configFiles = []string{
 
 func TestFormat(t *testing.T) {
 	for _, f := range configFiles {
-		_, actualConfig, err := formatFile(filepath.FromSlash(f), formatTopics)
+		_, actualConfig, err := formatFile(filepath.FromSlash(f), formatTopics, orderConfig)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -56,7 +56,7 @@ var maintainersFiles = []string{
 
 func TestMaintainers(t *testing.T) {
 	for _, f := range maintainersFiles {
-		_, actualMaintainers, err := formatFile(filepath.FromSlash(f), nil)
+		_, actualMaintainers, err := formatFile(filepath.FromSlash(f), nil, nil)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -37,18 +37,24 @@ It also normalizes and alphabetizes the exercise topics in the config.json file.
 // formatter applies additional formatting to unmarshalled JSON files.
 type formatter func(m map[string]interface{})
 
+// orderer applies an ordering to unmarshalled JSON files
+type orderer func(map[string]interface{}) OrderedMap
+
 func runFmt(cmd *cobra.Command, args []string) {
 	path := args[0]
 	var fs = []struct {
 		path string
 		formatter
+		orderer
 	}{
 		{
 			filepath.Join(path, "config.json"),
 			formatTopics,
+			orderConfig,
 		},
 		{
 			filepath.Join(path, "config", "maintainers.json"),
+			nil,
 			nil,
 		},
 	}
@@ -60,7 +66,7 @@ func runFmt(cmd *cobra.Command, args []string) {
 			ui.PrintError("path not found:", f.path)
 			os.Exit(1)
 		}
-		diff, formatted, err := formatFile(f.path, f.formatter)
+		diff, formatted, err := formatFile(f.path, f.formatter, f.orderer)
 		if err != nil {
 			ui.PrintError(err.Error())
 			continue
@@ -84,7 +90,7 @@ func runFmt(cmd *cobra.Command, args []string) {
 	}
 }
 
-func formatFile(path string, format formatter) (diff string, formatted []byte, err error) {
+func formatFile(path string, format formatter, order orderer) (diff string, formatted []byte, err error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return diff, formatted, err
@@ -99,12 +105,19 @@ func formatFile(path string, format formatter) (diff string, formatted []byte, e
 		format(m)
 	}
 
+	var om interface{}
+	if order == nil {
+		om = m
+	} else {
+		om = order(m)
+	}
+
 	original, err := ioutil.ReadFile(path)
 	if err != nil {
 		return diff, formatted, err
 	}
 
-	formatted, err = json.MarshalIndent(&m, "", "  ")
+	formatted, err = json.MarshalIndent(&om, "", "  ")
 	if err != nil {
 		return diff, formatted, err
 	}
@@ -159,6 +172,45 @@ func normaliseTopic(t string) string {
 	reg = regexp.MustCompile(`[\s-]+`)
 	s = reg.ReplaceAllString(s, "_")
 	return s
+}
+
+// orderConfig applies an ordering to config.json
+//
+// This ordering was specified in
+// https://github.com/exercism/meta/issues/95#issuecomment-341991512
+func orderConfig(m map[string]interface{}) OrderedMap {
+	exercises, ok := m["exercises"].([]interface{})
+	if ok {
+		var orderedExercises []OrderedMap
+		for _, e := range exercises {
+			exercise, ok := e.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			orderedExercises = append(orderedExercises, WithOrdering(exercise,
+				"slug",
+				"uuid",
+				"core",
+				"unlocked_by",
+				"difficulty",
+				"topics",
+			))
+		}
+		m["exercises"] = orderedExercises
+	}
+	return WithOrdering(m,
+		"track_id",
+		"language",
+		"active",
+		"blurb",
+		"gitter",
+		"checklist_issue",
+		"ignore_pattern",
+		"solution_pattern",
+		"test_pattern",
+		"foregone",
+		"exercises",
+	)
 }
 
 func init() {
