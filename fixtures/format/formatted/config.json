@@ -1,38 +1,38 @@
 {
+  "language": "Numbers",
   "active": true,
   "blurb": "",
+  "ignore_pattern": "example(?!.*test)",
+  "foregone": [
+    "three",
+    "four"
+  ],
   "exercises": [
     {
-      "core": false,
-      "difficulty": 1,
       "slug": "one",
+      "uuid": "001",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 1,
       "topics": [
         "booleans",
         "control_flow_conditionals",
         "integers",
         "logic"
-      ],
-      "unlocked_by": null,
-      "uuid": "001"
+      ]
     },
     {
-      "core": false,
-      "difficulty": 1,
       "slug": "two",
+      "uuid": "002",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 1,
       "topics": [
         "equality",
         "mathematics",
         "text_formatting",
         "time"
-      ],
-      "unlocked_by": null,
-      "uuid": "002"
+      ]
     }
-  ],
-  "foregone": [
-    "three",
-    "four"
-  ],
-  "ignore_pattern": "example(?!.*test)",
-  "language": "Numbers"
+  ]
 }

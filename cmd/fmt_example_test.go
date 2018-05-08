@@ -7,7 +7,7 @@ import (
 )
 
 func ExampleFormat() {
-	diff, formatted, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), formatTopics)
+	diff, formatted, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), formatTopics, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
