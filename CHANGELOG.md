@@ -8,6 +8,12 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.9.0 (8th May 2018)
+
+* [#127](https://github.com/exercism/configlet/pull/127)  Update configlet fmt to apply a definite ordering [@coriolinus]
+* [#126](https://github.com/exercism/configlet/pull/126)  all: linting [@ferhatelmas]
+* [#125](https://github.com/exercism/configlet/pull/125)  Gopkg: correct uuid dependency [@ferhatelmas]
+
 ## v3.8.0 (20th March 2018)
 
 * [#122](https://github.com/exercism/configlet/pull/122) readme: Add documentation for the upgrade command - [@nywilken]
@@ -114,6 +120,7 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 * [#6](https://github.com/exercism/configlet/pull/6) Run tests on travis - [@kytrinyx]
 * [#5](https://github.com/exercism/configlet/pull/5) Ignore img directory - [@ryanplusplus]
 
+[@coriolinus]: https://github.com/coriolinus
 [@Insti]: https://github.com/Insti
 [@ferhatelmas]: https://github.com/ferhatelmas
 [@kytrinyx]: https://github.com/kytrinyx
