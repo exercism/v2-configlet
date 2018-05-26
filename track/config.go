@@ -8,29 +8,49 @@ import (
 
 // PatternGroup holds matching patterns defined in an Exercism track configuration.
 type PatternGroup struct {
+	IgnorePattern   string `json:"ignore_pattern"`
 	SolutionPattern string `json:"solution_pattern"`
 	TestPattern     string `json:"test_pattern"`
 }
 
+// ExerciseMetadata contains metadata about an implemented exercise.
+// It's listed in the config in the order that the exercise will be
+// delivered by the API.
+type ExerciseMetadata struct {
+	Slug         string   `json:"slug"`
+	UUID         string   `json:"uuid"`
+	IsCore       bool     `json:"core"`
+	UnlockedBy   string   `json:"unlocked_by"`
+	Difficulty   int      `json:"difficulty"`
+	Topics       []string `json:"topics"`
+	IsDeprecated bool     `json:"deprecated"`
+}
+
 // Config is an Exercism track configuration.
 type Config struct {
-	Language        string
-	Active          bool
-	Exercises       []ExerciseMetadata
-	DeprecatedSlugs []string `json:"deprecated"`
-	ForegoneSlugs   []string `json:"foregone"`
+	TrackID        string `json:"track_id"`
+	Language       string `json:"language"`
+	Active         bool   `json:"active"`
+	Blurb          string `json:"blurb"`
+	Gitter         string `json:"gitter"`
+	ChecklistIssue string `json:"checklist_issue"`
 	PatternGroup
+	Exercises       []ExerciseMetadata `json:"exercises"`
+	ForegoneSlugs   []string           `json:"foregone"`
+	DeprecatedSlugs []string           `json:"deprecated"`
 }
 
 // NewConfig loads a track configuration file.
 // The config has a default solution and test pattern if not provided in the file.
 // The solution pattern is used to determine if an exercise has a sample solution.
 // The test pattern is used to determine if an exercise has a test suite.
+// The ignore pattern is used to exclude files from the 'exercism fetch' command.
 func NewConfig(path string) (Config, error) {
 	c := Config{
 		PatternGroup: PatternGroup{
 			SolutionPattern: "[Ee]xample",
 			TestPattern:     "(?i)test",
+			IgnorePattern:   "[Ee]xample",
 		},
 	}
 
