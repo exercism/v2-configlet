@@ -14,6 +14,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var (
+	// The JSON needs to have nulls, not empty strings.
+	// We cannot take the address of strings.
+	apple   = "apple"
+	banana  = "banana"
+	unknown = "unknown"
+)
+
 func TestLintTrack(t *testing.T) {
 	originalNoHTTP := noHTTP
 	noHTTP = true
@@ -308,12 +316,12 @@ func TestLockedCoreViolation(t *testing.T) {
 				Exercises: []track.ExerciseMetadata{
 					{
 						Slug:       "apple",
-						UnlockedBy: "banana",
+						UnlockedBy: &banana,
 						IsCore:     true,
 					},
 					{
 						Slug:       "banana",
-						UnlockedBy: "",
+						UnlockedBy: nil,
 						IsCore:     false,
 					},
 				},
@@ -327,17 +335,17 @@ func TestLockedCoreViolation(t *testing.T) {
 				Exercises: []track.ExerciseMetadata{
 					{
 						Slug:       "apple",
-						UnlockedBy: "",
+						UnlockedBy: nil,
 						IsCore:     true,
 					},
 					{
 						Slug:       "banana",
-						UnlockedBy: "apple",
+						UnlockedBy: &apple,
 						IsCore:     false,
 					},
 					{
 						Slug:       "cherry",
-						UnlockedBy: "",
+						UnlockedBy: nil,
 						IsCore:     false,
 					},
 				},
@@ -372,12 +380,12 @@ func TestUnlockedByViolations(t *testing.T) {
 				Exercises: []track.ExerciseMetadata{
 					{
 						Slug:       "apple",
-						UnlockedBy: "",
+						UnlockedBy: nil,
 						IsCore:     false,
 					},
 					{
 						Slug:       "banana",
-						UnlockedBy: "apple",
+						UnlockedBy: &apple,
 						IsCore:     false,
 					},
 				},
@@ -391,17 +399,17 @@ func TestUnlockedByViolations(t *testing.T) {
 				Exercises: []track.ExerciseMetadata{
 					{
 						Slug:       "apple",
-						UnlockedBy: "",
+						UnlockedBy: nil,
 						IsCore:     true,
 					},
 					{
 						Slug:       "banana",
-						UnlockedBy: "apple",
+						UnlockedBy: &apple,
 						IsCore:     false,
 					},
 					{
 						Slug:       "cherry",
-						UnlockedBy: "unknown",
+						UnlockedBy: &unknown,
 						IsCore:     false,
 					},
 				},
@@ -415,12 +423,12 @@ func TestUnlockedByViolations(t *testing.T) {
 				Exercises: []track.ExerciseMetadata{
 					{
 						Slug:       "apple",
-						UnlockedBy: "",
+						UnlockedBy: nil,
 						IsCore:     true,
 					},
 					{
 						Slug:       "banana",
-						UnlockedBy: "apple",
+						UnlockedBy: &apple,
 						IsCore:     false,
 					},
 				},

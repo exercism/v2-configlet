@@ -20,7 +20,7 @@ type ExerciseMetadata struct {
 	Slug         string   `json:"slug"`
 	UUID         string   `json:"uuid"`
 	IsCore       bool     `json:"core"`
-	UnlockedBy   string   `json:"unlocked_by"`
+	UnlockedBy   *string  `json:"unlocked_by"`
 	Difficulty   int      `json:"difficulty"`
 	Topics       []string `json:"topics"`
 	IsDeprecated bool     `json:"deprecated"`

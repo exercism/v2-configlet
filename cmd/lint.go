@@ -368,7 +368,7 @@ func duplicateTrackUUID(t track.Track) []string {
 func lockedCoreViolation(t track.Track) []string {
 	slugs := []string{}
 	for _, exercise := range t.Config.Exercises {
-		if exercise.IsCore && len(exercise.UnlockedBy) > 0 {
+		if exercise.IsCore && exercise.UnlockedBy != nil {
 			slugs = append(slugs, exercise.Slug)
 		}
 	}
@@ -387,11 +387,11 @@ func unlockedByValidExercise(t track.Track) []string {
 	}
 
 	for _, exercise := range t.Config.Exercises {
-		if len(exercise.UnlockedBy) == 0 {
+		if exercise.UnlockedBy == nil {
 			continue
 		}
 
-		if !valid[exercise.UnlockedBy] {
+		if !valid[*exercise.UnlockedBy] {
 			slugs = append(slugs, exercise.Slug)
 		}
 	}
