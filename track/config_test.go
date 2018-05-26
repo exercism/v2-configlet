@@ -31,3 +31,9 @@ func TestDefaultTestPattern(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "(?i)test", c.TestPattern)
 }
+
+func TestDefaultIgnorePattern(t *testing.T) {
+	c, err := NewConfig("../fixtures/empty.json")
+	assert.NoError(t, err)
+	assert.Equal(t, "[Ee]xample", c.IgnorePattern)
+}
