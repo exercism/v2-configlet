@@ -26,6 +26,6 @@
     "three",
     "four"
   ],
-"ignore_pattern": "example(?!.*test)",
+"ignore_pattern": "example(?!.*test)","solution_pattern": "[Ee]xample", "test_pattern": "(?i)test",
         "language": "Numbers"
 }

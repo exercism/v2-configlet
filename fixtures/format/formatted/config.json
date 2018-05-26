@@ -3,6 +3,8 @@
   "active": true,
   "blurb": "",
   "ignore_pattern": "example(?!.*test)",
+  "solution_pattern": "[Ee]xample",
+  "test_pattern": "(?i)test",
   "foregone": [
     "three",
     "four"
