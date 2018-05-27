@@ -45,7 +45,7 @@ func TestFormat(t *testing.T) {
 		}
 		defer os.Remove(tmp.Name())
 
-		_, _, err = formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, orderConfig)
+		_, err = formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, orderConfig)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -72,7 +72,7 @@ func TestMaintainers(t *testing.T) {
 		}
 		defer os.Remove(tmp.Name())
 
-		_, _, err = formatFile(filepath.FromSlash(f), tmp.Name(), nil, nil)
+		_, err = formatFile(filepath.FromSlash(f), tmp.Name(), nil, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -93,14 +93,19 @@ func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
 	}
 	defer os.Remove(tmp.Name())
 
-	// Read original from source.
+	// Run it through the formatter.
+	if _, err := formatFile(filepath.FromSlash(filename), tmp.Name(), formatTopics, orderConfig); err != nil {
+		t.Fatal(err)
+	}
+
+	// Read original from source
 	src, err := ioutil.ReadFile(filepath.FromSlash(filename))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	// Run it through the formatter.
-	_, dst, err := formatFile(filepath.FromSlash(filename), tmp.Name(), formatTopics, orderConfig)
+	// Read output from source
+	dst, err := ioutil.ReadFile(tmp.Name())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -117,13 +122,18 @@ func TestSemanticsOfMissingTopics(t *testing.T) {
 	}
 	defer os.Remove(tmp.Name())
 
+	if _, err := formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, nil); err != nil {
+		t.Fatal(err)
+	}
+
 	// Read original from source
 	src, err := ioutil.ReadFile(filepath.FromSlash(f))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, dst, err := formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, nil)
+	// Read output from source
+	dst, err := ioutil.ReadFile(tmp.Name())
 	if err != nil {
 		t.Fatal(err)
 	}
