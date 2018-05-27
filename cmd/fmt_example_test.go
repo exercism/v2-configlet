@@ -1,132 +1,68 @@
 package cmd
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
-	"path/filepath"
+
+	"github.com/exercism/configlet/ui"
 )
 
 func ExampleFormat() {
-	tmp, err := ioutil.TempFile(os.TempDir(), "")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer os.Remove(tmp.Name())
+	oldOut := ui.Out
+	oldErrOut := ui.ErrOut
+	ui.Out = os.Stdout
+	ui.ErrOut = os.Stderr
+	defer func() {
+		ui.Out = oldOut
+		ui.ErrOut = oldErrOut
+	}()
 
-	diff, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), tmp.Name(), formatTopics, nil)
+	unformattedDir, err := ioutil.TempDir("", "unformatted")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(diff)
+	defer os.Remove(unformattedDir)
 
-	formatted, err := ioutil.ReadFile(tmp.Name())
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(formatted))
+	runFmt("../fixtures/format/unformatted/", unformattedDir, true)
 
 	// Output:
-	// @@ -2 +1,0 @@
-	// -  "language": "Numbers",
-	// @@ -5 +4,28 @@
-	// -  "ignore_pattern": "example(?!.*test)",
-	// +  "exercises": [
-	// +    {
-	// +      "core": false,
-	// +      "difficulty": 1,
-	// +      "slug": "one",
-	// +      "topics": [
-	// +        "booleans",
-	// +        "control_flow_conditionals",
-	// +        "integers",
-	// +        "logic"
-	// +      ],
-	// +      "unlocked_by": null,
-	// +      "uuid": "001"
-	// +    },
-	// +    {
-	// +      "core": false,
-	// +      "difficulty": 1,
-	// +      "slug": "two",
-	// +      "topics": [
-	// +        "equality",
-	// +        "mathematics",
-	// +        "text_formatting",
-	// +        "time"
-	// +      ],
-	// +      "unlocked_by": null,
-	// +      "uuid": "002"
-	// +    }
-	// +  ],
-	// @@ -10,26 +36,3 @@
-	// -  "exercises": [
+	// -> ../fixtures/format/unformatted/config.json
+	//
+	// @@ -11 +11,2 @@
 	// -{
-	// -      "uuid": "001",
+	// +    {
+	// +      "slug": "one",
+	// @@ -13 +13,0 @@
 	// -      "slug": "one",
-	// -      "core": false,
-	// -      "unlocked_by": null,
-	// -      "difficulty": 1,
-	// -      "topics": [
+	// @@ -18,4 +18,4 @@
 	// -            "Control-flow (conditionals)",
 	// -            "Logic",
 	// -            "Booleans",
 	// -            "Integers"
-	// -      ]
-	// -    },
-	// -    {
-	// -      "uuid": "002",
+	// +        "booleans",
+	// +        "control_flow_conditionals",
+	// +        "integers",
+	// +        "logic"
+	// @@ -24,0 +25 @@
+	// +      "slug": "two",
+	// @@ -26 +26,0 @@
 	// -      "slug": "two",
-	// -      "core": false,
-	// -      "unlocked_by": null,
-	// -      "difficulty": 1,
-	// -      "topics": [
+	// @@ -31,5 +31,8 @@
 	// -        "Time",
 	// -        "Mathematics",
 	// -        "Text formatting",
 	// -        "Equality"
 	// -      ]}]}
-	// +  "ignore_pattern": "example(?!.*test)",
-	// +  "language": "Numbers"
+	// +        "equality",
+	// +        "mathematics",
+	// +        "text_formatting",
+	// +        "time"
+	// +      ]
+	// +    }
+	// +  ]
 	// +}
 	//
-	// {
-	//   "active": true,
-	//   "blurb": "",
-	//   "exercises": [
-	//     {
-	//       "core": false,
-	//       "difficulty": 1,
-	//       "slug": "one",
-	//       "topics": [
-	//         "booleans",
-	//         "control_flow_conditionals",
-	//         "integers",
-	//         "logic"
-	//       ],
-	//       "unlocked_by": null,
-	//       "uuid": "001"
-	//     },
-	//     {
-	//       "core": false,
-	//       "difficulty": 1,
-	//       "slug": "two",
-	//       "topics": [
-	//         "equality",
-	//         "mathematics",
-	//         "text_formatting",
-	//         "time"
-	//       ],
-	//       "unlocked_by": null,
-	//       "uuid": "002"
-	//     }
-	//   ],
-	//   "foregone": [
-	//     "three",
-	//     "four"
-	//   ],
-	//   "ignore_pattern": "example(?!.*test)",
-	//   "language": "Numbers"
-	// }
+	// -> changes made to:
+	//  ../fixtures/format/unformatted/config.json
 }

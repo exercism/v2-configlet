@@ -82,7 +82,7 @@ func runFmt(inDir, outDir string, verbose bool) error {
 			continue
 		}
 		if verbose {
-			ui.Print(f.inPath, "\n\n", diff)
+			ui.Print(fmt.Sprintf("%s\n\n%s", f.inPath, diff))
 		}
 		changes += fmt.Sprintf("%s\n", f.inPath)
 	}
