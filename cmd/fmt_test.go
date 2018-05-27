@@ -126,3 +126,49 @@ func TestSemanticsOfMissingTopics(t *testing.T) {
 
 	assert.Equal(t, "", string(dst))
 }
+
+func TestFmtCommand(t *testing.T) {
+	cfgTrack, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	cfgMaintainer, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config/maintainers.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// The fmt command does not rewrite a correctly formatted file.
+	formattedDir, err := ioutil.TempDir("", "formatted")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(formattedDir)
+	runFmt("../fixtures/format/formatted/", formattedDir)
+
+	_, err = os.Stat(filepath.Join(formattedDir, "config.json"))
+	assert.True(t, os.IsNotExist(err))
+
+	_, err = os.Stat(filepath.Join(formattedDir, "config", "maintainers.json"))
+	assert.True(t, os.IsNotExist(err))
+
+	// It rewrites an incorrectly formatted file.
+	malformedDir, err := ioutil.TempDir("", "malformed")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(malformedDir)
+	runFmt("../fixtures/format/malformed/", malformedDir)
+
+	track, err := ioutil.ReadFile(filepath.Join(malformedDir, "config.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, track, cfgTrack)
+
+	maintainer, err := ioutil.ReadFile(filepath.Join(malformedDir, "config", "maintainers.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, maintainer, cfgMaintainer)
+}
