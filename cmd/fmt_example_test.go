@@ -63,6 +63,15 @@ func ExampleFormat() {
 	// +  ]
 	// +}
 	//
-	// -> changes made to:
+	//-> ../fixtures/format/unformatted/config/maintainers.json
+	//
+	//@@ -2,2 +2,2 @@
+	//-	"docs_url": "http://docs.example.com",
+	//-	"maintainers": []
+	//+  "docs_url": "http://docs.example.com",
+	//+  "maintainers": []
+	//
+	//-> changes made to:
 	//  ../fixtures/format/unformatted/config.json
+	// ../fixtures/format/unformatted/config/maintainers.json
 }
