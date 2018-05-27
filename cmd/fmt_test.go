@@ -9,28 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSemanticsOfMissingTopics(t *testing.T) {
-	f := "../fixtures/format/semantics/config.json"
-
-	tmp, err := ioutil.TempFile(os.TempDir(), "")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.Remove(tmp.Name())
-
-	if _, err := formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, nil); err != nil {
-		t.Fatal(err)
-	}
-
-	// No change; nothing should be written to outfile.
-	dst, err := ioutil.ReadFile(tmp.Name())
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.Equal(t, "", string(dst))
-}
-
 func TestFmtCommand(t *testing.T) {
 	cfgTrack, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config.json"))
 	if err != nil {
@@ -75,4 +53,17 @@ func TestFmtCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, maintainer, cfgMaintainer)
+}
+
+func TestSemanticsOfMissingTopics(t *testing.T) {
+	semanticsDir, err := ioutil.TempDir("", "semantics")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(semanticsDir)
+	runFmt("../fixtures/format/semantics/", semanticsDir, false)
+
+	// No change; nothing should be written to out dir.
+	_, err = os.Stat(filepath.Join(semanticsDir, "config.json"))
+	assert.True(t, os.IsNotExist(err))
 }
