@@ -71,7 +71,7 @@ func TestFmtCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.Remove(formattedDir)
-	runFmt("../fixtures/format/formatted/", formattedDir)
+	runFmt("../fixtures/format/formatted/", formattedDir, false)
 
 	_, err = os.Stat(filepath.Join(formattedDir, "config.json"))
 	assert.True(t, os.IsNotExist(err))
@@ -85,7 +85,7 @@ func TestFmtCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.Remove(malformedDir)
-	runFmt("../fixtures/format/malformed/", malformedDir)
+	runFmt("../fixtures/format/malformed/", malformedDir, false)
 
 	track, err := ioutil.ReadFile(filepath.Join(malformedDir, "config.json"))
 	if err != nil {

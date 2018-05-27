@@ -31,7 +31,7 @@ It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
 	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := runFmt(args[0], args[0]); err != nil {
+		if err := runFmt(args[0], args[0], fmtVerbose); err != nil {
 			ui.PrintError(err.Error())
 			os.Exit(1)
 		}
@@ -46,7 +46,7 @@ type formatter func(m map[string]interface{})
 // orderer applies an ordering to unmarshalled JSON files
 type orderer func(map[string]interface{}) OrderedMap
 
-func runFmt(inDir, outDir string) error {
+func runFmt(inDir, outDir string, verbose bool) error {
 	var fs = []struct {
 		inPath  string
 		outPath string
@@ -81,7 +81,7 @@ func runFmt(inDir, outDir string) error {
 		if diff == "" {
 			continue
 		}
-		if fmtVerbose {
+		if verbose {
 			ui.Print(f.inPath, "\n\n", diff)
 		}
 		changes += fmt.Sprintf("%s\n", f.inPath)
