@@ -4,13 +4,23 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strings"
+)
+
+var (
+	rgxFunkyChars = regexp.MustCompile(`[^a-z\s-_]+`)
+	rgxSpaces     = regexp.MustCompile(`[\s-]+`)
 )
 
 // PatternGroup holds matching patterns defined in an Exercism track configuration.
 type PatternGroup struct {
-	IgnorePattern   string `json:"ignore_pattern"`
-	SolutionPattern string `json:"solution_pattern"`
-	TestPattern     string `json:"test_pattern"`
+	IgnorePattern   string `json:"ignore_pattern,omitempty"`
+	SolutionPattern string `json:"solution_pattern,omitempty"`
+	TestPattern     string `json:"test_pattern,omitempty"`
 }
 
 // ExerciseMetadata contains metadata about an implemented exercise.
@@ -23,21 +33,21 @@ type ExerciseMetadata struct {
 	UnlockedBy   *string  `json:"unlocked_by"`
 	Difficulty   int      `json:"difficulty"`
 	Topics       []string `json:"topics"`
-	IsDeprecated bool     `json:"deprecated"`
+	IsDeprecated bool     `json:"deprecated,omitempty"`
 }
 
 // Config is an Exercism track configuration.
 type Config struct {
-	TrackID        string `json:"track_id"`
+	TrackID        string `json:"track_id,omitempty"`
 	Language       string `json:"language"`
 	Active         bool   `json:"active"`
 	Blurb          string `json:"blurb"`
-	Gitter         string `json:"gitter"`
-	ChecklistIssue string `json:"checklist_issue"`
+	Gitter         string `json:"gitter,omitempty"`
+	ChecklistIssue string `json:"checklist_issue,omitempty"`
 	PatternGroup
+	ForegoneSlugs   []string           `json:"foregone,omitempty"`
 	Exercises       []ExerciseMetadata `json:"exercises"`
-	ForegoneSlugs   []string           `json:"foregone"`
-	DeprecatedSlugs []string           `json:"deprecated"`
+	DeprecatedSlugs []string           `json:"deprecated,omitempty"`
 }
 
 // NewConfig loads a track configuration file.
@@ -63,4 +73,35 @@ func NewConfig(path string) (Config, error) {
 		return c, fmt.Errorf("invalid config %s -- %s", path, err.Error())
 	}
 	return c, nil
+}
+
+// Read loads a config from file given the path to the file.
+func (cfg *Config) Read(path string) error {
+	file, err := os.Open(filepath.FromSlash(path))
+	if err != nil {
+		return err
+	}
+
+	if err := json.NewDecoder(file).Decode(&cfg); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ToJSON marshals the Config to normalized JSON.
+func (cfg *Config) ToJSON() ([]byte, error) {
+	for _, exercise := range cfg.Exercises {
+		for i, t := range exercise.Topics {
+			exercise.Topics[i] = normalizeTopic(t)
+		}
+		sort.Strings(exercise.Topics)
+	}
+	return json.MarshalIndent(&cfg, "", "  ")
+}
+
+func normalizeTopic(t string) string {
+	s := strings.ToLower(t)
+	s = rgxFunkyChars.ReplaceAllString(s, "")
+	s = rgxSpaces.ReplaceAllString(s, "_")
+	return s
 }
