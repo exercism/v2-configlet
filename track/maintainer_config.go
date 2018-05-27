@@ -18,14 +18,14 @@ type MaintainerConfig struct {
 
 // Maintainer contains data about a track maintainer.
 type Maintainer struct {
-	Username      string `json:"github_username"`
-	Alumnus       bool   `json:"alumnus"`
-	ShowOnWebsite bool   `json:"show_on_website"`
-	Name          string `json:"name"`
-	LinkText      string `json:"link_text"`
-	LinkURL       string `json:"link_url"`
-	AvatarURL     string `json:"avatar_url"`
-	Bio           string `json:"bio"`
+	Username      string  `json:"github_username"`
+	Alumnus       bool    `json:"alumnus"`
+	ShowOnWebsite bool    `json:"show_on_website"`
+	Name          *string `json:"name"`
+	LinkText      *string `json:"link_text"`
+	LinkURL       *string `json:"link_url"`
+	AvatarURL     *string `json:"avatar_url"`
+	Bio           *string `json:"bio"`
 }
 
 // NewMaintainerConfig reads the maintainer config file, if present.
