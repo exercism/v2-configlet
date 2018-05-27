@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,13 +20,13 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	expectedConfig = strings.TrimSuffix(string(cfg), "\n")
+	expectedConfig = string(cfg)
 
 	maintainers, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/maintainers.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	expectedMaintainers = strings.TrimSuffix(string(maintainers), "\n")
+	expectedMaintainers = string(maintainers)
 	result := m.Run()
 	os.Exit(result)
 }
@@ -62,4 +61,19 @@ func TestMaintainers(t *testing.T) {
 		}
 		assert.Equal(t, expectedMaintainers, string(actualMaintainers))
 	}
+}
+
+func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
+	filename := "../fixtures/format/formatted/config.json"
+	src, err := ioutil.ReadFile(filepath.FromSlash(filename))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, dst, err := formatFile(filepath.FromSlash(filename), formatTopics, orderConfig)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, string(src), string(dst))
 }

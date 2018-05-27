@@ -128,6 +128,7 @@ func formatFile(path string, format formatter, order orderer) (diff string, form
 			B: difflib.SplitLines(string(formatted)),
 		})
 
+	formatted = []byte(fmt.Sprintf("%s\n", formatted))
 	return diff, formatted, err
 }
 
