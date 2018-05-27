@@ -77,3 +77,18 @@ func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
 
 	assert.Equal(t, string(src), string(dst))
 }
+func TestSemanticsOfMissingTopics(t *testing.T) {
+	// Read directly from source.
+	f := "../fixtures/format/semantics/config.json"
+	src, err := ioutil.ReadFile(filepath.FromSlash(f))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Run through formatter.
+	_, dst, err := formatFile(filepath.FromSlash(f), formatTopics, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, src, dst)
+}
