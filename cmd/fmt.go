@@ -67,6 +67,10 @@ func runFmt(inDir, outDir string) error {
 		},
 	}
 
+	// This is for the tests.
+	// It will go away in a subsequent refactoring.
+	os.Mkdir(filepath.Join(outDir, "config"), os.ModePerm)
+
 	var changes string
 
 	for _, f := range fs {
@@ -125,7 +129,7 @@ func formatFile(inPath, outPath string, format formatter, order orderer) (diff s
 		return diff, err
 	}
 
-	src := difflib.SplitLines(string(original))
+	src := difflib.SplitLines(strings.TrimSuffix(string(original), "\n"))
 	dst := difflib.SplitLines(string(formatted))
 	diff, err = difflib.GetUnifiedDiffString(difflib.UnifiedDiff{A: src, B: dst})
 	if diff == "" || err != nil {

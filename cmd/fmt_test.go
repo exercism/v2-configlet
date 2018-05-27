@@ -32,7 +32,6 @@ func TestMain(m *testing.M) {
 }
 
 var configFiles = []string{
-	"../fixtures/format/formatted/config.json",
 	"../fixtures/format/malformed/config.json",
 	"../fixtures/format/minimised/config.json",
 }
@@ -59,7 +58,6 @@ func TestFormat(t *testing.T) {
 }
 
 var maintainersFiles = []string{
-	"../fixtures/format/formatted/config/maintainers.json",
 	"../fixtures/format/malformed/config/maintainers.json",
 	"../fixtures/format/minimised/config/maintainers.json",
 }
@@ -98,19 +96,13 @@ func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Read original from source
-	src, err := ioutil.ReadFile(filepath.FromSlash(filename))
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Read output from source
+	// No change; nothing should be written to outfile.
 	dst, err := ioutil.ReadFile(tmp.Name())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, string(src), string(dst))
+	assert.Equal(t, "", string(dst))
 }
 
 func TestSemanticsOfMissingTopics(t *testing.T) {
@@ -126,17 +118,11 @@ func TestSemanticsOfMissingTopics(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Read original from source
-	src, err := ioutil.ReadFile(filepath.FromSlash(f))
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Read output from source
+	// No change; nothing should be written to outfile.
 	dst, err := ioutil.ReadFile(tmp.Name())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, string(src), string(dst))
+	assert.Equal(t, "", string(dst))
 }

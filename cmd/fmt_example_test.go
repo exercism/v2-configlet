@@ -60,7 +60,7 @@ func ExampleFormat() {
 	// +      "uuid": "002"
 	// +    }
 	// +  ],
-	// @@ -10,27 +36,3 @@
+	// @@ -10,26 +36,3 @@
 	// -  "exercises": [
 	// -{
 	// -      "uuid": "001",
@@ -87,7 +87,6 @@ func ExampleFormat() {
 	// -        "Text formatting",
 	// -        "Equality"
 	// -      ]}]}
-	// -
 	// +  "ignore_pattern": "example(?!.*test)",
 	// +  "language": "Numbers"
 	// +}
