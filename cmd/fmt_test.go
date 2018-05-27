@@ -9,29 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
-	filename := "../fixtures/format/formatted/config.json"
-
-	tmp, err := ioutil.TempFile(os.TempDir(), "")
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer os.Remove(tmp.Name())
-
-	// Run it through the formatter.
-	if _, err := formatFile(filepath.FromSlash(filename), tmp.Name(), formatTopics, orderConfig); err != nil {
-		t.Fatal(err)
-	}
-
-	// No change; nothing should be written to outfile.
-	dst, err := ioutil.ReadFile(tmp.Name())
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.Equal(t, "", string(dst))
-}
-
 func TestSemanticsOfMissingTopics(t *testing.T) {
 	f := "../fixtures/format/semantics/config.json"
 
