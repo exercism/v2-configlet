@@ -12,20 +12,20 @@ import (
 // as to configure the display values for each maintainer on the Exercism
 // website.
 type MaintainerConfig struct {
-	Maintainers []Maintainer `json:"maintainers"`
 	DocsURL     string       `json:"docs_url"`
+	Maintainers []Maintainer `json:"maintainers"`
 }
 
 // Maintainer contains data about a track maintainer.
 type Maintainer struct {
 	Username      string `json:"github_username"`
-	ShowOnWebsite bool   `json:"show_on_website"`
 	Alumnus       bool   `json:"alumnus"`
+	ShowOnWebsite bool   `json:"show_on_website"`
 	Name          string `json:"name"`
-	Bio           string `json:"bio"`
 	LinkText      string `json:"link_text"`
 	LinkURL       string `json:"link_url"`
 	AvatarURL     string `json:"avatar_url"`
+	Bio           string `json:"bio"`
 }
 
 // NewMaintainerConfig reads the maintainer config file, if present.
