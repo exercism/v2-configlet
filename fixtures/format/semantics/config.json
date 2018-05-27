@@ -1,11 +1,22 @@
 {
+  "language": "Nope",
+  "active": false,
+  "blurb": "",
   "exercises": [
     {
       "slug": "one",
+      "uuid": "1",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 1,
       "topics": []
     },
     {
       "slug": "two",
+      "uuid": "2",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 1,
       "topics": null
     }
   ]
