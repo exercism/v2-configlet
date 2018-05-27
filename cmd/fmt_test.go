@@ -45,7 +45,12 @@ func TestFormat(t *testing.T) {
 		}
 		defer os.Remove(tmp.Name())
 
-		_, actualConfig, err := formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, orderConfig)
+		_, _, err = formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, orderConfig)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		actualConfig, err := ioutil.ReadFile(tmp.Name())
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -67,7 +72,11 @@ func TestMaintainers(t *testing.T) {
 		}
 		defer os.Remove(tmp.Name())
 
-		_, actualMaintainers, err := formatFile(filepath.FromSlash(f), tmp.Name(), nil, nil)
+		_, _, err = formatFile(filepath.FromSlash(f), tmp.Name(), nil, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		actualMaintainers, err := ioutil.ReadFile(tmp.Name())
 		if err != nil {
 			log.Fatal(err)
 		}

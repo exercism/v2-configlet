@@ -15,12 +15,16 @@ func ExampleFormat() {
 	}
 	defer os.Remove(tmp.Name())
 
-	diff, formatted, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), tmp.Name(), formatTopics, nil)
+	diff, _, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), tmp.Name(), formatTopics, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	fmt.Println(diff)
+
+	formatted, err := ioutil.ReadFile(tmp.Name())
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println(string(formatted))
 
 	// Output:
