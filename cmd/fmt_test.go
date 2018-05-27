@@ -22,7 +22,7 @@ func TestMain(m *testing.M) {
 	}
 	expectedConfig = string(cfg)
 
-	maintainers, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/maintainers.json"))
+	maintainers, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config/maintainers.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,9 +48,9 @@ func TestFormat(t *testing.T) {
 }
 
 var maintainersFiles = []string{
-	"../fixtures/format/formatted/maintainers.json",
-	"../fixtures/format/malformed/maintainers.json",
-	"../fixtures/format/minimised/maintainers.json",
+	"../fixtures/format/formatted/config/maintainers.json",
+	"../fixtures/format/malformed/config/maintainers.json",
+	"../fixtures/format/minimised/config/maintainers.json",
 }
 
 func TestMaintainers(t *testing.T) {
