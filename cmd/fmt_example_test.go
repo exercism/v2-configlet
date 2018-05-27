@@ -2,12 +2,20 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 )
 
 func ExampleFormat() {
-	diff, formatted, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), formatTopics, nil)
+	tmp, err := ioutil.TempFile(os.TempDir(), "")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer os.Remove(tmp.Name())
+
+	diff, formatted, err := formatFile(filepath.FromSlash("../fixtures/format/unformatted/config.json"), tmp.Name(), formatTopics, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

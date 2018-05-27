@@ -30,8 +30,14 @@ It ensures the following files have consistent JSON syntax and indentation:
 It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
 	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
-	Run:     runFmt,
-	Args:    cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := runFmt(args[0]); err != nil {
+			ui.PrintError(err.Error())
+			os.Exit(1)
+		}
+	},
+
+	Args: cobra.ExactArgs(1),
 }
 
 // formatter applies additional formatting to unmarshalled JSON files.
@@ -40,8 +46,7 @@ type formatter func(m map[string]interface{})
 // orderer applies an ordering to unmarshalled JSON files
 type orderer func(map[string]interface{}) OrderedMap
 
-func runFmt(cmd *cobra.Command, args []string) {
-	path := args[0]
+func runFmt(path string) error {
 	var fs = []struct {
 		path string
 		formatter
@@ -62,21 +67,11 @@ func runFmt(cmd *cobra.Command, args []string) {
 	var changes string
 
 	for _, f := range fs {
-		if _, err := os.Stat(f.path); os.IsNotExist(err) {
-			ui.PrintError("path not found:", f.path)
-			os.Exit(1)
-		}
-		diff, formatted, err := formatFile(f.path, f.formatter, f.orderer)
+		diff, _, err := formatFile(f.path, f.path, f.formatter, f.orderer)
 		if err != nil {
-			ui.PrintError(err.Error())
-			continue
+			return err
 		}
 		if diff == "" {
-			continue
-		}
-		err = ioutil.WriteFile(f.path, formatted, os.FileMode(0644))
-		if err != nil {
-			ui.PrintError(err.Error())
 			continue
 		}
 		if fmtVerbose {
@@ -88,10 +83,15 @@ func runFmt(cmd *cobra.Command, args []string) {
 	if changes != "" {
 		ui.Print("changes made to:\n", changes)
 	}
+	return nil
 }
 
-func formatFile(path string, format formatter, order orderer) (diff string, formatted []byte, err error) {
-	f, err := os.Open(path)
+func formatFile(inPath, outPath string, format formatter, order orderer) (diff string, formatted []byte, err error) {
+	if _, err := os.Stat(inPath); os.IsNotExist(err) {
+		return diff, formatted, fmt.Errorf("path not found: %s", inPath)
+	}
+
+	f, err := os.Open(inPath)
 	if err != nil {
 		return diff, formatted, err
 	}
@@ -112,7 +112,7 @@ func formatFile(path string, format formatter, order orderer) (diff string, form
 		om = order(m)
 	}
 
-	original, err := ioutil.ReadFile(path)
+	original, err := ioutil.ReadFile(inPath)
 	if err != nil {
 		return diff, formatted, err
 	}
@@ -122,13 +122,15 @@ func formatFile(path string, format formatter, order orderer) (diff string, form
 		return diff, formatted, err
 	}
 
-	diff, err = difflib.GetUnifiedDiffString(
-		difflib.UnifiedDiff{
-			A: difflib.SplitLines(string(original)),
-			B: difflib.SplitLines(string(formatted)),
-		})
+	src := difflib.SplitLines(string(original))
+	dst := difflib.SplitLines(string(formatted))
+	diff, err = difflib.GetUnifiedDiffString(difflib.UnifiedDiff{A: src, B: dst})
+	if diff == "" || err != nil {
+		return diff, formatted, err
+	}
 
 	formatted = []byte(fmt.Sprintf("%s\n", formatted))
+	err = ioutil.WriteFile(outPath, formatted, os.FileMode(0644))
 	return diff, formatted, err
 }
 

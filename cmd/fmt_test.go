@@ -39,7 +39,13 @@ var configFiles = []string{
 
 func TestFormat(t *testing.T) {
 	for _, f := range configFiles {
-		_, actualConfig, err := formatFile(filepath.FromSlash(f), formatTopics, orderConfig)
+		tmp, err := ioutil.TempFile(os.TempDir(), "")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer os.Remove(tmp.Name())
+
+		_, actualConfig, err := formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, orderConfig)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -55,7 +61,13 @@ var maintainersFiles = []string{
 
 func TestMaintainers(t *testing.T) {
 	for _, f := range maintainersFiles {
-		_, actualMaintainers, err := formatFile(filepath.FromSlash(f), nil, nil)
+		tmp, err := ioutil.TempFile(os.TempDir(), "")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer os.Remove(tmp.Name())
+
+		_, actualMaintainers, err := formatFile(filepath.FromSlash(f), tmp.Name(), nil, nil)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -65,30 +77,47 @@ func TestMaintainers(t *testing.T) {
 
 func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
 	filename := "../fixtures/format/formatted/config.json"
+
+	tmp, err := ioutil.TempFile(os.TempDir(), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(tmp.Name())
+
+	// Read original from source.
 	src, err := ioutil.ReadFile(filepath.FromSlash(filename))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, dst, err := formatFile(filepath.FromSlash(filename), formatTopics, orderConfig)
+	// Run it through the formatter.
+	_, dst, err := formatFile(filepath.FromSlash(filename), tmp.Name(), formatTopics, orderConfig)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	assert.Equal(t, string(src), string(dst))
 }
+
 func TestSemanticsOfMissingTopics(t *testing.T) {
-	// Read directly from source.
 	f := "../fixtures/format/semantics/config.json"
+
+	tmp, err := ioutil.TempFile(os.TempDir(), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(tmp.Name())
+
+	// Read original from source
 	src, err := ioutil.ReadFile(filepath.FromSlash(f))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	// Run through formatter.
-	_, dst, err := formatFile(filepath.FromSlash(f), formatTopics, nil)
+	_, dst, err := formatFile(filepath.FromSlash(f), tmp.Name(), formatTopics, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, src, dst)
+
+	assert.Equal(t, string(src), string(dst))
 }
