@@ -31,7 +31,7 @@ It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
 	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := runFmt(args[0]); err != nil {
+		if err := runFmt(args[0], args[0]); err != nil {
 			ui.PrintError(err.Error())
 			os.Exit(1)
 		}
@@ -46,19 +46,22 @@ type formatter func(m map[string]interface{})
 // orderer applies an ordering to unmarshalled JSON files
 type orderer func(map[string]interface{}) OrderedMap
 
-func runFmt(path string) error {
+func runFmt(inDir, outDir string) error {
 	var fs = []struct {
-		path string
+		inPath  string
+		outPath string
 		formatter
 		orderer
 	}{
 		{
-			filepath.Join(path, "config.json"),
+			filepath.Join(inDir, "config.json"),
+			filepath.Join(outDir, "config.json"),
 			formatTopics,
 			orderConfig,
 		},
 		{
-			filepath.Join(path, "config", "maintainers.json"),
+			filepath.Join(inDir, "config", "maintainers.json"),
+			filepath.Join(outDir, "config", "maintainers.json"),
 			nil,
 			nil,
 		},
@@ -67,7 +70,7 @@ func runFmt(path string) error {
 	var changes string
 
 	for _, f := range fs {
-		diff, err := formatFile(f.path, f.path, f.formatter, f.orderer)
+		diff, err := formatFile(f.inPath, f.outPath, f.formatter, f.orderer)
 		if err != nil {
 			return err
 		}
@@ -75,9 +78,9 @@ func runFmt(path string) error {
 			continue
 		}
 		if fmtVerbose {
-			ui.Print(f.path, "\n\n", diff)
+			ui.Print(f.inPath, "\n\n", diff)
 		}
-		changes += fmt.Sprintf("%s\n", f.path)
+		changes += fmt.Sprintf("%s\n", f.inPath)
 	}
 
 	if changes != "" {
