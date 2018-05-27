@@ -149,7 +149,7 @@ func formatTopics(m map[string]interface{}) {
 			continue
 		}
 		// Ensure that topics are an empty list rather than null.
-		sorted := make([]string, 0)
+		sorted := make([]string, 0, len(topics))
 		for _, t := range topics {
 			topic, ok := t.(string)
 			if !ok {
