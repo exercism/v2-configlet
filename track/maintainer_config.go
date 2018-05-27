@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 // MaintainerConfig contains the list of current and previous maintainers.
@@ -44,4 +45,22 @@ func NewMaintainerConfig(path string) (MaintainerConfig, error) {
 		return mc, fmt.Errorf("invalid config %s -- %s", path, err.Error())
 	}
 	return mc, nil
+}
+
+// Read loads a config from file given the path to the file.
+func (mCfg *MaintainerConfig) Read(path string) error {
+	file, err := os.Open(filepath.FromSlash(path))
+	if err != nil {
+		return err
+	}
+
+	if err := json.NewDecoder(file).Decode(mCfg); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ToJSON marshals the Config to normalized JSON.
+func (mCfg MaintainerConfig) ToJSON() ([]byte, error) {
+	return json.MarshalIndent(&mCfg, "", "  ")
 }
