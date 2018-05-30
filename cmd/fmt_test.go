@@ -10,12 +10,12 @@ import (
 )
 
 func TestFmtCommand(t *testing.T) {
-	cfgTrack, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config.json"))
+	trackCfg, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	cfgMaintainer, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config/maintainers.json"))
+	maintainerCfg, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config/maintainers.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,13 +46,13 @@ func TestFmtCommand(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, track, cfgTrack)
+	assert.Equal(t, track, trackCfg)
 
 	maintainer, err := ioutil.ReadFile(filepath.Join(malformedDir, "config", "maintainers.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	assert.Equal(t, maintainer, cfgMaintainer)
+	assert.Equal(t, maintainer, maintainerCfg)
 }
 
 func TestSemanticsOfMissingTopics(t *testing.T) {
