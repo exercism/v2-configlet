@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"testing"
@@ -10,85 +9,61 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
-	expectedConfig      string
-	expectedMaintainers string
-)
-
-func TestMain(m *testing.M) {
-	cfg, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config.json"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	expectedConfig = string(cfg)
-
-	maintainers, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/maintainers.json"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	expectedMaintainers = string(maintainers)
-	result := m.Run()
-	os.Exit(result)
-}
-
-var configFiles = []string{
-	"../fixtures/format/formatted/config.json",
-	"../fixtures/format/malformed/config.json",
-	"../fixtures/format/minimised/config.json",
-}
-
-func TestFormat(t *testing.T) {
-	for _, f := range configFiles {
-		_, actualConfig, err := formatFile(filepath.FromSlash(f), formatTopics, orderConfig)
-		if err != nil {
-			log.Fatal(err)
-		}
-		assert.Equal(t, expectedConfig, string(actualConfig))
-	}
-}
-
-var maintainersFiles = []string{
-	"../fixtures/format/formatted/maintainers.json",
-	"../fixtures/format/malformed/maintainers.json",
-	"../fixtures/format/minimised/maintainers.json",
-}
-
-func TestMaintainers(t *testing.T) {
-	for _, f := range maintainersFiles {
-		_, actualMaintainers, err := formatFile(filepath.FromSlash(f), nil, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		assert.Equal(t, expectedMaintainers, string(actualMaintainers))
-	}
-}
-
-func TestNoChangeOnFormattingCompliantConfig(t *testing.T) {
-	filename := "../fixtures/format/formatted/config.json"
-	src, err := ioutil.ReadFile(filepath.FromSlash(filename))
+func TestFmtCommand(t *testing.T) {
+	trackCfg, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	_, dst, err := formatFile(filepath.FromSlash(filename), formatTopics, orderConfig)
+	maintainerCfg, err := ioutil.ReadFile(filepath.FromSlash("../fixtures/format/formatted/config/maintainers.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, string(src), string(dst))
+	// The fmt command does not rewrite a correctly formatted file.
+	formattedDir, err := ioutil.TempDir("", "formatted")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(formattedDir)
+	runFmt("../fixtures/format/formatted/", formattedDir, false)
+
+	_, err = os.Stat(filepath.Join(formattedDir, "config.json"))
+	assert.True(t, os.IsNotExist(err))
+
+	_, err = os.Stat(filepath.Join(formattedDir, "config", "maintainers.json"))
+	assert.True(t, os.IsNotExist(err))
+
+	// It rewrites an incorrectly formatted file.
+	malformedDir, err := ioutil.TempDir("", "malformed")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(malformedDir)
+	runFmt("../fixtures/format/malformed/", malformedDir, false)
+
+	track, err := ioutil.ReadFile(filepath.Join(malformedDir, "config.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, track, trackCfg)
+
+	maintainer, err := ioutil.ReadFile(filepath.Join(malformedDir, "config", "maintainers.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(t, maintainer, maintainerCfg)
 }
+
 func TestSemanticsOfMissingTopics(t *testing.T) {
-	// Read directly from source.
-	f := "../fixtures/format/semantics/config.json"
-	src, err := ioutil.ReadFile(filepath.FromSlash(f))
+	semanticsDir, err := ioutil.TempDir("", "semantics")
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer os.Remove(semanticsDir)
+	runFmt("../fixtures/format/semantics/", semanticsDir, false)
 
-	// Run through formatter.
-	_, dst, err := formatFile(filepath.FromSlash(f), formatTopics, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	assert.Equal(t, src, dst)
+	// No change; nothing should be written to out dir.
+	_, err = os.Stat(filepath.Join(semanticsDir, "config.json"))
+	assert.True(t, os.IsNotExist(err))
 }
