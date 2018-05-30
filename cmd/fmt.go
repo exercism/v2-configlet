@@ -93,19 +93,19 @@ func runFmt(inDir, outDir string, verbose bool) error {
 	return nil
 }
 
-func formatFile(inPath, outPath string, format formatter, order orderer) (diff string, err error) {
+func formatFile(inPath, outPath string, format formatter, order orderer) (string, error) {
 	if _, err := os.Stat(inPath); os.IsNotExist(err) {
-		return diff, fmt.Errorf("path not found: %s", inPath)
+		return "", fmt.Errorf("path not found: %s", inPath)
 	}
 
 	f, err := os.Open(inPath)
 	if err != nil {
-		return diff, err
+		return "", err
 	}
 
 	var m map[string]interface{}
 	if err = json.NewDecoder(f).Decode(&m); err != nil {
-		return diff, err
+		return "", err
 	}
 
 	if format != nil {
@@ -121,19 +121,19 @@ func formatFile(inPath, outPath string, format formatter, order orderer) (diff s
 
 	original, err := ioutil.ReadFile(inPath)
 	if err != nil {
-		return diff, err
+		return "", err
 	}
 
 	formatted, err := json.MarshalIndent(&om, "", "  ")
 	if err != nil {
-		return diff, err
+		return "", err
 	}
 
 	src := difflib.SplitLines(strings.TrimSuffix(string(original), "\n"))
 	dst := difflib.SplitLines(string(formatted))
-	diff, err = difflib.GetUnifiedDiffString(difflib.UnifiedDiff{A: src, B: dst})
+	diff, err := difflib.GetUnifiedDiffString(difflib.UnifiedDiff{A: src, B: dst})
 	if diff == "" || err != nil {
-		return diff, err
+		return "", err
 	}
 
 	formatted = []byte(fmt.Sprintf("%s\n", formatted))
