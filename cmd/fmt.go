@@ -62,8 +62,8 @@ func runFmt(inDir, outDir string, verbose bool) error {
 		{
 			filepath.Join(inDir, "config", "maintainers.json"),
 			filepath.Join(outDir, "config", "maintainers.json"),
-			nil,
-			nil,
+			formatMaintainers,
+			orderMaintainers,
 		},
 	}
 
@@ -224,6 +224,69 @@ func orderConfig(m map[string]interface{}) OrderedMap {
 		"foregone",
 		"exercises",
 	)
+}
+
+// orderMaintainers applies an ordering to maintainers.json
+//
+// This ordering was specified in
+// https://github.com/exercism/meta/issues/95#issuecomment-341991512
+func orderMaintainers(m map[string]interface{}) OrderedMap {
+	maintainers, ok := m["maintainers"].([]interface{})
+	orderedMaintainers := make([]OrderedMap, 0, len(maintainers))
+	if ok {
+		for _, m := range maintainers {
+			maintainer, ok := m.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			orderedMaintainers = append(orderedMaintainers, WithOrdering(maintainer,
+				"github_username",
+				"alumnus",
+				"show_on_website",
+				"name",
+				"link_text",
+				"link_url",
+				"avatar_url",
+				"bio",
+			))
+		}
+	}
+	m["maintainers"] = orderedMaintainers
+	return WithOrdering(m,
+		"docs_url",
+		"maintainers",
+	)
+}
+
+// Add missing fields
+func formatMaintainers(m map[string]interface{}) {
+	maintainers, ok := m["maintainers"].([]interface{})
+	if !ok {
+		return
+	}
+	for _, m := range maintainers {
+		maintainer, ok := m.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		maintainerKeys := []string{
+			"github_username",
+			"alumnus",
+			"show_on_website",
+			"name",
+			"link_text",
+			"link_url",
+			"avatar_url",
+			"bio",
+		}
+		for _, key := range maintainerKeys {
+			_, ok := maintainer[key].(interface{})
+			if !ok {
+				maintainer[key] = nil
+			}
+		}
+	}
 }
 
 func init() {
