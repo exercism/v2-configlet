@@ -38,10 +38,9 @@ It also normalizes and alphabetizes the exercise topics in the config.json file.
 }
 
 func runFmt(inDir, outDir string, verbose bool) error {
-	// This is for the tests.
-	// We want to be able to test the written output
-	// without clobbering the fixtures.
-	os.Mkdir(filepath.Join(outDir, "config"), os.ModePerm)
+	if _, err := os.Stat(filepath.Join(outDir, "config")); os.IsNotExist(err) {
+		os.Mkdir(filepath.Join(outDir, "config"), os.ModePerm)
+	}
 
 	var fs = []struct {
 		inPath  string
