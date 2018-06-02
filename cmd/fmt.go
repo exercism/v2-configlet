@@ -46,7 +46,7 @@ func runFmt(inDir, outDir string, verbose bool) error {
 	var fs = []struct {
 		inPath  string
 		outPath string
-		cfg     track.ConfigSerializer
+		cfg     ConfigSerializer
 	}{
 		{
 			filepath.Join(inDir, "config.json"),
@@ -80,7 +80,7 @@ func runFmt(inDir, outDir string, verbose bool) error {
 	return nil
 }
 
-func formatFile(cfg track.ConfigSerializer, inPath, outPath string) (string, error) {
+func formatFile(cfg ConfigSerializer, inPath, outPath string) (string, error) {
 	src, err := ioutil.ReadFile(inPath)
 	if err != nil {
 		return "", err
