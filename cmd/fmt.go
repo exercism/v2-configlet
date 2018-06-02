@@ -85,7 +85,7 @@ func formatFile(cfg track.ConfigSerializer, inPath, outPath string) (string, err
 	if err != nil {
 		return "", err
 	}
-	if err := cfg.Read(inPath); err != nil {
+	if err := cfg.NewConfigFromFile(inPath); err != nil {
 		return "", err
 	}
 	dst, err := cfg.ToJSON()
