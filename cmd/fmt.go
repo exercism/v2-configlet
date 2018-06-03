@@ -8,6 +8,7 @@ import (
 
 	"github.com/exercism/configlet/track"
 	"github.com/exercism/configlet/ui"
+	multierror "github.com/hashicorp/go-multierror"
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/spf13/cobra"
 )
@@ -61,10 +62,12 @@ func runFmt(inDir, outDir string, verbose bool) error {
 
 	var changes string
 
+	errs := &multierror.Error{}
 	for _, f := range fs {
 		diff, err := formatFile(f.cfg, f.inPath, f.outPath)
 		if err != nil {
-			return err
+			errs = multierror.Append(errs, err)
+			continue
 		}
 		if diff != "" {
 			if verbose {
@@ -75,6 +78,9 @@ func runFmt(inDir, outDir string, verbose bool) error {
 	}
 	if changes != "" {
 		ui.Print("changes made to:\n", changes)
+	}
+	if err := errs.ErrorOrNil(); err != nil {
+		return err
 	}
 	return nil
 }
