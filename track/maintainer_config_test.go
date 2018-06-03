@@ -35,7 +35,7 @@ func TestNoChangeWhenMarshalingAcceptableMaintainerConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 	mCfg := MaintainerConfig{}
-	if err := mCfg.NewConfigFromFile(filename); err != nil {
+	if err := mCfg.LoadFromFile(filename); err != nil {
 		t.Fatal(err)
 	}
 	dst, err := mCfg.ToJSON()

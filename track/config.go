@@ -75,8 +75,8 @@ func NewConfig(path string) (Config, error) {
 	return c, nil
 }
 
-// NewConfigFromFile loads a config from file given the path to the file.
-func (cfg *Config) NewConfigFromFile(path string) error {
+// LoadFromFile loads a config from file given the path to the file.
+func (cfg *Config) LoadFromFile(path string) error {
 	file, err := os.Open(filepath.FromSlash(path))
 	if err != nil {
 		return err

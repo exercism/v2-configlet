@@ -47,8 +47,8 @@ func NewMaintainerConfig(path string) (MaintainerConfig, error) {
 	return mc, nil
 }
 
-// NewConfigFromFile loads a config from file given the path to the file.
-func (mCfg *MaintainerConfig) NewConfigFromFile(path string) error {
+// LoadFromFile loads a config from file given the path to the file.
+func (mCfg *MaintainerConfig) LoadFromFile(path string) error {
 	file, err := os.Open(filepath.FromSlash(path))
 	if err != nil {
 		return err

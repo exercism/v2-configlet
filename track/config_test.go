@@ -52,7 +52,7 @@ func TestNoChangeWhenMarshalingAcceptableConfig(t *testing.T) {
 	}
 
 	cfg := Config{}
-	if err := cfg.NewConfigFromFile(filename); err != nil {
+	if err := cfg.LoadFromFile(filename); err != nil {
 		t.Fatal(err)
 	}
 	dst, err := cfg.ToJSON()

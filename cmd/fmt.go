@@ -90,7 +90,7 @@ func formatFile(cfg ConfigSerializer, inPath, outPath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if err := cfg.NewConfigFromFile(inPath); err != nil {
+	if err := cfg.LoadFromFile(inPath); err != nil {
 		return "", err
 	}
 	dst, err := cfg.ToJSON()
