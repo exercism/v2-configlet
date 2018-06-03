@@ -216,7 +216,7 @@ func treeTrack(configFilepath string) error {
 
 		if ep.IsCore {
 			coreExercises = append(coreExercises, ep.Slug)
-		} else if ep.UnlockedBy == "" {
+		} else if ep.UnlockedBy == nil {
 			bonusExercises = append(bonusExercises, ep.Slug)
 		}
 	}
@@ -226,16 +226,16 @@ func treeTrack(configFilepath string) error {
 	// true) if so issue a nextercism warning.
 	unlocksPresent := false
 	for _, e := range exercises {
-		if e.UnlockedBy == "" {
+		if e.UnlockedBy == nil {
 			continue
 		}
 
-		parent, unlockExists := slugToExercise[e.UnlockedBy]
+		parent, unlockExists := slugToExercise[*e.UnlockedBy]
 		// An unlocked_by slug that does not exist and is referenced can crash
 		// the program, see #102. If an non-existent slug exists issue warning.
 		if !unlockExists {
 			printConfigurationWarning(
-				fmt.Sprintf("Exercise %q has an invalid unlocked_by slug: %q", e.Slug, e.UnlockedBy))
+				fmt.Sprintf("Exercise %q has an invalid unlocked_by slug: %q", e.Slug, *e.UnlockedBy))
 			continue
 		}
 

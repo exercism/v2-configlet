@@ -1,6 +1,9 @@
 package track
 
 import (
+	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,4 +26,22 @@ func TestValidMaintainerConfig(t *testing.T) {
 func TestIgnoreMissingMaintainerConfig(t *testing.T) {
 	_, err := NewMaintainerConfig("../fixtures/no-such-file.json")
 	assert.NoError(t, err)
+}
+
+func TestNoChangeWhenMarshalingAcceptableMaintainerConfig(t *testing.T) {
+	filename := "../fixtures/format/formatted/config/maintainers.json"
+	src, err := ioutil.ReadFile(filepath.FromSlash(filename))
+	if err != nil {
+		t.Fatal(err)
+	}
+	mCfg := MaintainerConfig{}
+	if err := mCfg.LoadFromFile(filename); err != nil {
+		t.Fatal(err)
+	}
+	dst, err := mCfg.ToJSON()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, string(src), fmt.Sprintf("%s\n", dst))
 }
