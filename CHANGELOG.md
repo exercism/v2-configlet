@@ -8,6 +8,17 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.9.1 (3rd June 2018)
+
+* [#134](https://github.com/exercism/configlet/pull/134)
+    Refactor the fmt command to rely on default marshaling of structs [@kytrinyx]
+* [#133](https://github.com/exercism/configlet/pull/133)
+    Add ordering to maintainers config [@kytrinyx]
+* [#132](https://github.com/exercism/configlet/pull/132)
+    Rework the fmt command and tests [@kytrinyx]
+* [#131](https://github.com/exercism/configlet/pull/131)
+    Distinguish between undefined and empty for topics [@kytrinyx]
+
 ## v3.9.0 (8th May 2018)
 
 * [#127](https://github.com/exercism/configlet/pull/127)  Update configlet fmt to apply a definite ordering [@coriolinus]
