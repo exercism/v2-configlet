@@ -43,7 +43,7 @@ type Config struct {
 	Active         bool   `json:"active"`
 	Blurb          string `json:"blurb"`
 	Gitter         string `json:"gitter,omitempty"`
-	ChecklistIssue string `json:"checklist_issue,omitempty"`
+	ChecklistIssue int    `json:"checklist_issue,omitempty"`
 	PatternGroup
 	ForegoneSlugs   []string           `json:"foregone,omitempty"`
 	Exercises       []ExerciseMetadata `json:"exercises"`
