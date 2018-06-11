@@ -27,41 +27,45 @@ func ExampleFormat() {
 	runFmt("../fixtures/format/unformatted/", unformattedDir, true)
 
 	// Output:
-	// -> ../fixtures/format/unformatted/config.json
+	//-> ../fixtures/format/unformatted/config.json
 	//
-	// @@ -11 +11,2 @@
-	// -{
-	// +    {
-	// +      "slug": "one",
-	// @@ -13 +13,0 @@
-	// -      "slug": "one",
-	// @@ -18,4 +18,4 @@
-	// -            "Control-flow (conditionals)",
-	// -            "Logic",
-	// -            "Booleans",
-	// -            "Integers"
-	// +        "booleans",
-	// +        "control_flow_conditionals",
-	// +        "integers",
-	// +        "logic"
-	// @@ -24,0 +25 @@
-	// +      "slug": "two",
-	// @@ -26 +26,0 @@
-	// -      "slug": "two",
-	// @@ -31,5 +31,8 @@
-	// -        "Time",
-	// -        "Mathematics",
-	// -        "Text formatting",
-	// -        "Equality"
-	// -      ]}]}
-	// +        "equality",
-	// +        "mathematics",
-	// +        "text_formatting",
-	// +        "time"
-	// +      ]
-	// +    }
-	// +  ]
-	// +}
+	//@@ -11 +11,2 @@
+	//-{
+	//+    {
+	//+      "slug": "one",
+	//@@ -13 +13,0 @@
+	//-      "slug": "one",
+	//@@ -14,0 +15 @@
+	//+      "auto_approve": true,
+	//@@ -17 +17,0 @@
+	//-      "auto_approve": true,
+	//@@ -19,4 +19,4 @@
+	//-            "Control-flow (conditionals)",
+	//-            "Logic",
+	//-            "Booleans",
+	//-            "Integers"
+	//+        "booleans",
+	//+        "control_flow_conditionals",
+	//+        "integers",
+	//+        "logic"
+	//@@ -25,0 +26 @@
+	//+      "slug": "two",
+	//@@ -27 +27,0 @@
+	//-      "slug": "two",
+	//@@ -32,5 +32,8 @@
+	//-        "Time",
+	//-        "Mathematics",
+	//-        "Text formatting",
+	//-        "Equality"
+	//-      ]}]}
+	//+        "equality",
+	//+        "mathematics",
+	//+        "text_formatting",
+	//+        "time"
+	//+      ]
+	//+    }
+	//+  ]
+	//+}
 	//
 	//-> ../fixtures/format/unformatted/config/maintainers.json
 	//
@@ -73,5 +77,5 @@ func ExampleFormat() {
 	//
 	//-> changes made to:
 	//  ../fixtures/format/unformatted/config.json
-	// ../fixtures/format/unformatted/config/maintainers.json
+	//../fixtures/format/unformatted/config/maintainers.json
 }
