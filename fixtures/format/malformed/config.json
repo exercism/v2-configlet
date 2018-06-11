@@ -2,6 +2,7 @@
   "blurb": "", "active": true,
   "exercises": [ {
       "core": false,
+      "auto_approve": true,
       "difficulty": 1,
       "slug": "one",
       "topics": [ "integers", "Control-Flow    (conditionals)", "Booleans", "logic" ],
