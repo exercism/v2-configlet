@@ -8,6 +8,12 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v3.9.2 (11th June 2018)
+* [#139](https://github.com/exercism/configlet/pull/139)
+    Add missing boolean field ExerciseMetadata.AutoSupport [@kytrinyx]
+* [#138](https://github.com/exercism/configlet/pull/138)
+    Update type of ExerciseMetadata.ChecklistIssue to `int` [@kytrinyx]
+
 ## v3.9.1 (3rd June 2018)
 
 * [#134](https://github.com/exercism/configlet/pull/134)
