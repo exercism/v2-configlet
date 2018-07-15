@@ -5,6 +5,13 @@
   "ignore_pattern": "example(?!.*test)",
   "solution_pattern": "[Ee]xample",
   "test_pattern": "(?i)test",
+  "extensions": [
+    "jruby",
+    "macruby",
+    "rake",
+    "rb",
+    "rbx"
+  ],
   "foregone": [
     "three",
     "four"

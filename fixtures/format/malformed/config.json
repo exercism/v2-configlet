@@ -28,5 +28,6 @@
     "four"
   ],
 "ignore_pattern": "example(?!.*test)","solution_pattern": "[Ee]xample", "test_pattern": "(?i)test",
-        "language": "Numbers"
+        "language": "Numbers",
+        "extensions": [ "jruby", "macruby", "rake", "rb", "rbx" ]
 }

@@ -46,6 +46,7 @@ type Config struct {
 	Gitter         string `json:"gitter,omitempty"`
 	ChecklistIssue int    `json:"checklist_issue,omitempty"`
 	PatternGroup
+	Extensions      []string           `json:"extensions,omitempty"`
 	ForegoneSlugs   []string           `json:"foregone,omitempty"`
 	Exercises       []ExerciseMetadata `json:"exercises"`
 	DeprecatedSlugs []string           `json:"deprecated,omitempty"`
