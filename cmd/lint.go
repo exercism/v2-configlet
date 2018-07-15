@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/exercism/configlet/track"
@@ -129,6 +130,10 @@ func lintTrack(path string) bool {
 			check: unlockedByValidExercise,
 			msg:   "The exercise '%v' is being unlocked by a non-core exercise. Non-core exercises can only be unlocked by core exercises.",
 		},
+		{
+			check: incompleteBlurb,
+			msg:   "The config.json for '%v' does not contain a blurb that is at least 30 words long.",
+		},
 	}
 
 	var hasErrors bool
@@ -144,6 +149,16 @@ func lintTrack(path string) bool {
 		}
 	}
 	return hasErrors
+}
+
+func incompleteBlurb(t track.Track) []string {
+	var tracks []string
+	re := regexp.MustCompile(`(?im:\b[\w]{5,}\b)`)
+	words := re.FindAllString(t.Config.Blurb, -1)
+	if len(words) < 10 {
+		tracks = append(tracks, t.Config.TrackID)
+	}
+	return tracks
 }
 
 func missingImplementations(t track.Track) []string {
