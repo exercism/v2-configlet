@@ -153,7 +153,7 @@ func lintTrack(path string) bool {
 
 func incompleteBlurb(t track.Track) []string {
 	var tracks []string
-	re := regexp.MustCompile(`(?im:\b[\w]{5,}\b)`)
+	re := regexp.MustCompile(`(?im:\b[\w]{4,}\b)`)
 	words := re.FindAllString(t.Config.Blurb, -1)
 	if len(words) < 10 {
 		tracks = append(tracks, t.Config.TrackID)
