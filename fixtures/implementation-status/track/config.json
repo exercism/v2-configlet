@@ -1,0 +1,34 @@
+{
+  "language": "Implementation Status",
+  "active": true,
+  "blurb": "",
+  "foregone": [
+    "do-not-want"
+  ],
+  "exercises": [
+    {
+      "slug": "up-to-date",
+      "uuid": "",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 0,
+      "topics": null
+    },
+    {
+      "slug": "old-but-gold",
+      "uuid": "",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 0,
+      "topics": null
+    },
+    {
+      "slug": "old-but-present",
+      "uuid": "",
+      "core": false,
+      "unlocked_by": null,
+      "difficulty": 0,
+      "topics": null
+    }
+  ]
+}
