@@ -26,7 +26,10 @@ func TestFmtCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.Remove(formattedDir)
-	runFmt("../fixtures/format/formatted/", formattedDir, false)
+
+	fmtTest = false
+	fmtVerbose = false
+	runFmt("../fixtures/format/formatted/", formattedDir)
 
 	_, err = os.Stat(filepath.Join(formattedDir, "config.json"))
 	assert.True(t, os.IsNotExist(err))
@@ -40,7 +43,10 @@ func TestFmtCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.Remove(malformedDir)
-	runFmt("../fixtures/format/malformed/", malformedDir, false)
+
+	fmtTest = false
+	fmtVerbose = false
+	runFmt("../fixtures/format/malformed/", malformedDir)
 
 	track, err := ioutil.ReadFile(filepath.Join(malformedDir, "config.json"))
 	if err != nil {
@@ -53,6 +59,24 @@ func TestFmtCommand(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, maintainer, maintainerCfg)
+
+	// It does not rewrite an incorrectly formatted file when the diff opton is true
+	unformattedDir, err := ioutil.TempDir("", "unformatted")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(formattedDir)
+
+	fmtTest = true
+	fmtVerbose = false
+	runFmt("../fixtures/format/unformatted/", unformattedDir)
+
+	_, err = os.Stat(filepath.Join(unformattedDir, "config.json"))
+	assert.True(t, os.IsNotExist(err))
+
+	_, err = os.Stat(filepath.Join(unformattedDir, "config", "maintainers.json"))
+	assert.True(t, os.IsNotExist(err))
+
 }
 
 func TestSemanticsOfMissingTopics(t *testing.T) {
@@ -61,7 +85,10 @@ func TestSemanticsOfMissingTopics(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.Remove(semanticsDir)
-	runFmt("../fixtures/format/semantics/", semanticsDir, false)
+
+	fmtTest = false
+	fmtVerbose = false
+	runFmt("../fixtures/format/semantics/", semanticsDir)
 
 	// No change; nothing should be written to out dir.
 	_, err = os.Stat(filepath.Join(semanticsDir, "config.json"))
