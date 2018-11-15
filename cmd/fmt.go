@@ -74,7 +74,6 @@ func runFmt(inDir, outDir string) (bool, error) {
 	}
 
 	var changes string
-	var diffFound bool
 
 	errs := &multierror.Error{}
 	for _, f := range fs {
@@ -88,11 +87,11 @@ func runFmt(inDir, outDir string) (bool, error) {
 				ui.Print(fmt.Sprintf("%s\n\n%s", f.inPath, diff))
 			}
 			changes += fmt.Sprintf("%s\n", f.inPath)
-			diffFound = true
 
 		}
 	}
-	if changes != "" {
+	diffFound := changes != ""
+	if diffFound {
 		if fmtTest {
 			ui.Print("no changes were made to:\n", changes)
 		} else {
