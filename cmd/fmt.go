@@ -13,8 +13,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// verbose flag for fmt command.
-var fmtVerbose bool
+var (
+	// verbose flag for fmt command.
+	fmtVerbose bool
+
+	// test flag for fmt command displays the proposed changes
+	fmtTest bool
+)
 
 // fmtCmd defines the fmt command
 var fmtCmd = &cobra.Command{
@@ -29,18 +34,26 @@ It also normalizes and alphabetizes the exercise topics in the config.json file.
 `,
 	Example: fmt.Sprintf("  %s fmt %s --verbose", binaryName, pathExample),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := runFmt(args[0], args[0], fmtVerbose); err != nil {
+
+		if diffFound, err := runFmt(args[0], args[0]); err != nil {
 			ui.PrintError(err.Error())
 			os.Exit(1)
+		} else if diffFound && fmtTest {
+			os.Exit(2)
 		}
+
 	},
 
 	Args: cobra.ExactArgs(1),
 }
 
-func runFmt(inDir, outDir string, verbose bool) error {
+func runFmt(inDir, outDir string) (bool, error) {
 	if _, err := os.Stat(filepath.Join(outDir, "config")); os.IsNotExist(err) {
 		os.Mkdir(filepath.Join(outDir, "config"), os.ModePerm)
+	}
+
+	if fmtTest {
+		fmtVerbose = true
 	}
 
 	var fs = []struct {
@@ -70,19 +83,25 @@ func runFmt(inDir, outDir string, verbose bool) error {
 			continue
 		}
 		if diff != "" {
-			if verbose {
+			if fmtVerbose {
 				ui.Print(fmt.Sprintf("%s\n\n%s", f.inPath, diff))
 			}
 			changes += fmt.Sprintf("%s\n", f.inPath)
+
 		}
 	}
-	if changes != "" {
-		ui.Print("changes made to:\n", changes)
+	diffFound := changes != ""
+	if diffFound {
+		if fmtTest {
+			ui.Print("no changes were made to:\n", changes)
+		} else {
+			ui.Print("changes made to:\n", changes)
+		}
 	}
 	if err := errs.ErrorOrNil(); err != nil {
-		return err
+		return diffFound, err
 	}
-	return nil
+	return diffFound, nil
 }
 
 func formatFile(cfg ConfigSerializer, inPath, outPath string) (string, error) {
@@ -105,7 +124,7 @@ func formatFile(cfg ConfigSerializer, inPath, outPath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if diff != "" {
+	if diff != "" && !fmtTest {
 		if err := ioutil.WriteFile(outPath, dst, os.FileMode(0644)); err != nil {
 			return "", err
 		}
@@ -116,4 +135,5 @@ func formatFile(cfg ConfigSerializer, inPath, outPath string) (string, error) {
 func init() {
 	RootCmd.AddCommand(fmtCmd)
 	fmtCmd.Flags().BoolVarP(&fmtVerbose, "verbose", "v", false, "display the diff of the formatted changes.")
+	fmtCmd.Flags().BoolVarP(&fmtTest, "test", "t", false, "display the proposed changes, but do not make them.")
 }
