@@ -81,11 +81,11 @@ Exercises may have information specific to that exercise's implementation in the
 
 ## Tree
 
-The track configuration file can be hard to review, especially the new structure being used for [nextercism](https://github.com/exercism/prototype). The `tree` command can help with the process of setting up your configuration file for nextercism. It will:
+The track configuration file can be hard to review. The `tree` command can help with the process of setting up your configuration file. It will:
 
 1. Display the core track exercises and unlocked exercises as a tree.
 1. List out the bonus exercises separately.
-1. Issue warnings if expected elements from the nextercism-style configuration are missing.
+1. Issue warnings if expected elements from the configuration are missing.
 1. Optionally show the difficulty of the exercises via the `--with-difficulty` option.
 
 ## Upgrade
