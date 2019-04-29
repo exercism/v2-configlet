@@ -6,32 +6,18 @@ and effort making things better.
 
 ## Dependencies
 
-You'll need Go version 1.8 or higher. Follow the directions on
+You'll need Go version 1.11 or higher. Follow the directions on
 http://golang.org/doc/install
 
 ## Development
 
-If you've never contributed to a Go project before this is going to feel a
-little bit foreign.
+This project uses Go's [`modules` dependency management](https://github.com/golang/go/wiki/Modules) system.
 
-The TL;DR is: **don't clone your fork**, and it matters where on your filesystem
-the project gets cloned to.
+To contribute [fork this repo on the GitHub webpage][fork] and clone your fork.
+Make your desired changes and submit a pull request.
+Please provide tests for the changes where possible.
 
-If you don't care how and why and just want something that works, follow these
-steps:
-
-1. [fork this repo][fork]
-1. `go get github.com/exercism/configlet`
-1. `cd $GOPATH/src/github.com/exercism/configlet`
-1. `git remote set-url origin https://github.com/<your-github-username>/configlet`
-1. `go get -u github.com/golang/dep/cmd/dep`
-1. `dep ensure`
-
-Then make the change as usual, and submit a pull request. Please provide tests
-for the changes where possible.
-
-If you care about the details, check out the blog post [Contributing to Open
-Source Repositories in Go][contrib-blog] on the Splice blog.
+Please note that if your development directory is located inside the `GOPATH`, you need to set the `GO111MODULE=on` environment variable.
 
 ## Running the Tests
 
