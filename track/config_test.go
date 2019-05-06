@@ -140,3 +140,19 @@ func TestSemanticsOfMissingTopics(t *testing.T) {
 	assert.NotNil(t, dstCfg.Exercises[1].Topics)
 	assert.Equal(t, []string{}, dstCfg.Exercises[1].Topics)
 }
+
+func TestNormalizeDeprecated(t *testing.T) {
+	config := Config{
+		Exercises: []ExerciseMetadata{
+			{Slug: "apple", IsDeprecated: true},
+			{Slug: "banana"},
+			{Slug: "cherry", IsDeprecated: true},
+			{Slug: "durian"},
+		},
+		DeprecatedSlugs: []string{"apple", "durian"},
+	}
+	normalizeDeprecated(&config)
+	// deprecated exercises may appear in the IsDeprecated list or the
+	// DeprecatedSlugs list. They are not duplicated even if they appear in both.
+	assert.Equal(t, []string{"apple", "cherry", "durian"}, config.DeprecatedSlugs)
+}

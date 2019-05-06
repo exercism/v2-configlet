@@ -225,14 +225,13 @@ func TestDuplicateSlugs(t *testing.T) {
 
 	slugs := duplicateSlugs(track)
 
-	if len(slugs) != 2 {
-		t.Fatalf("Expected 2 duplicate slugs, found %d", len(slugs))
+	if len(slugs) != 1 {
+		t.Fatalf("Expected 1 duplicate slug, found %d", len(slugs))
 	}
 
 	sort.Strings(slugs)
 
-	assert.Equal(t, "apple", slugs[0])
-	assert.Equal(t, "banana", slugs[1])
+	assert.Equal(t, []string{"banana"}, slugs)
 }
 
 func TestDuplicateUUID(t *testing.T) {

@@ -73,6 +73,7 @@ func NewConfig(path string) (Config, error) {
 	if err != nil {
 		return c, fmt.Errorf("invalid config %s -- %s", path, err.Error())
 	}
+	normalizeDeprecated(&c)
 	return c, nil
 }
 
@@ -86,6 +87,7 @@ func (cfg *Config) LoadFromFile(path string) error {
 	if err := json.NewDecoder(file).Decode(&cfg); err != nil {
 		return err
 	}
+	normalizeDeprecated(cfg)
 	return nil
 }
 
@@ -105,4 +107,30 @@ func normalizeTopic(t string) string {
 	s = rgxFunkyChars.ReplaceAllString(s, "")
 	s = rgxSpaces.ReplaceAllString(s, "_")
 	return s
+}
+
+// Exercise deprecation is typically reported as a property of the exercise,
+// not as a separate list of deprecated exercises. We need to support both
+// methods, without duplication
+func normalizeDeprecated(c *Config) {
+	for _, exercise := range c.Exercises {
+		if exercise.IsDeprecated {
+			c.DeprecatedSlugs = append(c.DeprecatedSlugs, exercise.Slug)
+		}
+	}
+	// dedup in case a separate list was also configured
+	sort.Strings(c.DeprecatedSlugs)
+	dupes := make([]bool, len(c.DeprecatedSlugs))
+	for idx := 1; idx < len(c.DeprecatedSlugs); idx++ {
+		if c.DeprecatedSlugs[idx] == c.DeprecatedSlugs[idx-1] {
+			dupes[idx] = true
+		}
+	}
+	unduped := make([]string, 0, len(c.DeprecatedSlugs))
+	for idx, dupe := range dupes {
+		if !dupe {
+			unduped = append(unduped, c.DeprecatedSlugs[idx])
+		}
+	}
+	c.DeprecatedSlugs = unduped
 }
