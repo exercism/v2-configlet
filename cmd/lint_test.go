@@ -210,6 +210,24 @@ func TestForegoneViolations(t *testing.T) {
 	assert.Equal(t, "cherry", slugs[1])
 }
 
+func TestForegoneViolationWithDoNotImplementOnly(t *testing.T) {
+	track := track.Track{
+		Config: track.Config{
+			ForegoneSlugs: []string{"banana"},
+		},
+		Exercises: []track.Exercise{
+			{Slug: "apple"},
+			{Slug: "banana", DoNotImplementPath: "DO_NOT_IMPLEMENT.md"},
+		},
+	}
+
+	slugs := foregoneViolations(track)
+
+	if len(slugs) != 0 {
+		t.Fatalf("Expected no foregone violations in 0 exercises, but found violations: %s", string(slugs))
+	}
+}
+
 func TestDuplicateSlugs(t *testing.T) {
 	track := track.Track{
 		Config: track.Config{

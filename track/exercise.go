@@ -10,10 +10,11 @@ import (
 
 // Exercise is an implementation of an Exercism exercise.
 type Exercise struct {
-	Slug          string
-	ReadmePath    string
-	SolutionPath  string
-	TestSuitePath string
+	Slug               string
+	ReadmePath         string
+	SolutionPath       string
+	TestSuitePath      string
+	DoNotImplementPath string
 }
 
 // NewExercise loads an exercise.
@@ -33,6 +34,11 @@ func NewExercise(root string, pg PatternGroup) (Exercise, error) {
 	}
 
 	err = setPath(root, "README\\.md", &ex.ReadmePath)
+	if err != nil {
+		return ex, err
+	}
+
+	err = setPath(root, "DO_NOT_IMPLEMENT\\.md", &ex.DoNotImplementPath)
 	return ex, err
 }
 
@@ -77,4 +83,12 @@ func (ex Exercise) HasTestSuite() bool {
 // IsValid checks that an exercise has a sample solution.
 func (ex Exercise) IsValid() bool {
 	return ex.SolutionPath != ""
+}
+
+// IsDoNotImplementOnly checks that an exercise only has a DO_NOT_IMPLEMENT.md file.
+func (ex Exercise) IsDoNotImplementOnly() bool {
+	return ex.ReadmePath == ""
+		&& ex.TestSuitePath == ""
+		&& ex.SolutionPath == ""
+		&& ex.DoNotImplementPath != ""
 }

@@ -13,5 +13,5 @@
       "difficulty": 1
     }
   ],
-  "foregone": []
+  "foregone": ["do-not-implement"]
 }

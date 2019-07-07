@@ -270,7 +270,7 @@ func foregoneViolations(t track.Track) []string {
 
 	slugs := []string{}
 	for _, exercise := range t.Exercises {
-		if violations[exercise.Slug] {
+		if violations[exercise.Slug] && !exercise.IsDoNotImplementOnly() {
 			slugs = append(slugs, exercise.Slug)
 		}
 	}
