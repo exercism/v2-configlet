@@ -87,8 +87,8 @@ func (ex Exercise) IsValid() bool {
 
 // IsDoNotImplementOnly checks that an exercise only has a DO_NOT_IMPLEMENT.md file.
 func (ex Exercise) IsDoNotImplementOnly() bool {
-	return ex.ReadmePath == ""
-		&& ex.TestSuitePath == ""
-		&& ex.SolutionPath == ""
-		&& ex.DoNotImplementPath != ""
+	return ex.ReadmePath == "" &&
+		ex.TestSuitePath == "" &&
+		ex.SolutionPath == "" &&
+		ex.DoNotImplementPath != ""
 }
