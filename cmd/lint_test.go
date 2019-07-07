@@ -224,7 +224,7 @@ func TestForegoneViolationWithDoNotImplementOnly(t *testing.T) {
 	slugs := foregoneViolations(track)
 
 	if len(slugs) != 0 {
-		t.Fatalf("Expected no foregone violations in 0 exercises, but found violations: %s", string(slugs))
+		t.Fatalf("Expected no foregone violations in 0 exercises, but found violations: %v", string(slugs))
 	}
 }
 
