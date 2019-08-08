@@ -10,11 +10,12 @@ get_version () {
 }
 
 case "$(uname)" in
-    (Darwin*)  OS='mac'     ;;
-    (Linux*)   OS='linux'   ;;
-    (Windows*) OS='windows' ;;
-    (MINGW*)   OS='windows' ;;
-    (*)        OS='linux'   ;;
+    (Darwin*)   OS='mac'     ;;
+    (Linux*)    OS='linux'   ;;
+    (Windows*)  OS='windows' ;;
+    (MINGW*)    OS='windows' ;;
+    (MSYS_NT-*) OS='windows' ;;
+    (*)         OS='linux'   ;;
 esac
 
 case "$OS" in
