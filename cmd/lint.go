@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/exercism/configlet/track"
 	"github.com/exercism/configlet/ui"
 	"github.com/spf13/cobra"
@@ -104,6 +105,10 @@ func lintTrack(path string) bool {
 		{
 			check: missingUUID,
 			msg:   "The exercise '%v' was found in config.json, but does not have a UUID.",
+		},
+		{
+			check: invalidUUID,
+			msg:   "The exercise '%v' has an invalid UUID in config.json.",
 		},
 		{
 			check: foregoneViolations,
@@ -255,6 +260,17 @@ func missingUUID(t track.Track) []string {
 	slugs := []string{}
 	for _, exercise := range t.Config.Exercises {
 		if exercise.UUID == "" {
+			slugs = append(slugs, exercise.Slug)
+		}
+	}
+
+	return slugs
+}
+
+func invalidUUID(t track.Track) []string {
+	slugs := []string{}
+	for _, exercise := range t.Config.Exercises {
+		if _, err := uuid.Parse(exercise.UUID); err != nil {
 			slugs = append(slugs, exercise.Slug)
 		}
 	}

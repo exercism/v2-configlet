@@ -19,6 +19,8 @@ func ExampleLint() {
 	// -> The implementation for 'three' is missing an example solution.
 	// -> The implementation for 'two' is missing a test suite.
 	// -> The exercise 'one' was found in config.json, but does not have a UUID.
+	// -> The exercise 'one' has an invalid UUID in config.json.
+	// -> The exercise 'three' has an invalid UUID in config.json.
 	// -> An implementation for 'zero' was found, but config.json specifies that it should be foregone (not implemented).
 }
 
