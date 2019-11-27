@@ -262,6 +262,17 @@ func TestDuplicateUUID(t *testing.T) {
 				},
 			},
 		},
+		{
+			desc:     "should complain that multiple exercises have a conflicting UUID (while trimming spaces).",
+			expected: 1,
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{Slug: "cherry", UUID: " ccc"},
+					{Slug: "diakon", UUID: "abc"},
+					{Slug: "eggplant", UUID: "ccc "},
+				},
+			},
+		},
 	}
 
 	for _, tt := range uuidTests {
