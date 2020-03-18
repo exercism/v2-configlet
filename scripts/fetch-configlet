@@ -35,7 +35,7 @@ fi
 FILENAME="configlet-${OS}-${ARCH}.${EXT}"
 
 get_url () {
-    curl --header $HEADER -s $RELEASES |
+    curl --header "$HEADER" -s "$LATEST" |
         awk -v filename=$FILENAME '$1 ~ /browser_download_url/ && $2 ~ filename { print $2 }' |
         tr -d '"'
 }
