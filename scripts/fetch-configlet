@@ -48,5 +48,5 @@ case "$EXT" in
         unzip bin/latest-configlet.zip -d bin/
         rm bin/latest-configlet.zip
         ;;
-    (*) curl --header $HEADER -s --location "$URL" | tar xz -C bin/ ;;
+    (*) curl --header "$HEADER" -s --location "$URL" | tar xz -C bin/ ;;
 esac
