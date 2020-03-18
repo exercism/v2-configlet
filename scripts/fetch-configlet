@@ -44,7 +44,7 @@ URL=$(get_url)
 
 case "$EXT" in
     (*zip)
-        curl --header $HEADER -s --location "$URL" -o bin/latest-configlet.zip
+        curl --header "$HEADER" -s --location "$URL" -o bin/latest-configlet.zip
         unzip bin/latest-configlet.zip -d bin/
         rm bin/latest-configlet.zip
         ;;
