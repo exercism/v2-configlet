@@ -73,6 +73,26 @@ func lintTrack(path string) bool {
 		return true
 	}
 
+	if t.Config.Version < 3 {
+		ui.PrintError("config.json has a missing or invalid version: ",
+			t.Config.Version)
+		return true
+	}
+
+	switch t.Config.OnlineEditor.IndentStyle {
+	case "space", "tabs":
+		break
+	default:
+		ui.PrintError("config.json - missing or invalid indent_style: ",
+			t.Config.OnlineEditor.IndentStyle)
+		return true
+	}
+	ind := t.Config.OnlineEditor.IndentSize
+	if ind < 1 || ind > 16 {
+		ui.PrintError("config.json - missing or invalid indent_size: ", ind)
+		return true
+	}
+
 	if trackID != "" {
 		t.ID = trackID
 	}
@@ -139,7 +159,6 @@ func lintTrack(path string) bool {
 			hasErrors = true
 			for _, item := range failedItems {
 				ui.Print(fmt.Sprintf(configError.msg, item))
-
 			}
 		}
 	}

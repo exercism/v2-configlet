@@ -1,4 +1,5 @@
 out/
+dist/
 build/*tgz
 
 # dep

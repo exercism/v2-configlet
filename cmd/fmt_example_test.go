@@ -30,19 +30,19 @@ func ExampleFormatVerboseFlag() {
 	runFmt("../fixtures/format/unformatted/", unformattedDir)
 
 	// Output:
-	//-> ../fixtures/format/unformatted/config.json
+	//	-> ../fixtures/format/unformatted/config.json
 	//
-	//@@ -11 +11,2 @@
+	//@@ -16 +16,2 @@
 	//-{
 	//+    {
 	//+      "slug": "one",
-	//@@ -13 +13,0 @@
+	//@@ -18 +18,0 @@
 	//-      "slug": "one",
-	//@@ -14,0 +15 @@
+	//@@ -19,0 +20 @@
 	//+      "auto_approve": true,
-	//@@ -17 +17,0 @@
+	//@@ -22 +22,0 @@
 	//-      "auto_approve": true,
-	//@@ -19,4 +19,4 @@
+	//@@ -24,4 +24,4 @@
 	//-            "Control-flow (conditionals)",
 	//-            "Logic",
 	//-            "Booleans",
@@ -51,11 +51,11 @@ func ExampleFormatVerboseFlag() {
 	//+        "control_flow_conditionals",
 	//+        "integers",
 	//+        "logic"
-	//@@ -25,0 +26 @@
+	//@@ -30,0 +31 @@
 	//+      "slug": "two",
-	//@@ -27 +27,0 @@
+	//@@ -32 +32,0 @@
 	//-      "slug": "two",
-	//@@ -32,5 +32,8 @@
+	//@@ -37,5 +37,8 @@
 	//-        "Time",
 	//-        "Mathematics",
 	//-        "Text formatting",
@@ -79,7 +79,7 @@ func ExampleFormatVerboseFlag() {
 	//+  "maintainers": []
 	//
 	//-> changes made to:
-	//  ../fixtures/format/unformatted/config.json
+	/* ../fixtures/format/unformatted/config.json*/
 	//../fixtures/format/unformatted/config/maintainers.json
 }
 
@@ -107,17 +107,17 @@ func ExampleFormatTestFlag() {
 	// Output:
 	//-> ../fixtures/format/unformatted/config.json
 	//
-	//@@ -11 +11,2 @@
+	//@@ -16 +16,2 @@
 	//-{
 	//+    {
 	//+      "slug": "one",
-	//@@ -13 +13,0 @@
+	//@@ -18 +18,0 @@
 	//-      "slug": "one",
-	//@@ -14,0 +15 @@
+	//@@ -19,0 +20 @@
 	//+      "auto_approve": true,
-	//@@ -17 +17,0 @@
+	//@@ -22 +22,0 @@
 	//-      "auto_approve": true,
-	//@@ -19,4 +19,4 @@
+	//@@ -24,4 +24,4 @@
 	//-            "Control-flow (conditionals)",
 	//-            "Logic",
 	//-            "Booleans",
@@ -126,11 +126,11 @@ func ExampleFormatTestFlag() {
 	//+        "control_flow_conditionals",
 	//+        "integers",
 	//+        "logic"
-	//@@ -25,0 +26 @@
+	//@@ -30,0 +31 @@
 	//+      "slug": "two",
-	//@@ -27 +27,0 @@
+	//@@ -32 +32,0 @@
 	//-      "slug": "two",
-	//@@ -32,5 +32,8 @@
+	//@@ -37,5 +37,8 @@
 	//-        "Time",
 	//-        "Mathematics",
 	//-        "Text formatting",
@@ -154,6 +154,6 @@ func ExampleFormatTestFlag() {
 	//+  "maintainers": []
 	//
 	//-> no changes were made to:
-	//  ../fixtures/format/unformatted/config.json
+	/* ../fixtures/format/unformatted/config.json*/
 	//../fixtures/format/unformatted/config/maintainers.json
 }

@@ -1,5 +1,10 @@
 {
   "slug": "valid-track",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4
+  },
   "language": "Valid Track",
   "repository": "https://github.com/exercism/valid-track",
   "active": true,

@@ -1,4 +1,9 @@
 {
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4
+  },
   "language": "Numbers",
   "active": true,
   "blurb": "",

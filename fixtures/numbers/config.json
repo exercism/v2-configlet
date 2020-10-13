@@ -1,5 +1,10 @@
 {
   "slug": "numbers",
+  "version": 3,
+  "online_editor": {
+    "indent_style": "space",
+    "indent_size": 4
+  },
   "language": "Numbers",
   "repository": "https://github.com/exercism/numbers",
   "active": true,
