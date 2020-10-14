@@ -1,6 +1,21 @@
 # Configlet
 
-A tool for managing Exercism language track repositories.
+`configlet` is an internal command-line tool for managing Exercism language track repositories. The `confliglet` binary is [fetched from the track repos](https://github.com/exercism/request-new-language-track/blob/master/bin/fetch-configlet) and the linter is [executed during the build / CI process](https://github.com/exercism/request-new-language-track/blob/master/.travis.yml). In addition to linting, configlet provides a number of commands to assist in track creation and maintenance:
+
+ * [Lint](#lint)
+ * [Format](#format)
+ * [Generate](#generate)
+ * [Tree](#tree)
+ * [Upgrade](#upgrade)
+ * [UUID](#uuid)
+
+## Install / Build
+
+Configlet is a standalone Go application which compiles to a binary. Download
+[the latest build](https://github.com/exercism/configlet/releases), extract, and execute.
+
+To build the application from source, run: `go build ./...`
+To execute the tests, run: `go test ./...`
 
 ## Lint
 
@@ -114,4 +129,3 @@ and are at the root of an exercism language track, then you can run the followin
 ```bash
 $ configlet [command] .
 ```
-
