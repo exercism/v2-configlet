@@ -8,6 +8,24 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 * [**Your contribution here**](/CONTRIBUTING.md)
 
+## v4.0.0 (30th October 2020)
+
+* [#182](https://github.com/exercism/configlet/pull/182)
+    V3 Linting Updates [@ekingery]
+* [#181](https://github.com/exercism/configlet/pull/181)
+    Switch to GoReleaser [@ekingery]
+* [#171](https://github.com/exercism/configlet/pull/171)
+    Trim UUID in duplicate check [@ekingery]
+* [#177](https://github.com/exercism/configlet/pull/177)
+* [#167](https://github.com/exercism/configlet/pull/167)
+* [#166](https://github.com/exercism/configlet/pull/166)
+* [#164](https://github.com/exercism/configlet/pull/164)
+* [#156](https://github.com/exercism/configlet/pull/156)
+* [#151](https://github.com/exercism/configlet/pull/151)
+    Various fetch-configlet bash script updates / fixes [@SaschaMann], [@SleeplessByte], [@ErikSchierboom], [@guygastineau], [@NobbZ]
+* [#150](https://github.com/exercism/configlet/pull/150)
+    Added --dry-run flag to the fmt command [@danielj-jordan]  
+
 ## v3.9.2 (11th June 2018)
 * [#139](https://github.com/exercism/configlet/pull/139)
     Add missing boolean field ExerciseMetadata.AutoSupport [@kytrinyx]
@@ -150,3 +168,10 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 [@stkent]: https://github.com/stkent
 [@tleen]: https://github.com/tleen
 [@tuxagon]: https://github.com/tuxagon
+[@danielj-jordan]: https://github.com/danielj-jordan
+[@ekingery]: https://github.com/ekingery
+[@ErikSchierboom]: https://github.com/ErikSchierboom
+[@SleeplessByte]: https://github.com/SleeplessByte
+[@SaschaMann]: https://github.com/SaschaMann
+[@guygastineau]: https://github.com/guygastineau
+[@NobbZ]: https://github.com/NobbZ
