@@ -306,6 +306,7 @@ func duplicateUUID(t track.Track) []string {
 		if exercise.UUID == "" {
 			continue
 		}
+		exercise.UUID = strings.TrimSpace(exercise.UUID)
 
 		if seen[exercise.UUID] {
 			uuids = append(uuids, exercise.UUID)
