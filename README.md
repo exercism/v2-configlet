@@ -1,6 +1,36 @@
 # Configlet
 
-A tool for managing Exercism language track repositories.
+`configlet` is an internal command-line tool for managing Exercism language track repositories. The `confliglet` binary is [fetched from the track repos](https://github.com/exercism/request-new-language-track/blob/master/bin/fetch-configlet) and the linter is [executed during the build / CI process](https://github.com/exercism/request-new-language-track/blob/master/.travis.yml). In addition to linting, configlet provides a number of commands to assist in track creation and maintenance:
+
+ * [Lint](#lint)
+ * [Format](#format)
+ * [Generate](#generate)
+ * [Tree](#tree)
+ * [Upgrade](#upgrade)
+ * [UUID](#uuid)
+
+
+## Install / Build
+
+Configlet is a standalone Go application which compiles to a binary. Download
+[the latest build](https://github.com/exercism/configlet/releases/latest), extract, and execute.
+
+To build the application from source, run: `go build ./...`
+
+To execute the tests, run: `go test ./...`
+
+
+## Usage
+
+```bash
+configlet [command] <path/to/track>
+```
+
+If you are at the root of an exercism language track, then you can run the following:
+
+```bash
+configlet [command] .
+```
 
 ## Lint
 
@@ -15,6 +45,7 @@ Exercism makes certain assumptions about language tracks. The configlet `lint` c
     * Implementations for slugs that are not referenced in `config.json`.
     * Implementations for slugs that have been declared as foregone in `config.json`.
 
+
 ## Format
 
 Inspired by Go's [`gofmt`](https://blog.golang.org/go-fmt-your-code) tool, configlet's `fmt` command will consistently format a track's configuration files.
@@ -25,6 +56,7 @@ Inspired by Go's [`gofmt`](https://blog.golang.org/go-fmt-your-code) tool, confi
 1. In the `config.json` file:
     * Exercises will have their list of topics sorted alphabetically.
     * Topics names will be normalised to be lowercase and contain underscores in place of spaces.
+
 
 ## Generate
 
@@ -79,6 +111,7 @@ Language tracks will most likely have some unique information common to every ex
 
 Exercises may have information specific to that exercise's implementation in the track language (for example, the introduction of a specific language concept). In this case placing a [`.meta/hints.md`](https://github.com/exercism/go/blob/nextercism/exercises/leap/.meta/hints.md) in that track exercise's directory will make those contents available in this template variable.
 
+
 ## Tree
 
 The track configuration file can be hard to review. The `tree` command can help with the process of setting up your configuration file. It will:
@@ -87,6 +120,7 @@ The track configuration file can be hard to review. The `tree` command can help 
 1. List out the bonus exercises separately.
 1. Issue warnings if expected elements from the configuration are missing.
 1. Optionally show the difficulty of the exercises via the `--with-difficulty` option.
+
 
 ## Upgrade
 
@@ -101,17 +135,3 @@ Exercises in each track config.json file must have a [UUID](https://en.wikipedia
 $ configlet uuid
 78aa565f-632d-47c0-a190-5144c91d0e33
 ```
-
-### Usage
-
-```bash
-$ configlet [command] <path/to/track>
-```
-
-If you have [installed the configlet binary](https://github.com/exercism/configlet/releases/latest)
-and are at the root of an exercism language track, then you can run the following:
-
-```bash
-$ configlet [command] .
-```
-
