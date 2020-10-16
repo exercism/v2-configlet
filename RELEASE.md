@@ -7,7 +7,7 @@ release process.
 
 1. [Install GoReleaser](https://goreleaser.com/install/)
 1. [Setup GitHub token](https://goreleaser.com/environment/#github-token)
-1. Have a gpg key installed on your machine - it is [used for signing the artifacts](https://goreleaser.com/sign/)
+1. Have a gpg key installed on your machine - it is [used for signing the artifacts](https://goreleaser.com/customization/sign/)
 
 ## Confirm / Update the Changelog
 
@@ -41,3 +41,5 @@ goreleaser --rm-dist
 ## Cut Release on GitHub
 
 The generated archive files should be uploaded to the [draft release page created by GoReleaser](https://github.com/exercism/cli/releases). Describe the release (generally you can copy from the CHANGELOG.md file), select a specific commit to target, then test and publish the draft.
+
+The `fetch-configlet` file is hardcoded into most track repos, so we need to rename the `*.tar.gz` files to `*.tgz` and upload these manually to the release for backwards compatibility. This command will do the appropriate renaming: `rename 's/\.tar.gz\z/.tgz/' dist/*`
