@@ -27,8 +27,8 @@ Once you have verified that the binaries are built properly:
 
 ```bash
 # Create a new tag on the master branch and push it
-git tag -a 3.9.10 -m "Trying out GoReleaser"
-git push origin 3.9.10
+git tag -a v3.9.10 -m "Trying out GoReleaser"
+git push origin v3.9.10
 
 # Build and release
 goreleaser --rm-dist
