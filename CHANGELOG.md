@@ -10,7 +10,7 @@ Exercism configlet follows [semantic versioning](http://semver.org/).
 
 ## v4.0.0 (30th October 2020)
 
-* [#181](https://github.com/exercism/configlet/pull/181)
+* [#182](https://github.com/exercism/configlet/pull/182)
     Switch to GoReleaser [@ekingery]
 * [#171](https://github.com/exercism/configlet/pull/171)
     Trim UUID in duplicate check [@ekingery]
