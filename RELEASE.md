@@ -18,26 +18,22 @@ https://github.com/exercism/configlet/compare/$PREVIOUS_RELEASE...master
 
 Some features to consider - GoReleaser supports the [auto generation of a changelog](https://goreleaser.com/customization/#customize-the-changelog) and has a [release notes feature](https://goreleaser.com/customization/#custom-release-notes).
 
-## Bump the version
-
-In the future we will probably want to replace the hardcoded `Version` constant with [main.version](https://goreleaser.com/environment/#using-the-main-version). Here is a [stack overflow post on injecting to cmd/version.go](https://stackoverflow.com/a/47510909).
-
-Commit this change on a branch along with the CHANGELOG updates in a single commit, and create a PR for merge to master.
 
 ## Cut a release
 
-```bash
-# Test run
-goreleaser --skip-publish --snapshot --rm-dist
+Create a PR for the updates to the CHANGELOG. Once that is merged to master, you should test the builds by running: `goreleaser --skip-publish --snapshot --rm-dist`
 
+Once you have verified that the binaries are built properly:
+
+```bash
 # Create a new tag on the master branch and push it
-git tag -a v4.0.0 -m "Trying out GoReleaser"
-git push origin v4.0.0
+git tag -a 3.9.10 -m "Trying out GoReleaser"
+git push origin 3.9.10
 
 # Build and release
 goreleaser --rm-dist
 ```
 
-## Cut Release on GitHub
+### GitHub Follow-Up / Backwards Compatibility
 
-The generated archive files should be uploaded to the [draft release page created by GoReleaser](https://github.com/exercism/cli/releases). Describe the release (generally you can copy from the CHANGELOG.md file), select a specific commit to target, then test and publish the draft.
+The generated archive files should be uploaded to the [draft release page created by GoReleaser](https://github.com/exercism/configlet/releases). Describe the release (generally you can copy from the CHANGELOG.md file), select a specific commit to target, then test and publish the draft.

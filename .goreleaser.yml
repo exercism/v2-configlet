@@ -11,6 +11,11 @@ builds:
     - windows
   goarch:
     - amd64
+  # Custom ldflags templates.
+  ldflags:
+    # Default is `-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser`.
+    - -s -w -X github.com/exercism/configlet/cmd.version={{.Version}}
+
 
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
