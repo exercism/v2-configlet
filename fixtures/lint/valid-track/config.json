@@ -10,13 +10,44 @@
   "active": true,
   "solution_pattern": "[Ee]xample",
   "test_pattern": "(?i)test",
-  "exercises": [
+  "concepts": [
     {
-      "uuid": "aaa",
-      "slug": "aluminum",
-      "topics": [],
-      "difficulty": 1
+      "uuid": "e95023cf-6928-4ccc-ae09-d3cb93d96d0e",
+      "slug": "basics",
+      "name": "Basics",
+      "blurb": "Basics, like the training"
+    },
+    {
+      "uuid": "64a2670d-f61a-419f-8623-7116bad8e8a7",
+      "slug": "strings",
+      "name": "Strings",
+      "blurb": "Strings are an important concept"
     }
   ],
-  "foregone": []
+  "exercises": [
+    "concept": [
+      {
+        "slug": "basics",
+        "uuid": "7d358894-4fbd-4c91-b49f-d68f1c5aa6bc",
+        "concepts": ["basics"],
+        "prerequisites": []
+      },
+      {
+        "slug": "strings",
+        "uuid": "401fe55e-407e-4408-88ca-0a4b342ab95b",
+        "concepts": ["strings"],
+        "prerequisites": ["basics"]
+      }
+    ],
+    "practice": [
+      {
+        "uuid": "2CE9984C-64C1-41F3-AEBA-037F8C06616F",
+        "slug": "aluminum",
+        "topics": [],
+        "teaches": [],
+        "prerequisites": ["basics", "strings"],
+        "difficulty": 1
+      }
+    ]
+  ]
 }
