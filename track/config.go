@@ -6,34 +6,46 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"regexp"
-	"sort"
-	"strings"
 )
 
-var (
-	rgxFunkyChars = regexp.MustCompile(`[^a-z\s-_]+`)
-	rgxSpaces     = regexp.MustCompile(`[\s-]+`)
-)
-
-// PatternGroup holds matching patterns defined in an Exercism track configuration.
+// PatternGroup holds matching patterns defined in an Exercism track config
 type PatternGroup struct {
 	IgnorePattern   string `json:"ignore_pattern,omitempty"`
 	SolutionPattern string `json:"solution_pattern,omitempty"`
 	TestPattern     string `json:"test_pattern,omitempty"`
 }
 
-// ExerciseMetadata contains metadata about an implemented exercise.
-// It's listed in the config in the order that the exercise will be
-// delivered by the API.
-type ExerciseMetadata struct {
+// ConceptKey defines the fields associated with the full array of concepts
+type ConceptKey struct {
+	Slug  string `json:"slug"`
+	UUID  string `json:"uuid"`
+	Name  string `json:"name"`
+	Blurb string `json:"blurb"`
+}
+
+// PracticeMetadata contains metadata about an implemented practice exercise.
+// The order below determines the order delivered by the API.
+type PracticeMetadata struct {
 	Slug         string   `json:"slug"`
 	UUID         string   `json:"uuid"`
 	IsCore       bool     `json:"core"`
 	AutoApprove  bool     `json:"auto_approve,omitempty"`
 	UnlockedBy   *string  `json:"unlocked_by"`
 	Difficulty   int      `json:"difficulty"`
-	Topics       []string `json:"topics"`
+	Topics       []string `json:"topics,omitempty"`
+	IsDeprecated bool     `json:"deprecated,omitempty"`
+}
+
+// ConceptMetadata contains metadata about an implemented concept exercise.
+// The order below determines the order delivered by the API.
+type ConceptMetadata struct {
+	Slug         string   `json:"slug"`
+	UUID         string   `json:"uuid"`
+	IsCore       bool     `json:"core"`
+	AutoApprove  bool     `json:"auto_approve,omitempty"`
+	UnlockedBy   *string  `json:"unlocked_by"`
+	Difficulty   int      `json:"difficulty"`
+	Topics       []string `json:"topics,omitempty"`
 	IsDeprecated bool     `json:"deprecated,omitempty"`
 }
 
@@ -51,9 +63,13 @@ type Config struct {
 	Gitter         string `json:"gitter,omitempty"`
 	ChecklistIssue int    `json:"checklist_issue,omitempty"`
 	PatternGroup
-	ForegoneSlugs   []string           `json:"foregone,omitempty"`
-	Exercises       []ExerciseMetadata `json:"exercises"`
-	DeprecatedSlugs []string           `json:"deprecated,omitempty"`
+	ForegoneSlugs []string     `json:"foregone,omitempty"`
+	Concepts      []ConceptKey `json:"concepts"`
+	Exercises     struct {
+		ConceptExercises  []ConceptMetadata  `json:"concept"`
+		PracticeExercises []PracticeMetadata `json:"exercises"`
+	} `json:"exercises"`
+	DeprecatedSlugs []string `json:"deprecated,omitempty"`
 }
 
 // NewConfig loads a track configuration file.
@@ -96,18 +112,5 @@ func (cfg *Config) LoadFromFile(path string) error {
 
 // ToJSON marshals the Config to normalized JSON.
 func (cfg *Config) ToJSON() ([]byte, error) {
-	for _, exercise := range cfg.Exercises {
-		for i, t := range exercise.Topics {
-			exercise.Topics[i] = normalizeTopic(t)
-		}
-		sort.Strings(exercise.Topics)
-	}
 	return json.MarshalIndent(&cfg, "", "  ")
-}
-
-func normalizeTopic(t string) string {
-	s := strings.ToLower(t)
-	s = rgxFunkyChars.ReplaceAllString(s, "")
-	s = rgxSpaces.ReplaceAllString(s, "_")
-	return s
 }
