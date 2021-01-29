@@ -44,17 +44,17 @@ func TestLintTrack(t *testing.T) {
 		expected bool
 	}{
 		{
-			desc:     "should fail when given a track containing one or more lint failures.",
+			desc:     "should fail when a track contains one or more lint failures.",
 			path:     "../fixtures/numbers",
 			expected: true,
 		},
 		{
-			desc:     "should fail when given a track containing malformed configuration data.",
+			desc:     "should fail when a track contains malformed configuration data.",
 			path:     "../fixtures/broken-maintainers",
 			expected: true,
 		},
 		{
-			desc:     "should fail when given a track missing READMEs.",
+			desc:     "should fail when a track is missing a README.",
 			path:     "../fixtures/missing-readme",
 			expected: true,
 		},
