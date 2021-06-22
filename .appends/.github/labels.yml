@@ -1,0 +1,48 @@
+# ----------------------------------------------------------------------------------------- #
+# These are the repository-specific labels that augment the Exercise-wide labels defined in #
+# https://github.com/exercism/org-wide-files/blob/main/global-files/.github/labels.yml.     #
+# ----------------------------------------------------------------------------------------- #
+
+- name: "bug"
+  description: ""
+  color: "fc2929"
+
+- name: "cmd/fmt"
+  description: ""
+  color: "d4c5f9"
+
+- name: "cmd/generate"
+  description: ""
+  color: "d4c5f9"
+
+- name: "cmd/lint"
+  description: ""
+  color: "d4c5f9"
+
+- name: "duplicate"
+  description: ""
+  color: "cccccc"
+
+- name: "enhancement"
+  description: ""
+  color: "84b6eb"
+
+- name: "good first patch"
+  description: ""
+  color: "FEF9DB"
+
+- name: "help wanted"
+  description: ""
+  color: "159818"
+
+- name: "invalid"
+  description: ""
+  color: "e6e6e6"
+
+- name: "question"
+  description: ""
+  color: "cc317c"
+
+- name: "wontfix"
+  description: ""
+  color: "ffffff"
