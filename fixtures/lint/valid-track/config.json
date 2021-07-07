@@ -7,7 +7,7 @@
   "test_pattern": "(?i)test",
   "exercises": [
     {
-      "uuid": "aaa",
+      "uuid": "123e4567-e89b-12d3-a456-111111111111",
       "slug": "aluminum",
       "topics": [],
       "difficulty": 1
