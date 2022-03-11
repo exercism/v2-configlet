@@ -1,5 +1,6 @@
 {
-  "blurb": "", "active": true,
+  "blurb": "", "active": true, "version": 3,
+  "online_editor": { "indent_style": "space", "indent_size": 4 },
   "exercises": [ {
       "core": false,
       "auto_approve": true,

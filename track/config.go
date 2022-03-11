@@ -39,7 +39,12 @@ type ExerciseMetadata struct {
 
 // Config is an Exercism track configuration.
 type Config struct {
-	TrackID        string `json:"track_id,omitempty"`
+	TrackID      string `json:"track_id,omitempty"`
+	Version      int    `json:"version"`
+	OnlineEditor struct {
+		IndentStyle string `json:"indent_style"`
+		IndentSize  int    `json:"indent_size"`
+	} `json:"online_editor"`
 	Language       string `json:"language"`
 	Active         bool   `json:"active"`
 	Blurb          string `json:"blurb"`

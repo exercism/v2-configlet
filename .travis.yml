@@ -7,6 +7,11 @@ go:
   - 1.15
   - tip
 
+matrix:
+  allow_failures:
+    - go: tip
+  fast_finish: true
+
 install: true
 
 before_install:
