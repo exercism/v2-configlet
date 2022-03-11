@@ -10,17 +10,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Version is the current version of the tool.
-const Version = "3.9.2"
-
 var (
-	// binaryName is this tool's given name. While we have named it configlet, others
-	// may choose to rename it. This var enables the use of it's name, whatever it is,
-	// in any help/usage text.
+	// GoReleaser injects this variable using ldflags
+	version = "dev"
+	// binaryName is this tool's given name. While we have named it configlet,
+	// others may choose to rename it. This var enables the use of it's name,
+	// whatever it is, in any help/usage text.
 	binaryName = os.Args[0]
 	//configletCLI is an updatable CLI binary.
 	configletCLI *cli.CLI
-	// pathExample is an illustration of the path argument necessary for some commands.
+	// pathExample illustrates the path argument necessary for some commands.
 	pathExample = "<path/to/track>"
 )
 
@@ -28,7 +27,7 @@ var (
 var RootCmd = &cobra.Command{
 	Use:     binaryName,
 	Short:   "A tool for managing Exercism language track repositories.",
-	Long:    binaryName + " version " + Version + "\n\n" + "A tool for managing Exercism language track repositories.",
+	Long:    binaryName + " version " + version + "\n\n" + "A tool for managing Exercism language track repositories.",
 	Example: rootExampleText(),
 }
 
@@ -42,7 +41,7 @@ func rootExampleText() string {
 	return fmt.Sprintf(s, binaryName, pathExample)
 }
 
-// Execute adds all child commands to the root command & sets flags appropriately.
+// Execute adds all child commands to the root command & sets flags
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
@@ -53,5 +52,5 @@ func Execute() {
 
 func init() {
 	cli.ReleaseURL = "https://api.github.com/repos/exercism/configlet/releases"
-	configletCLI = cli.New(Version)
+	configletCLI = cli.New(version)
 }
