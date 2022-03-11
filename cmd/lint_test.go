@@ -235,6 +235,40 @@ func TestDuplicateSlugs(t *testing.T) {
 	assert.Equal(t, "banana", slugs[1])
 }
 
+func TestInvalidUUID(t *testing.T) {
+	uuidTests := []struct {
+		desc     string
+		expected []string
+		config   track.Config
+	}{
+		{
+			desc:     "should approve a good UUID",
+			expected: []string{},
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{Slug: "apple", UUID: "123e4567-e89b-12d3-a456-111111111111"},
+				},
+			},
+		},
+		{
+			desc:     "should disapprove a bad UUID",
+			expected: []string{"banana"},
+			config: track.Config{
+				Exercises: []track.ExerciseMetadata{
+					{Slug: "banana", UUID: "123e4567-e89b-12d3-a456-gggggggggggg"},
+				},
+			},
+		},
+	}
+
+	for _, tt := range uuidTests {
+		track := track.Track{Config: tt.config}
+		uuids := invalidUUID(track)
+
+		assert.ElementsMatch(t, tt.expected, uuids, tt.desc)
+	}
+}
+
 func TestDuplicateUUID(t *testing.T) {
 	uuidTests := []struct {
 		desc     string
