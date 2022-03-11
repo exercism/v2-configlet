@@ -100,6 +100,36 @@ func (cfg *Config) ToJSON() ([]byte, error) {
 	return json.MarshalIndent(&cfg, "", "  ")
 }
 
+// MarshalJSON marshals a exercise metadata to JSON,
+// only marshalling certain fields if the exercise is deprecated.
+func (e *ExerciseMetadata) MarshalJSON() ([]byte, error) {
+	if e.IsDeprecated {
+		// Only marshal Slug, UUID, Deprecated.
+		return json.Marshal(&struct {
+			Slug         string `json:"slug"`
+			UUID         string `json:"uuid"`
+			IsDeprecated bool   `json:"deprecated"`
+		}{
+			Slug:         e.Slug,
+			UUID:         e.UUID,
+			IsDeprecated: true,
+		})
+	} else {
+		// Use the default marshalling.
+		// We can't embed ExerciseMetadata into an anonymous struct,
+		// since that will cause infinite recursion on this MarshalJSON,
+		// But we can embed a new typedef of it,
+		// since the typedef does not have this MarshalJSON function.
+		// Technique discovered from http://choly.ca/post/go-json-marshalling/
+		type ExerciseMetadataJ ExerciseMetadata
+		return json.Marshal(&struct {
+			*ExerciseMetadataJ
+		}{
+			ExerciseMetadataJ: (*ExerciseMetadataJ)(e),
+		})
+	}
+}
+
 func normalizeTopic(t string) string {
 	s := strings.ToLower(t)
 	s = rgxFunkyChars.ReplaceAllString(s, "")

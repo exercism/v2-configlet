@@ -105,6 +105,87 @@ func TestMarshalingNormalizesTopics(t *testing.T) {
 	assert.Equal(t, []string{"apple", "fig", "honeydew_melon"}, dstCfg.Exercises[0].Topics)
 }
 
+var allExercisesKeys = []string{
+	"slug",
+	"uuid",
+}
+
+var activeExercisesKeys = []string{
+	"core",
+	// not auto_approve, since it is omitempty
+	"unlocked_by",
+	"difficulty",
+	"topics",
+}
+
+func TestMarshalActive(t *testing.T) {
+	srcCfg := Config{
+		Exercises: []ExerciseMetadata{
+			ExerciseMetadata{
+				Slug:         "active",
+				Topics:       []string{"topic_one", "topic_two"},
+				IsDeprecated: false,
+			},
+		},
+	}
+
+	dst, err := srcCfg.ToJSON()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// contains all the keys we expect it to contain:
+	for _, key := range append(allExercisesKeys, activeExercisesKeys...) {
+		assert.True(t, strings.Contains(string(dst), key), "expected JSON representation to contain %q, but it didn't: %s", key, string(dst))
+	}
+
+	var dstCfg Config
+	if err := json.NewDecoder(bytes.NewReader(dst)).Decode(&dstCfg); err != nil {
+		t.Fatal(err)
+	}
+
+	// survived an encode -> decode:
+	assert.Equal(t, "active", dstCfg.Exercises[0].Slug)
+	assert.False(t, dstCfg.Exercises[0].IsDeprecated)
+	assert.Equal(t, []string{"topic_one", "topic_two"}, dstCfg.Exercises[0].Topics)
+}
+
+func TestMarshalDeprecated(t *testing.T) {
+	srcCfg := Config{
+		Exercises: []ExerciseMetadata{
+			ExerciseMetadata{
+				Slug:         "deprecated",
+				Topics:       []string{"topic_one", "topic_two"},
+				IsDeprecated: true,
+			},
+		},
+	}
+
+	dst, err := srcCfg.ToJSON()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// contains the keys we want, and not the ones we don't:
+	for _, key := range append(allExercisesKeys, "deprecated") {
+		assert.True(t, strings.Contains(string(dst), key), "expected JSON representation to contain %q, but it didn't: %s", key, string(dst))
+	}
+	for _, key := range activeExercisesKeys {
+		assert.False(t, strings.Contains(string(dst), key), "expected JSON representation NOT to contain %q, but it did: %s", key, string(dst))
+	}
+
+	var dstCfg Config
+	if err := json.NewDecoder(bytes.NewReader(dst)).Decode(&dstCfg); err != nil {
+		t.Fatal(err)
+	}
+
+	// survived an encode -> decode:
+	assert.Equal(t, "deprecated", dstCfg.Exercises[0].Slug)
+	assert.True(t, dstCfg.Exercises[0].IsDeprecated)
+	// Note that since topics was never marshalled, it should be nil.
+	assert.Nil(t, dstCfg.Exercises[0].Topics)
+}
+
 func TestSemanticsOfMissingTopics(t *testing.T) {
 	src := `
 	{
